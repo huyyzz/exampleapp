@@ -34,4 +34,13 @@ Route::get('/', function () {
 Route::get('/register',[\App\Http\Controllers\LogController::class,'viewRegister']);
 Route::post('/register',[\App\Http\Controllers\LogController::class,'registration']);
 
+Route::get('/showcus-detail/{id}',[\App\Http\Controllers\ClothController::class,'showcus'])->name('showcus');
+
+Route::get('/showcart/{cart}', [\App\Http\Controllers\CartController::class,'showcart'])->name('showcart');
+
+
+Route::get('/specific/{name}',[\App\Http\Controllers\ClothController::class,'manuf'])->name('specific');
+
+
+
 

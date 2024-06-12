@@ -23,6 +23,77 @@
         .container {
             padding: 2px 16px;
         }
+        header{
+            display: flex;
+            justify-content: space-between;
+            padding :  0 50px ;
+            height: 70px;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1;
+            background: rgba(255,255,255,0.3);
+        }
+        header.sticky{
+            background: rgba(255,255,255,1);
+        }
+        header:hover{
+            background: rgba(255,255,255,1);
+        }
+        li{
+            list-style: none;
+        }
+        a{
+            text-decoration: none;
+        }
+
+        .logo{
+            flex: 50px;
+        }
+
+        .menu{
+            flex: 3;
+            display: flex;
+        }
+        .menu >li{
+            padding : 0 12px ;
+            position: relative;
+        }
+        .menu > li:hover .sub-menu{
+            display: block;
+            visibility: visible;
+            top: 45px;
+        }
+        .sub-menu{
+            position: absolute;
+            width: 150px;
+            border: 1px solid #ccc;
+            padding: 10px 0 10px 20px;
+            display: none;
+            z-index: 1;
+            transition: 0.3s;
+            background: #ffff;
+            visibility: hidden;
+
+        }
+        .sub-menu ul {
+            padding-left: 20px;
+        }
+        .sub-menu ul a {
+            font-weight: normal;
+            font-size:  18px;
+        }
+
+
+
+        .menu li > a{
+            font-size:  18px;
+            font-weight: bold ;
+            display: block;
+            line-height: 20px;
+        }
     </style>
 </head>
 <body>
@@ -33,14 +104,40 @@
                 <svg class="bi me-2" width="1" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
             </a>
 
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="#" ><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRunR8mq9MYERvPi5vDff-HHn4kFeJpXEpWO6cg0_Yzg&s" width="80" height="45" alt=""></a></li>
-                <li><a href="#" class="nav-link px-2 text-white">Trang chủ</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">Câu hỏi</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">Về chúng tôi</a></li>
-            </ul>
+            <div class="logo">
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="{{route('customer.home')}}" ><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRunR8mq9MYERvPi5vDff-HHn4kFeJpXEpWO6cg0_Yzg&s" width="80" height="45" alt=""></a></li>
+
+                </ul>
+
+            </div>
+            <div class="menu">
+                <li><a href="{{route('specific','Channel')}}" class="nav-link px-2 text-white">Channel</a>
+                </li>
+
+                <li><a href="{{route('specific','Gucci')}}" class="nav-link px-2 text-white">Gucci</a>
+
+                </li>
+
+                <li><a href="{{route('specific','Adidas')}}" class="nav-link px-2 text-white">Adidas</a>
+
+                </li>
+
+                <li><a href="{{route('specific','Nike')}}" class="nav-link px-2 text-white">Nike</a>
+
+                </li>
+
+
+                <li><a href="{{route('specific','Dior')}}" class="nav-link px-2 text-white">Dior</a>
+                </li>
+
+
+            </div>
+            <div>
+                <h4><a href="{{route('showcart',1)}}" class="nav-link px-2 text-white"><i class="fa fa-shopping-cart" aria-hidden="true" ></i></a>
+                    </h4>
+            </div>
+
 
 
 
@@ -52,7 +149,7 @@
                 </form>
 
                 @if (Session())
-                    <p>{{Session('user_name')}}</p>
+                    <h6>Hi {{Session('user_name')}}</h6>
                 @endif
 
             </div>
@@ -60,21 +157,69 @@
     </div>
 
 </header>
-<h1 class="text-center">Sản phẩm quần áo</h1>
+<h1 class="text-center">Sản phẩm bán chạy</h1>
 <div class="container ">
     <div class="row py-4 shadow-5 d-flex">
-        @foreach($cloths as $item)
-            <div  alt="Product Image" class="col col-4 m-3 card" style="width: 18rem"  data-id="{{$item->id}}">
+        <h1 class="text-center">Sản phẩm bán chạy</h1>
+        @if ($specific != null)
+            @foreach($specific as $item)
+                <div  alt="Product Image" class="col col-4 m-3 card" style="width: 18rem"  data-id="{{$item->id}}" >
+                    <a href='{{ route('showcus',$item->id) }}'><img  src="{{ asset('storage/images/' . $item->product_image_url) }}" width="260" height="300"  alt="Product Image" ></a>
 
-                <img  src="{{ asset('storage/images/' . $item->product_image_url) }}" width="260" height="300"  alt="Product Image">
-                <p >{{ $item->product_description }}</p>
+                    <p>{{ $item->product_description }}</p>
+                    <h1>{{ $item->product_name }}</h1>
+                    <p>Price: {{ $item->product_price }} VNĐ</p>
+                    <a href='{{route('showcart')}}' class=" btn btn-outline-dark me-1 ">Add</a>
+
+                </div>
+            @endforeach
+        @else
+        @foreach($cloths as $item)
+            <div  alt="Product Image" class="col col-4 m-3 card" style="width: 18rem"  data-id="{{$item->id}}" >
+                <a href='{{ route('showcus',$item->id) }}'><img  src="{{ asset('storage/images/' . $item->product_image_url) }}" width="260" height="300"  alt="Product Image" ></a>
+
+                <p>{{ $item->product_description }}</p>
                 <h1>{{ $item->product_name }}</h1>
-                <p>Price: {{ $item->product_price }}</p>
+                <p>Price: {{ $item->product_price }} VNĐ</p>
+                <a href='{{route('showcart',)}}' class=" btn btn-outline-dark me-1 ">Add</a>
+
+            </div>
+
+        @endforeach
+    </div>
+    <hr>
+    <h4>Áo</h4>
+    <div class="row py-4 shadow-5 d-flex">
+        @foreach($ao as $item)
+            <div  alt="Product Image" class="col col-4 m-3 card" style="width: 18rem"  data-id="{{$item->id}}" >
+                <a href='{{ route('showcus',$item->id) }}'><img  src="{{ asset('storage/images/' . $item->product_image_url) }}" width="260" height="300"  alt="Product Image" ></a>
+
+                <p>{{ $item->product_description }}</p>
+                <h1>{{ $item->product_name }}</h1>
+                <p>Price: {{ $item->product_price }} VNĐ</p>
                 <button  class=" btn btn-outline-dark me-1 "type="submit">Add</button>
 
             </div>
 
         @endforeach
+    </div>
+    <hr>
+    <h4>Quần</h4>
+
+    <div class="row py-4 shadow-5 d-flex">
+        @foreach($quan as $item)
+            <div  alt="Product Image" class="col col-4 m-3 card" style="width: 18rem"  data-id="{{$item->id}}" >
+                <a href='{{ route('showcus',$item->id) }}'><img  src="{{ asset('storage/images/' . $item->product_image_url) }}" width="260" height="300"  alt="Product Image" ></a>
+
+                <p>{{ $item->product_description }}</p>
+                <h1>{{ $item->product_name }}</h1>
+                <p>Price: {{ $item->product_price }} VNĐ</p>
+                <button  class=" btn btn-outline-dark me-1 "type="submit">Add</button>
+
+            </div>
+
+        @endforeach
+        @endif
     </div>
 </div>
 
@@ -136,16 +281,16 @@
                         Sản phẩm
                     </h6>
                     <p>
-                        <a href="#!" class="text-reset" style="text-decoration: none">Lego Batman</a>
+                        <a href="#!" class="text-reset" style="text-decoration: none">Adidas</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset" style="text-decoration: none">Lego Ninjago</a>
+                        <a href="#"  class="text-reset" style="text-decoration: none">Nike</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset" style="text-decoration: none">Lego Chima</a>
+                        <a href="#!" class="text-reset" style="text-decoration: none">LV</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset" style="text-decoration: none">Lego Nexo</a>
+                        <a href="#!" class="text-reset" style="text-decoration: none">Gucci</a>
                     </p>
                 </div>
                 <!-- Grid column -->

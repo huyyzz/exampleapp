@@ -19,8 +19,14 @@ class ClothController extends Controller
 
     public function home()
     {
+        $specific = null;
         $cloths = Cloth::all();
-        return view('customer.home', compact('cloths'));
+//        doi thanh category
+        // 1 la ao, 2 la quan
+
+        $ao = Cloth::where('product_name','like', '%'.'Áo'.'%')->get();
+        $quan = Cloth::where('product_name','like', '%'.'Quần'.'%')->get();
+        return view('customer.home', compact('cloths','ao','quan','specific'));
     }
 
     /**
@@ -74,6 +80,15 @@ class ClothController extends Controller
         return view('admin.show-detail',compact('cloth'));
     }
 
+    public function showcus(string $id)
+    {
+        //
+        $cloth = Cloth::findOrFail($id);
+        return view('customer.showcus-detail',compact('cloth'));
+    }
+
+
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -125,6 +140,21 @@ class ClothController extends Controller
             ->first();
         return response()->json($cloth);
     }
+    public function manuf($name){
+        $specific = Cloth::where('product_name','like', '%'.$name.'%')->get();
+        return view('customer.home', compact('specific'));
+    }
+
+//    public function home()
+//    {
+//        $cloths = Cloth::all();
+////        doi thanh category
+//        // 1 la ao, 2 la quan
+//
+//        $ao = Cloth::where('product_name','like', '%'.'Áo'.'%')->get();
+//        $quan = Cloth::where('product_name','like', '%'.'Quần'.'%')->get();
+//        return view('customer.home', compact('cloths','ao','quan','nike'));
+//    }
 }
 
 
