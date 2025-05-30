@@ -14,11 +14,16 @@ return new class extends Migration
         Schema::create('cloths', function (Blueprint $table) {
             $table->id();
             $table->string('product_name');
-            $table->string('product_description');
+            $table->longText('product_description');
+            $table->bigInteger('QuantityInWareHouse')->default(0);
             $table->string('product_price');
             $table->string('product_image_url');
             $table->unsignedBigInteger('category_id')->nullable();
-            $table->foreign('category_id')->references('id')->on('category');
+            $table->unsignedBigInteger('brand_id')->nullable();
+
+            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('brand_id')->references('id')->on('brands');
+
             $table->timestamps();
         });
 

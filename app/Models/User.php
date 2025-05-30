@@ -12,6 +12,15 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public function isAdmin(){
+        return $this->role == 'admin';
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'customer_id');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +31,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
+        'address',
         'role',
     ];
 

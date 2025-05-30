@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\brand;
+use App\Models\category;
 use App\Models\Cloth;
+use App\Models\Order;
+use App\Models\Order_items;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpOption\None;
 
 class ClothController extends Controller
 {
@@ -13,8 +19,12 @@ class ClothController extends Controller
      */
     public function index()
     {
+//        $admin = User::where('role','admin');
+
         $cloths = Cloth::all();
-        return view('admin.index', compact('cloths'));
+        $brands = Brand::all();
+        $categories = category::all();
+        return view('admin.index', compact('cloths','brands'));
     }
 
     public function home()
@@ -23,10 +33,9 @@ class ClothController extends Controller
         $cloths = Cloth::all();
 //        doi thanh category
         // 1 la ao, 2 la quan
-
-        $ao = Cloth::where('product_name','like', '%'.'Áo'.'%')->get();
-        $quan = Cloth::where('product_name','like', '%'.'Quần'.'%')->get();
-        return view('customer.home', compact('cloths','ao','quan','specific'));
+        $brands = Brand::all();
+        $categories = category::all();
+        return view('customer.home', compact('cloths','brands','specific','categories'));
     }
 
     /**
@@ -34,7 +43,9 @@ class ClothController extends Controller
      */
     public function create()
     {
-        return view('admin.create');
+        $brands = Brand::where('id','!=','1')->orderBy('id','asc')->get();
+        $categories = category::all();
+        return view('admin.create',compact('brands','categories'));
     }
 
     /**
@@ -44,8 +55,11 @@ class ClothController extends Controller
     {
         $storeData = $request->validate([
             'product_name' => 'required|max:255',
-            'product_description' => 'required|max:255',
+            'product_description' => 'required|max:1000',
+            'QuantityInWareHouse' => 'numeric|max:1000',
             'product_price' => 'required|max:255',
+            'brand_id' => 'numeric',
+            'category_id' => 'numeric',
             'product_image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -82,9 +96,14 @@ class ClothController extends Controller
 
     public function showcus(string $id)
     {
+
+        $brands = Brand::all();
+        $categories = category::all();
         //
         $cloth = Cloth::findOrFail($id);
-        return view('customer.showcus-detail',compact('cloth'));
+
+//        dd($cloth);
+        return view('customer.showcus-detail',compact('cloth','brands','categories'));
     }
 
 
@@ -104,16 +123,41 @@ class ClothController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $quantity = Cloth::where('id',$id)->first()->QuantityInWareHouse;
+        $inputQuantity = $request->inputQuantity;
+//        dd($inputQuantity);
+
+        $updated = $quantity + $inputQuantity;
+
+
         $updateData = $request->validate([
             'product_name' => 'required|max:255',
-            'product_description' => 'required|max:255',
+            'product_description' => 'required|max:4000',
             'product_price' => 'required|max:255',
+            'QuantityInWareHouse' => 'max:255',
         ]);
+
+        $updateData['QuantityInWareHouse'] = $updated;
 
         Cloth::whereId($id)->update($updateData);
 
         return redirect('/Cloths')->with('completed', 'This product has been saved!');
     }
+
+//    public function updateQuantity(Request $request, string $id)
+//    {
+//
+//        $quantity = Cloth::where('id',$id)->first()->QuantityInWareHouse;
+//        $inputQuantity = $request->inputQuantity;
+//        dd($inputQuantity);
+//        $updateData = $request->validate([
+//            'QuantityInWareHouse' => $quantity + $inputQuantity,
+//        ]);
+//
+//        Cloth::whereId($id)->update($updateData);
+//
+//        return redirect('/Cloths')->with('completed', 'This product has been saved!');
+//    }
 
     /**
      * Remove the specified resource from storage.
@@ -125,13 +169,18 @@ class ClothController extends Controller
         return redirect('/Cloths')->with('completed', 'This product has been deleted');
     }
 
-//    public function search(Request $request)
-//    {
-//        $search = strtolower($request->input('search'));
-//
-//        $cloths = Cloth::where('product_name', 'like', "%$search%")->get();
-//        return view('admin.index', compact('cloths'));
-//    }
+    public function search(Request $request)
+    {
+        $specific = null;
+        $search = strtolower($request->input('term'));
+
+        $cloths = Cloth::where('product_name', 'like', "%$search%")->get();
+        $brands = Brand::all();
+        $categories = category::all();
+
+
+        return view('customer.home', compact('cloths','categories','brands','specific'));
+    }
 
     public function find($id)
     {
@@ -141,20 +190,130 @@ class ClothController extends Controller
         return response()->json($cloth);
     }
     public function manuf($name){
-        $specific = Cloth::where('product_name','like', '%'.$name.'%')->get();
-        return view('customer.home', compact('specific'));
+        $cloth = Cloth::all();
+//$name = Versace
+
+        $id = brand::where('name', $name)->first();
+        $brands = Brand::where('id','!=','6')->orderBy('id','asc')->get();
+        $specific = Cloth::where('brand_id', $id->id)->get();
+
+        return view('customer.home', compact('cloth','specific','brands'));
+    }
+    public function orderIndex($types){
+//        $pending = Order::where('status','Processed')->orderBy('id','desc')->get();
+//        $delivery = Order::where('status','Shipped')->orderBy('id','desc')->get();
+//        $completed = Order::where('status','Delivered')->orderBy('id','desc')->get();
+//        $cancelled = Order::where('status','Canceled')->orderBy('id','desc')->get();
+
+        $specific = $types;
+
+        $orders = Order::where('status', $types)->orderBy('updated_at','desc')->get();
+        $order_item = Order_items::all();
+
+        return view('admin.order', compact('orders','specific'));
     }
 
-//    public function home()
-//    {
-//        $cloths = Cloth::all();
-////        doi thanh category
-//        // 1 la ao, 2 la quan
-//
-//        $ao = Cloth::where('product_name','like', '%'.'Áo'.'%')->get();
-//        $quan = Cloth::where('product_name','like', '%'.'Quần'.'%')->get();
-//        return view('customer.home', compact('cloths','ao','quan','nike'));
-//    }
+    public function orderUpdate(Request $request, string $id){
+
+        $updateData = $request->validate([
+            'status' => 'required|max:255',
+        ]);
+
+        $products = Order_items::where('order_id',$id)->get();
+        foreach($products as $product) {
+            $cloth = Cloth::where('id', $product->product_id)->first();
+//            $quantity = [
+//                $product->quantity
+            if ($updateData['status'] == "Đã hủy") {
+                $quantity = [
+                    "QuantityInWareHouse" => $product->quantity + $cloth->QuantityInWareHouse
+                ];
+                Cloth::whereId($product->product_id)->update($quantity);
+            }
+
+        }
+        Order::whereId($id)->update($updateData);
+
+
+        return redirect()->back();
+    }
+
+    public function orderDetails(Request $request, string $id){
+
+        $items = Order_items::where('order_id', $id)->get();
+        $order = Order::where('id', $id)->first();
+
+
+        $brands = Brand::all();
+        $categories = category::all();
+
+        $role = auth()->user()->role;
+//        dd($role);
+
+        return view($role.'.order_details', compact('items','brands','categories','order'));
+    }
+
+    public function orderHistory(string $name){
+//        dd($name);
+        $brands = Brand::all();
+        $categories = category::all();
+        $userid = User::where('name',$name)->first()->id;
+        $orders = Order::where('customer_id', $userid)->orderBy('updated_at','desc')->get();
+        return view('customer.order_history', compact('orders','brands','categories'));
+    }
+
+
+
+    public function statistic(){
+
+        $hourStats = [];
+//        $ordersByYear = Order::where('status','Đã giao')
+//            ->get()
+//            ->groupBy(function($order) {
+//                return $order->updated_at->format('Y');
+//            })
+//            ->sortBy(function($orders, $date) {
+//                return $date;
+//            });
+
+        $ordersByDay = Order::where('status','Đã giao')
+            ->get()
+            ->groupBy(function($order) {
+                return $order->updated_at->format('Y');
+            })
+            ->sortBy(function($orders, $date) {
+                return $date;
+            });
+        $orders = null;
+        foreach($ordersByDay as $hour => $orders) {
+
+            $stats = (object) [
+                'time' => $hour,
+                'order_count' => count($orders),
+                'total_subtotal' => 0
+            ];
+
+            foreach($orders as $order) {
+                $stats->total_subtotal += $order->sub_total;
+            }
+
+            $stats->average_order_value = $stats->total_subtotal / $stats->order_count;
+
+            $hourStats[] = $stats;
+
+        }
+//        dd($hourStats);
+        $hourStatsObj = [];
+
+        foreach($hourStats as $stats) {
+            $hourStatsObj[] = $stats;
+        }
+
+        $brands = Brand::all();
+        $categories = category::all();
+
+        return view('admin.statistic', compact('orders','brands','categories','hourStatsObj'));
+    }
 }
 
 

@@ -36,5 +36,46 @@ class DatabaseSeeder extends Seeder
             'password'=> Hash::make('123456'),
             'role'=>'customer'
         ]);
+
+
+        DB::table('brands')->insert([
+            'id' => '1',
+            'name' => 'Adidas'
+        ]);
+        DB::table('brands')->insert([
+            'id' => '2',
+            'name' => 'Nike'
+        ]);
+        DB::table('brands')->insert([
+            'id' => '3',
+            'name' => 'Gucci'
+        ]);
+        DB::table('brands')->insert([
+            'id' => '4',
+            'name' => 'Nike'
+        ]);
+        DB::table('brands')->insert([
+            'id' => '5',
+            'name' => 'Versace'
+        ]);
+        DB::table('brands')->insert([
+            'id' => '6',
+            'name' => 'No brand'
+        ]);
+
+
+        DB::table('categories')->insert([
+            'id' => '1',
+            'name' => 'Quần'
+        ]);
+        DB::table('categories')->insert([
+            'id' => '2',
+            'name' => 'Áo'
+        ]);
+
     }
+
 }
+
+
+
