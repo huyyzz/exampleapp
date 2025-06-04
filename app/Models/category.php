@@ -12,4 +12,10 @@ class category extends Model
     protected $fillable = [
         'name',
     ];
+
+
+    public function cloth()
+    {
+        return $this->hasMany(Cloth::class);
+    }
 }

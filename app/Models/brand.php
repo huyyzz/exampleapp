@@ -12,9 +12,13 @@ class brand extends Model
         'name',
     ];
     protected $primaryKey = 'id';
-    public function cloth()
+    public function Cloth()
     {
-        return $this->hasMany(cloth::class);
+        return $this->hasMany(Cloth::class);
     }
+
+
+
+    
     use HasFactory;
 }

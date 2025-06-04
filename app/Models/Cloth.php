@@ -10,25 +10,35 @@ class Cloth extends Model
 {
     protected $table = 'cloths';
     use HasFactory;
-    public function category()
+    // public function category()
+    // {
+    //     return $this->hasOne('Category');
+    // }
+
+    // public function brands()
+    // {
+    //     return $this->hasOne(brand::class);
+    // }
+
+    public function brand()
     {
-        return $this->hasOne('Category');
+        return $this->belongsTo(Brand::class);
     }
 
-    public function brands()
+    public function category()
     {
-        return $this->belongsTo(brand::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function order_items()
     {
-        return $this->belongsToMany(Order_items::class,'product_id');
+        return $this->hasMany(Order_items::class, 'product_id', 'id');
     }
 
-    public function cart()
-    {
-        return $this->belongsToMany('cart');
-    }
+    // public function cart()
+    // {
+    //     return $this->belongsToMany('cart');
+    // }
     protected $fillable = [
         'product_name',
         'product_description',
