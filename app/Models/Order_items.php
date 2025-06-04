@@ -13,9 +13,9 @@ class Order_items extends Model
 //        return $this->hasOne(Cloth::class,'id');
 //    }
 
-    public function cloths()
+    public function cloth()
     {
-        return $this->hasOne(Cloth::class, 'id', 'product_id');
+        return $this->belongsTo(Cloth::class, 'cloth_id', 'id');
     }
     protected $fillable = [
         'order_id',
