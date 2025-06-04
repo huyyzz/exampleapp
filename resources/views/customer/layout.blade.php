@@ -179,7 +179,6 @@
                     <form action="{{route('showcart',1)}}" class="d-flex">
                         <button class="btn btn-outline-light me-2" type="submit">
                             <i class="bi-cart-fill me-1"></i>
-                            Cart
                             @if(Session('cart'))
                                     <?php
                                     $increment = 0;
@@ -204,7 +203,18 @@
                                     <hr>
                                     <a href="{{ route('Cloths.index') }}">Dashboard</a>
                                 @else
-                                    <a href="{{ route('profile', Session('id') ) }}">Thông tin cá nhân</a>
+                                    <div class="">
+                                        <!-- <ul> -->
+                                            <button class="btn" >
+                                                <a href="{{ route('profile', Session('id') ) }}">Thông tin</a>
+                                            </button>
+                                        <!-- </ul> -->
+                                    
+                                    <form method="post" action="{{route('logout')}}">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger">Đăng xuất</button>
+                                    </form>
+                                    </div>
                                 @endif
 
                             </div>
@@ -213,10 +223,7 @@
 
                     </div>
 
-                    <form method="post" action="{{route('logout')}}">
-                        @csrf
-                        <button type="submit" class="btn btn-outline-light me-2">Đăng xuất</button>
-                    </form>
+                    
                 @else
                     <form action="{{route('login')}}">
                         @csrf

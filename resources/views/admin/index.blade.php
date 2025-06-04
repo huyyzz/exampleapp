@@ -63,7 +63,7 @@
                     <td style="width:25rem;background-color: #ccc2a4">{{$item->product_description}}</td>
                     <td style="background-color: #ccc2a4">{{$item->QuantityInWareHouse}}</td>
                     <td style="background-color: #ccc2a4">{{$item->product_price}}</td>
-                    <td style="background-color: #ccc2a4"><img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="Product Image" width="150px" height="150px"></td>
+                    <td style="background-color: #ccc2a4"><img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="Product Image" width="100%" height="150px"></td>
                     <td style="background-color: #ccc2a4">{{$item->created_at}}</td>
                     <td style="background-color: #ccc2a4">{{$item->updated_at}}</td>
                     <td style="background-color: #ccc2a4;width:10%" class="btnContainer">

@@ -85,6 +85,7 @@
                 <td>Địa chỉ</td>
                 <td>Số điện thoại</td>
                 <td>Trạng thái</td>
+                <td>Thời gian cập nhật</td>
                 <td colspan="3" class="text-center">ACTION</td>
             </tr>
 
@@ -98,6 +99,7 @@
                 <td>{{$order->user->address}}</td>
                 <td>{{$order->user->phone}}</td>
                 <td>{{$order->status}}</td>
+                <td>{{$order->updated_at}}</td>
                 {{--                        Thong tin don hang--}}
                 <td class="text-center">
                     <form method="get" action="{{route('order.details',$order->id)}}">
