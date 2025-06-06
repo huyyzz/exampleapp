@@ -12,7 +12,7 @@ class brand extends Model
         'name',
     ];
     protected $primaryKey = 'id';
-    public function Cloth()
+    public function cloth()
     {
         return $this->hasMany(Cloth::class);
     }

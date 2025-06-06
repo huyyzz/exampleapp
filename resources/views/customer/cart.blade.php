@@ -211,34 +211,6 @@
 @endsection
 </body>
 @section('scripts')
-{{--    <script type="text/javascript">--}}
-{{--        function checkOut(obj){--}}
-{{--            console.log(JSON.stringify(obj))--}}
-{{--            // Say it's your request payload--}}
-{{--            let details = {--}}
-{{--                name: 'John Doe',--}}
-{{--                city: 'Mumbai',--}}
-{{--                status: 'Payment done',--}}
-{{--                _token: $('meta[name="csrf-token"]').attr('content')--}}
-{{--            };--}}
-{{--            $.ajax({--}}
-{{--                headers: {--}}
-{{--                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
-{{--                },--}}
-{{--                'url': '{{route('checkOut')}}',--}}
-{{--                'type': 'POST',--}}
-{{--                'dataType': 'json',--}}
-{{--                'data': details,--}}
-{{--            }).done(function (response) {--}}
-{{--                alert('success: ' + JSON.stringify(response));--}}
-{{--                // Redirect to response url--}}
-{{--                window.location.replace(response.url);--}}
-{{--            }).fail(function(xhr, ajaxOps, error) {--}}
-{{--                console.log('Failed: ' + error);--}}
-{{--            });--}}
-{{--        }--}}
-{{--    </script>--}}
-
     <script type="text/javascript">
         const formatter = new Intl.NumberFormat('vi-VN', {
             style: 'currency',

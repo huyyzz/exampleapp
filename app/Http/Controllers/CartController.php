@@ -190,10 +190,12 @@ class CartController extends Controller
             //tinh tien
         foreach ($validatedData['data'] as $item) {
 //            dd($item);
+            $cloth = Cloth::where('id', $item['id'])->first();
             $orderItem = [
-                'quantity' => $item['quantity'],
-                'order_id' => $orderid,
-                'product_id' => $item['id']
+                    'quantity' => $item['quantity'],
+                    'order_id' => $orderid,
+                    'product_id' => $item['id'],
+                    'product_price' => $cloth['product_price']
                 ];
 
                 Order_items::create($orderItem);
