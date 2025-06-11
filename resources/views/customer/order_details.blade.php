@@ -68,10 +68,10 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <td>name</td>
-                            <td>quantity</td>
-                            <td>img</td>
-                            <td>price</td>
+                            <td>Tên sản phẩm</td>
+                            <td>Số lượng sản phẩm</td>
+                            <td>Hình ảnh</td>
+                            <td>Giá sản phẩm</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,14 +80,15 @@
                             <td>{{$item->cloths->product_name}}</td>
                             <td>{{$item->quantity}}</td>
                             <td width="150px"><img src="{{asset('storage/images/'.$item->cloths->product_image_url)}}" height="100%" width="100%"></td>
-                            <td>{{$item->cloths->product_price}}</td>
+                            
+                            <td>{{number_format($item->product_price,0)}} VNĐ</td>
                         </tr>
                     @endforeach
                     </tbody>
                     <tfoot>
                         <td colspan="5">
                             Subtotal
-                            <span class="float-end">{{$order->sub_total}}</span>
+                            <span class="float-end">{{number_format($order->sub_total,0)}} VNĐ</span>
                         </td>
 
                     </tfoot>

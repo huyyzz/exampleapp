@@ -14,7 +14,11 @@ class brand extends Model
     protected $primaryKey = 'id';
     public function cloth()
     {
-        return $this->hasMany(cloth::class);
+        return $this->hasMany(Cloth::class);
     }
+
+
+
+    
     use HasFactory;
 }

@@ -13,19 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('invoices', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        // Schema::table('cloths', function (Blueprint $table) {
+        //     $table->softDeletes(); // Adds deleted_at TIMESTAMP (nullable)
+        // });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        Schema::dropIfExists('invoices');
+        // Schema::table('cloths', function (Blueprint $table) {
+        //     $table->dropSoftDeletes(); // Drops the deleted_at column
+        // });
     }
 };

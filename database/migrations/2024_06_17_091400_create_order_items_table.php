@@ -17,12 +17,14 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
 
             $table->id();
-            $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('order_id')->nullable();
 
-            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->integer('quantity');
 
-            $table->foreign('product_id')->references('id')->on('cloths');
+            $table->string('product_price');
+
+            $table->foreign('product_id')->references('id')->on('cloths')->onDelete('set null');
 
             $table->foreign('order_id')->references('id')->on('orders');
 

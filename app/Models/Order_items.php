@@ -15,11 +15,16 @@ class Order_items extends Model
 
     public function cloths()
     {
-        return $this->hasOne(Cloth::class, 'id', 'product_id');
+        return $this->belongsTo(Cloth::class, 'product_id', 'id');
     }
+
+
+    
+
     protected $fillable = [
         'order_id',
         'product_id',
         'quantity',
+        'product_price',
     ];
 }
