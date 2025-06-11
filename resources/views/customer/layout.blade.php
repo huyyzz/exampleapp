@@ -130,7 +130,7 @@
 
             <div class="logo">
                 <ul class="float-start nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="{{route('customer.home')}}" ><img src="https://insacmau.com/wp-content/uploads/2024/11/logo-shop-quan-ao-nu-9.jpg" width="100" height="45" alt=""></a></li>
+                    <li><a href="{{route('customer.home')}}" ><img src="https://insacmau.com/wp-content/uploads/2024/11/logo-shop-quan-ao-nu-9.jpg" width="60px" height="60px" alt=""></a></li>
                 </ul>
             </div>
 
