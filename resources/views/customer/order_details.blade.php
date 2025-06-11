@@ -80,6 +80,7 @@
                             <td>{{$item->cloths->product_name}}</td>
                             <td>{{$item->quantity}}</td>
                             <td width="150px"><img src="{{asset('storage/images/'.$item->cloths->product_image_url)}}" height="100%" width="100%"></td>
+                            
                             <td>{{number_format($item->product_price,0)}} VNĐ</td>
                         </tr>
                     @endforeach

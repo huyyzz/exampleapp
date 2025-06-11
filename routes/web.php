@@ -71,13 +71,15 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('customer/orderDetails/{id}', [ClothController::class, 'orderDetails'])->name('order.details');
     Route::get('customer/history/{id}', [ClothController::class, 'orderHistory'])->name('order.history');
-//    Route::get('customer/history/{id}', [ClothController::class, 'orderHistory'])->name('order.history');
+    Route::get('/profile/{id}', [ClothController::class, 'profile'])->name('profile');
 });
 
 
 Route::group(['middleware' => ['web']], function () {
     Route::post('checkout', [CartController::class, 'checkOut'])->name('checkOut');
 });
+
+
 
 
 

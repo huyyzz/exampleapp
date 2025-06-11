@@ -88,7 +88,7 @@
             @foreach($specific as $item)
                 <div class="col col-4 mb-4">
                     <div  alt="Product Image" class="col col-4 m-3 card h-100 p-3" style="width:18rem;"  data-id="{{$item->id}}" >
-                        <a href='{{ route('showcus',$item->id) }}'><img  src="{{ asset('storage/public/images/' . $item->product_image_url) }}" width="260" height="300"  alt="Product Image" ></a>
+                        <a href='{{ route('showcus',$item->id) }}'><img  src="{{ asset('storage/images/' . $item->product_image_url) }}" width="100%" height="100%"  alt="Product Image" ></a>
 
                         <div class="d-flex flex-column bd-highlight mb-3 justify-content-between h-100">
                             <div class="d-flex mt-1">
@@ -109,7 +109,7 @@
 
                 <div class="col col-4 mb-4">
                     <div  alt="Product Image" class="m-3 card h-100 p-3" style="width:18rem;"  data-id="{{$item->id}}" >
-                        <a href='{{ route('showcus',$item->id) }}'><img  src="{{ asset('storage/images/' . $item->product_image_url) }}" width="260" height="300"  alt="Product Image" ></a>
+                        <a href='{{ route('showcus',$item->id) }}'><img  src="{{ asset('storage/images/' . $item->product_image_url) }}" width="100%" height="100%"  alt="Product Image" ></a>
 
                         <div class="d-flex flex-column bd-highlight mb-3 justify-content-between h-100">
                             <div class="d-flex mt-1">
