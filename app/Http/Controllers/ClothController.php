@@ -221,7 +221,8 @@ class ClothController extends Controller
 
         $products = Order_items::where('order_id',$id)->get();
         foreach($products as $product) {
-            $cloth = Cloth::where('id', $product->product_id)->first();
+            $cloth = Cloth::withTrashed()->where('id', $product->product_id)->first();
+            // dd($cloth);
 //            $quantity = [
 //                $product->quantity
             if ($updateData['status'] == "Đã hủy") {
@@ -244,6 +245,8 @@ class ClothController extends Controller
             ->with(['cloths' => function ($query) {
                 $query->withTrashed();
             }])->get();
+
+            
         $order = Order::where('id', $id)->first();
 
         $brands = Brand::all();

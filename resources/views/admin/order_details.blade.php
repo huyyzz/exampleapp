@@ -90,7 +90,7 @@
                     <tfoot>
                         <td colspan="5">
                             Subtotal
-                            <span class="float-end">{{number_format($order->sub_total,0) VNĐ}}</span>
+                            <span class="float-end">{{number_format($order->sub_total,0) }} VNĐ</span>
                         </td>
 
                     </tfoot>
