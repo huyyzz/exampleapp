@@ -240,15 +240,17 @@ class ClothController extends Controller
 
     public function orderDetails(Request $request, string $id){
 
-        $items = Order_items::where('order_id', $id)->get();
+        $items = Order_items::where('order_id', $id)
+            ->with(['cloths' => function ($query) {
+                $query->withTrashed();
+            }])->get();
         $order = Order::where('id', $id)->first();
-
 
         $brands = Brand::all();
         $categories = category::all();
 
         $role = auth()->user()->role;
-//        dd($role);
+        // dd($items->cloths);
 
         return view($role.'.order_details', compact('items','brands','categories','order'));
     }

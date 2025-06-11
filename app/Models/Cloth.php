@@ -5,11 +5,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Cloth extends Model
 {
     protected $table = 'cloths';
     use HasFactory;
+    use SoftDeletes;
     // public function category()
     // {
     //     return $this->hasOne('Category');
@@ -48,4 +50,6 @@ class Cloth extends Model
         'brand_id',
         'product_image_url',
     ];
+
+    protected $dates = ['deleted_at'];
 }

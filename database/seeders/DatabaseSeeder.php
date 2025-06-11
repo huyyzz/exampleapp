@@ -21,55 +21,18 @@ class DatabaseSeeder extends Seeder
 //            'name' => 'Test User',
 //            'email' => 'test@example.com',
 //        ]);
-        DB::table('users')->insert([
-            'name'=>'admin',
-            'email'=>'admin@gmail.com',
-            'phone'=>'',
-            'password'=> Hash::make('123456'),
-            'role'=>'admin'
+       $this->call([
+            BrandSeeder::class,
+            CategorySeeder::class,
+            UserSeeder::class,
         ]);
-
-        DB::table('users')->insert([
-            'name'=>'Customer',
-            'email'=>'customer@gmail.com',
-            'phone'=>'',
-            'password'=> Hash::make('123456'),
-            'role'=>'customer'
-        ]);
-
-
-        DB::table('brands')->insert([
-            'id' => '1',
-            'name' => 'Adidas'
-        ]);
-        DB::table('brands')->insert([
-            'id' => '2',
-            'name' => 'Nike'
-        ]);
-        DB::table('brands')->insert([
-            'id' => '3',
-            'name' => 'Gucci'
-        ]);
-        DB::table('brands')->insert([
-            'id' => '4',
-            'name' => 'Nike'
-        ]);
-        DB::table('brands')->insert([
-            'id' => '5',
-            'name' => 'Versace'
-        ]);
-        DB::table('brands')->insert([
-            'id' => '6',
-            'name' => 'No brand'
-        ]);
-
 
         DB::table('categories')->insert([
-            'id' => '1',
+            'id' => '2',
             'name' => 'Quần'
         ]);
         DB::table('categories')->insert([
-            'id' => '2',
+            'id' => '3',
             'name' => 'Áo'
         ]);
 
