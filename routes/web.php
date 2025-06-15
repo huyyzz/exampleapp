@@ -96,8 +96,10 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('vnpay/index', [VnpayController::class, 'index'])->name('vnpay_index');
     Route::get('vnpay/return', [VnpayController::class, 'return'])->name('vnpay.return');
+    Route::get('/vnpay/ipn', [VNPayController::class, 'ipn'])->name('vnpay.ipn');
 });
 
+Route::get('vnpay/return', [VnpayController::class, 'return'])->name('vnpay.return');
 
 Route::group(['middleware' => ['web']], function () {
     Route::post('checkout', [CartController::class, 'checkOut'])->name('checkOut');

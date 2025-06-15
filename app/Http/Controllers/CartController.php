@@ -224,7 +224,8 @@ class CartController extends Controller
                 'payment_id' => $payment->id,
                 'amount' => $subtotal
             ]);
-        }else{
+        }
+        if ($request->payment_type == 'COD'){
             //COD
             foreach ($validatedData['data'] as $item) {
                 $cloth = Cloth::find($item['id']);

@@ -173,7 +173,6 @@
     <div class="form-group mt-4">
         <label for="payment_type"><strong>Chọn phương thức thanh toán:</strong></label>
         <select class="form-control" id="payment_type" name="payment_type" required>
-            <option value="">-- Vui lòng chọn --</option>
             <option value="COD">Thanh toán khi nhận hàng (COD)</option>
             <option value="VNPAY">VNPay</option>
         </select>

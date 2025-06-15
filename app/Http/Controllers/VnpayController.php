@@ -20,6 +20,7 @@ class VnpayController extends Controller
         $vnp_HashSecret = env('VNP_HASHSECRET');
         $vnp_Url = env('VNP_URL');
         $vnp_Returnurl = route('vnpay.return');
+        // dd($vnp_Returnurl);
 
         $vnp_TxnRef = $order->id;
         $vnp_OrderInfo = "Thanh toan don hang #" . $order->id;
@@ -29,25 +30,35 @@ class VnpayController extends Controller
         $vnp_BankCode = $request->bank_code;
         $vnp_IpAddr = $request->ip();
 
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+        $vnp_CreateDate = date('YmdHis');
+        $vnp_ExpireDate = date('YmdHis', strtotime('+15 minutes'));
+        // dd([
+        //     'now' => date('YmdHis'),
+        //     'expire' => date('YmdHis', strtotime('+15 minutes')),
+        // ]);
         $inputData = array(
             "vnp_Version" => "2.1.0",
             "vnp_TmnCode" => $vnp_TmnCode,
             "vnp_Amount" => $vnp_Amount,
             "vnp_Command" => "pay",
-            "vnp_CreateDate" => date('YmdHis'),
+            "vnp_CreateDate" => $vnp_CreateDate,
             "vnp_CurrCode" => "VND",
             "vnp_IpAddr" => $vnp_IpAddr,
             "vnp_Locale" => $vnp_Locale,
             "vnp_OrderInfo" => $vnp_OrderInfo,
             "vnp_OrderType" => $vnp_OrderType,
             "vnp_ReturnUrl" => $vnp_Returnurl,
+            "vnp_ExpireDate" => $vnp_ExpireDate,
             "vnp_TxnRef" => $vnp_TxnRef,
         );
 
         if (!empty($vnp_BankCode)) {
             $inputData['vnp_BankCode'] = $vnp_BankCode;
         }
-
+        if (empty($vnp_BankCode)) {
+            $inputData['vnp_BankCode'] = "MBBANK";
+        }
         ksort($inputData);
         $query = "";
         $i = 0;
@@ -67,8 +78,6 @@ class VnpayController extends Controller
             $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
-        // dd($vnp_Url);
-
         return redirect($vnp_Url);
     }
     public function return(Request $request)
@@ -92,7 +101,6 @@ class VnpayController extends Controller
             }
         }
         $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
-
         if ($secureHash == $vnp_SecureHash) {
             if ($inputData['vnp_ResponseCode'] == '00') {
                 // Payment Success
@@ -122,6 +130,7 @@ class VnpayController extends Controller
     }
     public function vnpayReturn(Request $request)
     {
+        
         $orderId = $request->query('order_id');
         $paymentId = $request->query('payment_id');
         $responseCode = $request->query('vnp_ResponseCode');
