@@ -7,15 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    protected $table = 'Payment';
+    protected $table = 'payments';
     use HasFactory;
 
 
     protected $fillable = [
-        'date',
         'description',
         'order_id',
         'status',
-        'sub_total'
+        'sub_total',
+        'payment_type',
+        'p_note',
+        'p_vnp_response_code',
+        'p_code_vnpay',
+        'p_code_bank',
+        'p_time',
     ];
 }
