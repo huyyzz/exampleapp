@@ -280,7 +280,47 @@ class ClothController extends Controller
         $orders = Order::where('customer_id', $userid)->orderBy('updated_at','desc')->get();
         return view('customer.order_history', compact('orders','brands','categories'));
     }
+    
+    public function profile($id)
+{
+    $user = User::find($id);
+    $orders = Order::where('customer_id', $id)
+        ->latest()
+        ->take(5)
+        ->get();
+    $addresses = null;
+    if ($user->address) {
+       $addresses = $user->address;
+    }
+    // dd($user);
 
+    $donHangDaHoanThanh = Order::where('customer_id', $id)
+        ->where('status', 'Đã giao')
+        ->count();
+
+    $user->donHangDaHoanThanh = $donHangDaHoanThanh;
+
+    $donHangTrongMotThang = Order::where('customer_id', $id)
+        ->where('status', 'Đã giao')
+        ->whereMonth('updated_at', now()->month)
+        ->count();
+
+    $user->donHangTrongMotThang = $donHangTrongMotThang;
+
+    $tongChiTieu = Order::where('customer_id', $id)
+        ->where('status', 'Đã giao')
+        ->sum('sub_total');
+
+    $user->tongChiTieu = $tongChiTieu;
+
+
+    $brands = Brand::all();
+    $categories = category::all();
+    if (!$user) {
+        return redirect()->back()->with('error', 'User not found');
+    }
+    return view('customer.profile', compact('user', 'orders', 'addresses', 'brands', 'categories'));
+}
 
 
     public function statistic(){
@@ -321,6 +361,7 @@ class ClothController extends Controller
             $hourStats[] = $stats;
 
         }
+        
 //        dd($hourStats);
         $hourStatsObj = [];
 

@@ -90,6 +90,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('customer/orderDetails/{id}', [ClothController::class, 'orderDetails'])->name('order.details');
     Route::get('customer/history/{id}', [ClothController::class, 'orderHistory'])->name('order.history');
+
 //    Route::get('customer/history/{id}', [ClothController::class, 'orderHistory'])->name('order.history');
 
 
@@ -97,6 +98,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('vnpay/index', [VnpayController::class, 'index'])->name('vnpay_index');
     Route::get('vnpay/return', [VnpayController::class, 'return'])->name('vnpay.return');
     Route::get('/vnpay/ipn', [VNPayController::class, 'ipn'])->name('vnpay.ipn');
+
+    Route::get('/profile/{id}', [ClothController::class, 'profile'])->name('profile');
+
 });
 
 Route::get('vnpay/return', [VnpayController::class, 'return'])->name('vnpay.return');
@@ -104,6 +108,8 @@ Route::get('vnpay/return', [VnpayController::class, 'return'])->name('vnpay.retu
 Route::group(['middleware' => ['web']], function () {
     Route::post('checkout', [CartController::class, 'checkOut'])->name('checkOut');
 });
+
+
 
 
 
