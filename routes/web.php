@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClothController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
 
 //Route::get('/customer/home', function () {
 //    return view('customer.home');
@@ -29,8 +30,15 @@ Route::middleware('isAdmin')->group(function(){
 
     Route::get('/QuantityUpdate/{id}', [\App\Http\Controllers\ClothController::class, 'updateQuantity'])->name('update.quantity');
     Route::get('/statistic', [\App\Http\Controllers\ClothController::class, 'statistic'])->name('statistic');
-
+    Route::prefix('admin')->group(function () {
+        Route::resource('categories', CategoryController::class);
+    });
 });
+
+
+
+
+
 
 
 //Route::get('admin/cloths/{id}', [\App\Http\Controllers\ClothController::class,'viewNewsById']);

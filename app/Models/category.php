@@ -5,17 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class category extends Model
+
+class Category extends Model
 {
     use HasFactory;
+   
+
     protected $table = 'categories';
+
     protected $fillable = [
-        'name',
+        'name'
     ];
 
+    protected $dates = ['deleted_at'];
 
-    public function cloth()
+    // Relationship with Cloth model
+    public function cloths()
     {
         return $this->hasMany(Cloth::class);
     }
+    
 }

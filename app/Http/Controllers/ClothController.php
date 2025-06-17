@@ -24,7 +24,8 @@ class ClothController extends Controller
         $cloths = Cloth::all();
         $brands = Brand::all();
         $categories = category::all();
-        return view('admin.index', compact('cloths','brands'));
+        $orders = Order::all();
+        return view('admin.index', compact('cloths','brands','categories','orders'));
     }
 
     public function home()
@@ -291,6 +292,8 @@ class ClothController extends Controller
         ->whereMonth('updated_at', now()->month)
         ->count();
 
+    // dd($donHangTrongMotThang);
+
     $user->donHangTrongMotThang = $donHangTrongMotThang;
 
     $tongChiTieu = Order::where('customer_id', $id)
@@ -298,6 +301,9 @@ class ClothController extends Controller
         ->sum('sub_total');
 
     $user->tongChiTieu = $tongChiTieu;
+
+    $since = $user->created_at;
+    $user->since = $since;
 
 
     $brands = Brand::all();
