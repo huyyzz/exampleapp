@@ -40,6 +40,7 @@ Route::middleware('isAdmin')->group(function(){
 
     Route::prefix('admin')->group(function () {
         Route::resource('categories', CategoryController::class);
+    });
 
 
 
