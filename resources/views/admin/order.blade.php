@@ -332,7 +332,7 @@
                         <tr>
                             <th><i class="fas fa-hashtag me-1"></i>ID</th>
                             <th><i class="fas fa-user me-1"></i>Khách hàng</th>
-                            <th><i class="fas fa-map-marker-alt me-1"></i>Địa chỉ</th>
+                            <th width="150px"><i class="fas fa-map-marker-alt me-1"></i>Địa chỉ</th>
                             <th><i class="fas fa-phone me-1"></i>Số điện thoại</th>
                             <th><i class="fas fa-info-circle me-1"></i>Trạng thái</th>
                             <th><i class="fas fa-clock me-1"></i>Cập nhật</th>

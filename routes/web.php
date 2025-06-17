@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClothController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
 
 use App\Http\Controllers\CollectionController;
 
@@ -37,6 +38,10 @@ Route::middleware('isAdmin')->group(function(){
     Route::get('/QuantityUpdate/{id}', [\App\Http\Controllers\ClothController::class, 'updateQuantity'])->name('update.quantity');
     Route::get('/statistic', [\App\Http\Controllers\ClothController::class, 'statistic'])->name('statistic');
 
+    Route::prefix('admin')->group(function () {
+        Route::resource('categories', CategoryController::class);
+
+
 
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('collections', AdminCollectionController::class);
@@ -46,8 +51,14 @@ Route::middleware('isAdmin')->group(function(){
 
         Route::post('collections/{collection}/products', [AdminCollectionController::class, 'updateProducts'])
             ->name('collections.products.update');
+
     });
 });
+
+
+
+
+
 
 
 //Route::get('admin/cloths/{id}', [\App\Http\Controllers\ClothController::class,'viewNewsById']);

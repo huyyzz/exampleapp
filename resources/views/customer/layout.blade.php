@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -12,234 +11,545 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <style>
-        .card {
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-            transition: 0.3s;
-            width: 40%;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .card:hover {
-            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
         }
 
-        .container {
-            padding: 2px 16px;
-        }
-        header{
-            display: flex;
-            justify-content: space-between;
-            padding :  0 50px ;
-            height: 70px;
-            align-items: center;
+        /* Header Styles */
+        .main-header {
+            background: white;
+            color: #333;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            z-index: 1;
-            background: rgba(255,255,255,0.3);
+            right: 0;
+            z-index: 1000;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 1px solid #e9ecef;
         }
-        header.sticky{
-            background: rgba(255,255,255,1);
+
+        /* Left Menu */
+        .left-menu {
+            display: flex;
+            align-items: center;
+            gap: 30px;
         }
-        header:hover{
-            background: rgba(255,255,255,1);
+
+        .menu-item {
+            position: relative;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
         }
-        li{
-            list-style: none;
+
+        .menu-item:hover {
+            background-color: #f8f9fa;
+            color: #007bff;
+            text-decoration: none;
+            transform: translateY(-2px);
         }
-        a{
+
+        /* Special styling for Sale item */
+        .menu-item.sale-item {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .menu-item.sale-item:hover {
+            color: #dc3545;
+            background-color: #f8f9fa;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu-custom {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            padding: 10px 0;
+        }
+
+        .menu-item {
+            position: relative;
+        }
+
+        .menu-item .dropdown-menu-custom {
+            display: none;
+        }
+
+        .menu-item:hover .dropdown-menu-custom {
+            display: block;
+            animation: slideDown 0.3s ease forwards;
+            visibility: visible;
+            opacity: 1;
+        }
+
+
+        .dropdown-item-custom {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-item-custom:hover {
+            background-color: #f8f9fa;
+            color: #007bff;
             text-decoration: none;
         }
 
-        .logo{
-
-            /*flex: 50px;*/
-        }
-
-        .menu{
-            margin-left: 2rem;
-            justify-content: left;
+        /* Center Banner/Logo */
+        .center-banner {
+            flex: 1;
             display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .menu >li{
-            padding : 0 12px ;
+
+        .logo-banner {
+            text-decoration: none;
+        }
+
+        .logo-banner img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-banner:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Right Section */
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Search Bar */
+        .search-container {
             position: relative;
         }
-        .menu > li:hover .sub-menu{
-            display: block;
-            visibility: visible;
-            top: 45px;
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 25px;
+            padding: 8px 15px;
+            transition: all 0.3s ease;
+            width: 250px;
         }
-        .sub-menu{
+
+        .search-form:focus-within {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+
+        .search-input {
+            border: none;
+            background: none;
+            outline: none;
+            flex: 1;
+            padding: 5px 10px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .search-input::placeholder {
+            color: #6c757d;
+        }
+
+        .search-btn {
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .search-btn:hover {
+            color: #007bff;
+        }
+
+        /* Right Icons */
+        .icon-item {
+            position: relative;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .icon-item:hover {
+            background: #007bff;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+        }
+
+        .icon-item i {
+            font-size: 20px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .icon-item:hover i {
+            color: white;
+            transform: scale(1.2);
+        }
+
+        /* Icon Dropdown */
+        .icon-dropdown {
             position: absolute;
-            width: 150px;
-            border: 1px solid #ccc;
-            padding: 10px 0 10px 20px;
-            display: none;
-            z-index: 1;
-            transition: 0.3s;
-            background: #ffff;
+            top: 100%;
+            right: 0;
+            background: white;
+            min-width: 220px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            opacity: 0;
             visibility: hidden;
-
-        }
-        .sub-menu ul {
-            padding-left: 20px;
-        }
-        .sub-menu ul a {
-            font-weight: normal;
-            font-size:  18px;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            padding: 10px 0;
+            margin-top: 10px;
         }
 
+        .icon-item:hover .icon-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
 
-
-        .menu li > a{
-            font-size:  18px;
-            font-weight: bold ;
+        .icon-dropdown-item {
             display: block;
-            line-height: 20px;
-        }
-        .content {
-            margin-top: 5rem;
-        }
-        .reF{
-            margin-left: auto;
-        }
-
-        .loginBtn {
-
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
         }
 
-
-        .loginBtn > a:link {
-            color: white!important;
+        .icon-dropdown-item:hover {
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
         }
-        .loginBtn > a:hover{
-            color: black!important;
+
+        .icon-dropdown-item i {
+            margin-right: 10px;
+            width: 16px;
+            color: inherit;
+        }
+
+        /* Cart Badge */
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .left-menu {
+                gap: 15px;
+            }
+            
+            .menu-item {
+                font-size: 14px;
+                padding: 8px 10px;
+            }
+            
+            .search-form {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 0 15px;
+                flex-wrap: wrap;
+                height: auto;
+                min-height: 80px;
+            }
+            
+            .left-menu {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                padding: 10px 0;
+                gap: 10px;
+            }
+            
+            .center-banner {
+                order: 1;
+                flex: none;
+            }
+            
+            .right-section {
+                order: 2;
+                gap: 10px;
+            }
+            
+            .search-form {
+                width: 150px;
+            }
+            
+            .menu-item {
+                font-size: 12px;
+                padding: 5px 8px;
+            }
+        }
+
+        /* Animation */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-menu-custom,
+        .icon-dropdown {
+            animation: slideDown 0.3s ease;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-<header class="p-3 text-bg-dark">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                <svg class="bi me-2" width="1" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-            </a>
-
-            <div class="logo">
-                <ul class="float-start nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="{{route('customer.home')}}" ><img src="https://insacmau.com/wp-content/uploads/2024/11/logo-shop-quan-ao-nu-9.jpg" width="60px" height="60px" alt=""></a></li>
-                </ul>
-            </div>
-
-
-            <div class="menu dropdown">
-                <button style="border: none" class="text-bg-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    Brands
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    @foreach($brands as $brand)
-                        <li>
-                            <a href="{{route('specific',$brand->name)}}" class="nav-link px-2 btn-outline-dark">{{$brand->name}}</a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-            <form class="menu" method="get" action="{{route('search')}}">
-                <div class="input-group form-control">
-                    <input type="search" class="border-0 form-control" aria-label="Search" aria-describedby="search-addon" name="term" value="" placeholder="Tìm kiếm sản phẩm">
-                    <button style="background: none" type="submit" class="border-0">
-                        <span class="input-group-text border-0" id="search-addon">
-                            <i class="fas fa-search"></i>
-                        </span>
-                    </button>
+    <!-- Main Header -->
+    <header class="main-header">
+        <!-- Left Menu -->
+        <nav class="left-menu">
+            <!-- Nữ -->
+            <div class="menu-item">
+                <a href="#">Nữ</a>
+                <div class="dropdown-menu-custom">
+                    <a href="#" class="dropdown-item-custom">Áo sơ mi nữ</a>
+                    <a href="#" class="dropdown-item-custom">Áo thun nữ</a>
+                    <a href="#" class="dropdown-item-custom">Áo khoác nữ</a>
+                    <a href="#" class="dropdown-item-custom">Quần jean nữ</a>
+                    <a href="#" class="dropdown-item-custom">Quần tây nữ</a>
+                    <a href="#" class="dropdown-item-custom">Váy ngắn</a>
+                    <a href="#" class="dropdown-item-custom">Váy dài</a>
+                    <a href="#" class="dropdown-item-custom">Đầm công sở</a>
+                    <a href="#" class="dropdown-item-custom">Túi xách</a>
+                    <a href="#" class="dropdown-item-custom">Giày cao gót</a>
                 </div>
-            </form>
-{{--            <div class="menu dropdown">--}}
-{{--                <button style="border: none" class="text-bg-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">--}}
-{{--                    Categories--}}
-{{--                </button>--}}
-{{--                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">--}}
-{{--                    @foreach($categories as $category)--}}
-{{--                        <li>--}}
-{{--                            <a href="{{route('specific',$category->name)}}" class="nav-link px-2 btn-outline-dark">{{$brand->name}}</a>--}}
-{{--                        </li>--}}
-{{--                    @endforeach--}}
-{{--                </ul>--}}
-{{--            </div>--}}
-            <div class="d-flex gap-2 align-items-center reF">
-                @if (Session('user_name'))
-                    <form action="{{route('order.history', Session('user_name'))}}">
-                        @csrf
-                        <button type="submit" class="btn btn-outline-light me-2 loginBtn" >Lịch sử đơn hàng</button>
-                    </form>
-
-                    <form action="{{route('showcart',1)}}" class="d-flex">
-                        <button class="btn btn-outline-light me-2" type="submit">
-                            <i class="bi-cart-fill me-1"></i>
-                            @if(Session('cart'))
-                                    <?php
-                                    $increment = 0;
-                                    ?>
-                                @foreach(Session('cart') as $item)
-                                        <?php
-                                        $increment++;
-                                        ?>
-                                @endforeach
-                                <span class="badge bg-danger text-white ms-1 rounded-pill">{{$increment}}</span></a>
-                            @endif
-                        </button>
-                    </form>
-                    <div>
-                        <div class="dropdown">
-                            <button class="text-bg-dark" style="border: none" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                Hi {{Session('user_name')}}
-                            </button>
-                            <div class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton2">
-                                @if (Session('role') == 'admin')
-                                    <a href="{{ route('profile', Session('id') )}}">Thông tin cá nhân</a>
-                                    <hr>
-                                    <a href="{{ route('Cloths.index') }}">Dashboard</a>
-                                @else
-                                    <div class="">
-                                        <!-- <ul> -->
-                                            <button class="btn" >
-                                                <a href="{{ route('profile', Session('id') ) }}">Thông tin</a>
-                                            </button>
-                                        <!-- </ul> -->
-                                    
-                                    <form method="post" action="{{route('logout')}}">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger">Đăng xuất</button>
-                                    </form>
-                                    </div>
-                                @endif
-
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    
-                @else
-                    <form action="{{route('login')}}">
-                        @csrf
-                        <button type="submit" class="btn btn-outline-light me-2 loginBtn" >Đăng nhập</button>
-                    </form>
-                @endif
-
             </div>
-        </div>
+
+            <!-- Nam -->
+            <div class="menu-item">
+                <a href="#">Nam</a>
+                <div class="dropdown-menu-custom">
+                    <a href="#" class="dropdown-item-custom">Áo sơ mi nam</a>
+                    <a href="#" class="dropdown-item-custom">Áo thun nam</a>
+                    <a href="#" class="dropdown-item-custom">Áo khoác nam</a>
+                    <a href="#" class="dropdown-item-custom">Quần jean nam</a>
+                    <a href="#" class="dropdown-item-custom">Quần tây nam</a>
+                    <a href="#" class="dropdown-item-custom">Quần short</a>
+                    <a href="#" class="dropdown-item-custom">Vest nam</a>
+                    <a href="#" class="dropdown-item-custom">Giày thể thao</a>
+                    <a href="#" class="dropdown-item-custom">Phụ kiện nam</a>
+                </div>
     </div>
 
-{{--    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>--}}
-{{--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>--}}
-</header>
-<div class="content">
-    @yield('content')
-</div>
+            <!-- Đại tiệc mùa hè -->
+            <a href="#" class="menu-item sale-item">
+                Đại tiệc mùa hè - Sale tới 70%
+                <div class="dropdown-menu-custom">
+                    <a href="#" class="dropdown-item-custom"> Sale 50% - Áo thun</a>
+                    <a href="#" class="dropdown-item-custom"> Sale 60% - Quần short</a>
+                    <a href="#" class="dropdown-item-custom"> Sale 70% - Váy hè</a>
+                    <a href="#" class="dropdown-item-custom"> Hot Deals - Đồ bơi</a>
+                    <a href="#" class="dropdown-item-custom"> Flash Sale - Sandal</a>
+                    <a href="#" class="dropdown-item-custom"> Mega Deal - Set đồ hè</a>
+                </div>
+            </a>
 
-@yield('scripts')
+            <!-- Bộ sưu tập -->
+            <a href="#" class="menu-item">
+                Bộ sưu tập
+                <div class="dropdown-menu-custom">
+                    <a href="#" class="dropdown-item-custom"> Spring Collection</a>
+                    <a href="#" class="dropdown-item-custom"> Summer Collection</a>
+                    <a href="#" class="dropdown-item-custom"> Fall Collection</a>
+                    <a href="#" class="dropdown-item-custom"> Winter Collection</a>
+                    <a href="#" class="dropdown-item-custom"> Premium Collection</a>
+                    <a href="#" class="dropdown-item-custom"> Limited Edition</a>
+                </div>
+            </a>
+
+            <!-- Về chúng tôi -->
+            <a href="#" class="menu-item">
+                Về chúng tôi
+                <div class="dropdown-menu-custom">
+                    <a href="#" class="dropdown-item-custom"> Hoạt động cộng đồng</a>
+                    <a href="#" class="dropdown-item-custom"> Tầm nhìn sứ mệnh</a>
+                    <a href="#" class="dropdown-item-custom"> Đội ngũ</a>
+                    <a href="#" class="dropdown-item-custom"> Liên hệ</a>
+                    <a href="#" class="dropdown-item-custom"> Hệ thống cửa hàng</a>
+                    <a href="#" class="dropdown-item-custom"> Chính sách</a>
+                </div>
+            </a>
+        </nav>
+
+        <!-- Center Banner/Logo -->
+        <div class="center-banner">
+            <a href="{{route('customer.home')}}" class="logo-banner">
+                <img src="https://insacmau.com/wp-content/uploads/2024/11/logo-shop-quan-ao-nu-9.jpg" alt="Logo">
+            </a>
+        </div>
+
+        <!-- Right Section -->
+        <div class="right-section">
+            <!-- Search Bar -->
+            <div class="search-container">
+                <form class="search-form" method="get" action="{{route('search')}}">
+                    <input type="search" class="search-input" name="term" placeholder="Tìm kiếm sản phẩm..." value="">
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Support Icon -->
+            <div class="icon-item">
+                <i class="fas fa-headset"></i>
+                <div class="icon-dropdown">
+                    <a href="tel:1900123456" class="icon-dropdown-item">
+                        <i class="fas fa-phone" style="color: #63E6BE;"></i> Hotline: 1900 123 456
+                    </a>
+                    <a href="#" class="icon-dropdown-item">
+                        <i class="fa-brands fa-facebook-messenger" style="color: #63E6BE;"></i> Messenger
+                    </a>
+                    <a href="#" class="icon-dropdown-item">
+                        <i class="fas fa-comments" style="color: #63E6BE;"></i> Live Chat
+                    </a>
+                    <a href="mailto:support@example.com" class="icon-dropdown-item">
+                        <i class="fas fa-envelope" style="color: #63E6BE;"></i> Email
+                    </a>
+                </div>
+            </div>
+
+            <!-- User Info Icon -->
+            <div class="icon-item">
+                <i class="fas fa-user"></i>
+                <div class="icon-dropdown">
+                    @if (Session('user_name'))
+                        <a href="{{ route('profile', Session('id') ) }}" class="icon-dropdown-item">
+                            <i class="fas fa-user-circle" style="color: #63E6BE;"></i> Thông tin cá nhân
+                        </a>
+                        <a href="{{route('order.history', Session('user_name'))}}" class="icon-dropdown-item">
+                            <i class="fas fa-history" style="color: #63E6BE;"></i> Lịch sử đơn hàng
+                        </a>
+                        <form method="post" action="{{route('logout')}}" style="margin: 0;">
+                            @csrf
+                            <button type="submit" class="icon-dropdown-item">
+                                <i class="fas fa-sign-out-alt" style="color: #63E6BE;"></i> Đăng xuất
+                            </button>
+                        </form>
+                        @if (Session('role') == 'admin')
+                            <a href="{{ route('Cloths.index') }}" class="icon-dropdown-item">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        @endif
+                    @else
+                        <a href="{{route('login')}}" class="icon-dropdown-item">
+                            <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                        </a>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Cart Icon -->
+            <div class="icon-item">
+                <form action="{{route('showcart',1)}}" method="GET" style="margin: 0;">
+                    <button type="submit" style="background: none; border: none; position: relative; color: inherit;">
+                        <i class="fas fa-shopping-cart"></i>
+                        @if(Session('cart'))
+                            <?php $increment = 0; ?>
+                            @foreach(Session('cart') as $item)
+                                <?php $increment++; ?>
+                            @endforeach
+                            <span class="cart-badge">{{$increment}}</span>
+                        @endif
+                    </button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Content will be injected here -->
+        <div class="container-fluid p-4">
+            @yield('content')
+        </div>
+    </main>
+
+    @yield('scripts')
+</body>
+</html>

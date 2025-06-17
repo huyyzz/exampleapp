@@ -347,7 +347,7 @@
                             <td>{{$item->product_description}}</td>
                             <td>{{$item->QuantityInWareHouse}}</td>
                             <td>{{$item->product_price}}.VNĐ</td>
-                            <td><img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="Product Image" width="100%" height="100%"></td>
+                            <td><img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="Product Image" width="120px" height="120px"></td>
                             <td>{{$item->created_at}}</td>
                             <td>{{$item->updated_at}}</td>
                             <td class="btnContainer">
