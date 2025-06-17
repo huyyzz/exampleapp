@@ -52,4 +52,13 @@ class Cloth extends Model
     ];
 
     protected $dates = ['deleted_at'];
+
+
+
+    public function collections()
+    {
+        return $this->belongsToMany(collections::class)
+            ->withPivot('sort_order')
+            ->orderBy('collection_product.sort_order');
+    }
 }
