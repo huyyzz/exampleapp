@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOption\None;
 
+
+use App\Models\collections;
+
 class ClothController extends Controller
 {
     /**
@@ -36,7 +39,18 @@ class ClothController extends Controller
         // 1 la ao, 2 la quan
         $brands = Brand::all();
         $categories = category::all();
-        return view('customer.home', compact('cloths','brands','specific','categories'));
+
+
+
+
+        $featuredCollections = collections::active()
+            ->current()
+            ->where('show_on_homepage', true)
+            ->orderBy('sort_order')
+            ->take(3)
+            ->get();
+
+        return view('customer.home', compact('cloths','brands','specific','categories','featuredCollections'));
     }
 
     /**

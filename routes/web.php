@@ -5,6 +5,11 @@ use App\Http\Controllers\ClothController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 
+use App\Http\Controllers\CollectionController;
+
+use App\Http\Controllers\AdminCollectionController;
+use App\Http\Controllers\VnpayController;
+
 //Route::get('/customer/home', function () {
 //    return view('customer.home');
 //})->middleware('auth')->name("customer.home");
@@ -30,8 +35,21 @@ Route::middleware('isAdmin')->group(function(){
 
     Route::get('/QuantityUpdate/{id}', [\App\Http\Controllers\ClothController::class, 'updateQuantity'])->name('update.quantity');
     Route::get('/statistic', [\App\Http\Controllers\ClothController::class, 'statistic'])->name('statistic');
+
     Route::prefix('admin')->group(function () {
         Route::resource('categories', CategoryController::class);
+
+
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::resource('collections', AdminCollectionController::class);
+
+        Route::get('collections/{collection}/products', [AdminCollectionController::class, 'products'])
+            ->name('collections.products');
+
+        Route::post('collections/{collection}/products', [AdminCollectionController::class, 'updateProducts'])
+            ->name('collections.products.update');
+
     });
 });
 
@@ -61,6 +79,10 @@ Route::get('/profile/{id}',[\App\Http\Controllers\LogController::class,'profile'
 Route::get('/search',[\App\Http\Controllers\ClothController::class,'search'])->name('search');
 
 
+Route::get('/collections', [CollectionController::class, 'index'])->name('collections.index');
+Route::get('/collections/{collection}', [CollectionController::class, 'show'])->name('collections.show');
+
+
 
 Route::post('/logout',[\App\Http\Controllers\LogController::class,'logout'])->name('logout');
 
@@ -79,9 +101,20 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('customer/orderDetails/{id}', [ClothController::class, 'orderDetails'])->name('order.details');
     Route::get('customer/history/{id}', [ClothController::class, 'orderHistory'])->name('order.history');
+
+//    Route::get('customer/history/{id}', [ClothController::class, 'orderHistory'])->name('order.history');
+
+
+
+    Route::get('vnpay/index', [VnpayController::class, 'index'])->name('vnpay_index');
+    Route::get('vnpay/return', [VnpayController::class, 'return'])->name('vnpay.return');
+    Route::get('/vnpay/ipn', [VNPayController::class, 'ipn'])->name('vnpay.ipn');
+
     Route::get('/profile/{id}', [ClothController::class, 'profile'])->name('profile');
+
 });
 
+Route::get('vnpay/return', [VnpayController::class, 'return'])->name('vnpay.return');
 
 Route::group(['middleware' => ['web']], function () {
     Route::post('checkout', [CartController::class, 'checkOut'])->name('checkOut');
