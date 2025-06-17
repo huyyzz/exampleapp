@@ -27,7 +27,9 @@ Route::middleware('isAdmin')->group(function(){
     Route::post('/orderUpdate/{id}', [\App\Http\Controllers\ClothController::class, 'orderUpdate'])->name('orderUpdate');
     Route::get('/', [\App\Http\Controllers\ClothController::class, 'index']
     )->name("admin.index");
+    
     Route::resource('Cloths', \App\Http\Controllers\ClothController::class);
+
     Route::get('/admin/index', function () {
         return view('admin.index');
     })->middleware('auth')->name("admin.index");
