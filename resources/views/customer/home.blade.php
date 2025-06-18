@@ -420,8 +420,8 @@
      <section class="section-header">
         <h2 class="section-title">NEW ARRIVAL</h2>
         <div class="section-tabs">
-            <a href="#" class="tab active">Lady</a>
-            <a href="#" class="tab">Metagent</a>
+            <!-- <a href="#" class="tab active">Lady</a>
+            <a href="#" class="tab">Metagent</a> -->
         </div>
     </section>
 
@@ -484,7 +484,32 @@
     <!-- Best Sellers Section -->
     <div class="section-header">
         <h2 class="section-title">BEST SELLERS</h2>
-        <p class="section-subtitle">Ưu đãi cực sốc</p>
+        <!-- <p class="section-subtitle">Ưu đãi cực sốc</p> -->
+         <div class="products-grid">
+         @foreach($productBestSeller as $item)
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <a href="{{ route('showcus', $item->id) }}">
+                            <img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="{{ $item->product_name }}" class="product-image">
+                        </a>
+                        <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; font-size: 0.75rem; padding: 5px 8px; border-radius: 15px;">NEW</span>
+                    </div>
+                    <div class="product-info">
+                        <h5 class="product-name">{{ \Illuminate\Support\Str::limit($item->product_name, 50) }}</h5>
+                        <div class="product-footer">
+                            <span class="product-price">{{ number_format($item->product_price, 0) }}đ</span>
+                            <form method="get" action="{{ route('addToCart', $item->id) }}">
+                                <input type="hidden" value="1" name="inputQuantity" id="inputQuantity" min="1" max="999">
+                                <button class="add-to-cart-btn" type="submit">
+                                    <i class="bi bi-cart-plus"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+            </div>
+
     </div>
 
     <div class="products-grid">
@@ -642,7 +667,7 @@
     <!-- Copyright -->
     <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
         Domestic goods:
-        <a class="text-reset fw-bold">Cloth SHOP VIP123</a>
+        <a class="text-reset fw-bold">HUY SHOP 123</a>
     </div>
     <!-- Copyright -->
 </footer>
