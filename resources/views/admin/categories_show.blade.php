@@ -29,10 +29,10 @@
                     </table>
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                        <a href="{{ route('categories_index') }}" class="btn btn-secondary me-md-2">
+                        <a href="{{ route('categories.index') }}" class="btn btn-secondary me-md-2">
                             <i class="fas fa-arrow-left"></i> Quay lại
                         </a>
-                        <a href="{{ route('categories_edit', $category->id) }}" class="btn btn-warning">
+                        <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning">
                             <i class="fas fa-edit"></i> Chỉnh sửa
                         </a>
                     </div>

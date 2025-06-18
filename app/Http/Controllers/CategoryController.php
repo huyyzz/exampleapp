@@ -65,7 +65,7 @@ class CategoryController extends Controller
         ]);
 
         Category::whereId($id)->update($updateData);
-        return redirect()->route('categories_index')->with('success', 'Category has been updated successfully!');
+        return redirect()->route('categories.index')->with('success', 'Category has been updated successfully!');
     }
 
     /**
