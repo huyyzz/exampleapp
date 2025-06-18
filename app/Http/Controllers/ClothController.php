@@ -28,6 +28,12 @@ class ClothController extends Controller
         $brands = Brand::all();
         $categories = category::all();
         $orders = Order::all();
+
+
+
+
+        
+
         return view('admin.index', compact('cloths','brands','categories','orders'));
     }
 
@@ -50,7 +56,18 @@ class ClothController extends Controller
             ->take(3)
             ->get();
 
-        return view('customer.home', compact('cloths','brands','specific','categories','featuredCollections'));
+
+        $bestSellers = DB::table('order_items')
+            ->select('product_id', DB::raw('SUM(quantity) as total_sold'))
+            ->groupBy('product_id')
+            ->orderByDesc('total_sold')
+            ->limit(8)
+            ->get();
+
+        $productIds = $bestSellers->pluck('product_id');
+        $productBestSeller = Cloth::whereIn('id', $productIds)->get();
+
+        return view('customer.home', compact('cloths','brands','specific','categories','featuredCollections','productBestSeller'));
     }
 
     /**
