@@ -495,7 +495,7 @@
                         <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; font-size: 0.75rem; padding: 5px 8px; border-radius: 15px;">NEW</span>
                     </div>
                     <div class="product-info">
-                        <h5 class="product-name">{{ \Illuminate\Support\Str::limit($item->product_name, 50) }}</h5>
+                        <h5 class="product-name" style="text-align: left;">{{ \Illuminate\Support\Str::limit($item->product_name, 50) }}</h5>
                         <div class="product-footer">
                             <span class="product-price">{{ number_format($item->product_price, 0) }}đ</span>
                             <form method="get" action="{{ route('addToCart', $item->id) }}">
