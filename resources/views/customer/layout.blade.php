@@ -459,7 +459,7 @@
         <!-- Center Banner/Logo -->
         <div class="center-banner">
             <a href="{{route('customer.home')}}" class="logo-banner">
-                <img src="https://insacmau.com/wp-content/uploads/2024/11/logo-shop-quan-ao-nu-9.jpg" alt="Logo">
+                <img src="https://i.imgur.com/Uq3SwRa.jpg" alt="Logo">
             </a>
         </div>
 

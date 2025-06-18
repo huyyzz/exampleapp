@@ -309,12 +309,15 @@
                             <span>Thêm sản phẩm</span>
                         </a>
                     </div>
+
                     <div class="menu-item">
-                        <a href="{{ route('categories.create') }}">
-                            <i class="fas fa-plus-circle"></i>
-                            <span>Thêm danh mục</span>
+                        <a href="{{ route('categories.index') }}">
+                            <i class="fas fa-list"></i>
+                            <span>Danh mục</span>
                         </a>
+
                     </div>
+                    
 
                     <div class="menu-item">
                         <a href="#">
