@@ -608,7 +608,7 @@
                 <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
                     <!-- Content -->
                     <h6 class="text-uppercase fw-bold mb-4">
-                        <i class="fas fa-gem me-3"></i>Huy shop
+                        <i class="fas fa-gem me-3"></i>TIN TIN 
                     </h6>
                     <p>
                         Cảm ơn bạn đã xem sản phẩm của chúng tôi. Ngoài ra,
@@ -652,7 +652,7 @@
                     <p><i class="fas fa-home me-3"></i> Hanoi, Hadong Vietnam</p>
                     <p>
                         <i class="fas fa-envelope me-3"></i>
-                        LuxyShop@gmail.com
+                        TINTINShop@gmail.com
                     </p>
                     <p><i class="fas fa-phone me-3"></i> + 0563 456 195</p>
                     <p><i class="fas fa-print me-3"></i> + 0904 775 377</p>
@@ -667,7 +667,7 @@
     <!-- Copyright -->
     <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
         Domestic goods:
-        <a class="text-reset fw-bold">HUY SHOP 123</a>
+        <a class="text-reset fw-bold">TIN TIN SHOP</a>
     </div>
     <!-- Copyright -->
 </footer>

@@ -53,14 +53,14 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 16px;
-            padding: 10px 15px;
+            padding: 10px 5px;
             border-radius: 5px;
             transition: all 0.3s ease;
         }
 
         .menu-item:hover {
             background-color: #f8f9fa;
-            color: #007bff;
+            color:rgb(246, 95, 7);
             text-decoration: none;
             transform: translateY(-2px);
         }
@@ -138,9 +138,8 @@
         }
 
         .logo-banner img {
-            width: 60px;
+            width: 100%;
             height: 60px;
-            border-radius: 50%;
             object-fit: cover;
             transition: transform 0.3s ease;
         }
@@ -385,7 +384,7 @@
         <nav class="left-menu">
             <!-- Nữ -->
             <div class="menu-item">
-                <a href="#">Nữ</a>
+                <a href="#" class="menu-item">Nữ</a>
                 <div class="dropdown-menu-custom">
                     <a href="#" class="dropdown-item-custom">Áo sơ mi nữ</a>
                     <a href="#" class="dropdown-item-custom">Áo thun nữ</a>
@@ -401,8 +400,8 @@
             </div>
 
             <!-- Nam -->
-            <div class="menu-item">
-                <a href="#">Nam</a>
+            <div class="menu-item"> 
+                <a href="#" class="menu-item">Nam</a>
                 <div class="dropdown-menu-custom">
                     <a href="#" class="dropdown-item-custom">Áo sơ mi nam</a>
                     <a href="#" class="dropdown-item-custom">Áo thun nam</a>
@@ -417,8 +416,8 @@
     </div>
 
             <!-- Đại tiệc mùa hè -->
-            <a href="#" class="menu-item sale-item">
-                Đại tiệc mùa hè - Sale tới 70%
+            <div class="menu-item sale-item">
+                <a href="" class="menu-item sale-item">Đại tiệc mùa hè - Sale tới 70% </a>
                 <div class="dropdown-menu-custom">
                     <a href="#" class="dropdown-item-custom"> Sale 50% - Áo thun</a>
                     <a href="#" class="dropdown-item-custom"> Sale 60% - Quần short</a>
@@ -427,11 +426,11 @@
                     <a href="#" class="dropdown-item-custom"> Flash Sale - Sandal</a>
                     <a href="#" class="dropdown-item-custom"> Mega Deal - Set đồ hè</a>
                 </div>
-            </a>
+            </div>
 
             <!-- Bộ sưu tập -->
-            <a href="#" class="menu-item">
-                Bộ sưu tập
+            <div class="menu-item">
+                <a href="" class="menu-item">Bộ sưu tập</a>
                 <div class="dropdown-menu-custom">
                     <a href="#" class="dropdown-item-custom"> Spring Collection</a>
                     <a href="#" class="dropdown-item-custom"> Summer Collection</a>
@@ -440,11 +439,11 @@
                     <a href="#" class="dropdown-item-custom"> Premium Collection</a>
                     <a href="#" class="dropdown-item-custom"> Limited Edition</a>
                 </div>
-            </a>
+            </div>
 
             <!-- Về chúng tôi -->
-            <a href="#" class="menu-item">
-                Về chúng tôi
+            <div class="menu-item">
+                <a href="" class="menu-item">Về chúng tôi</a>
                 <div class="dropdown-menu-custom">
                     <a href="#" class="dropdown-item-custom"> Hoạt động cộng đồng</a>
                     <a href="#" class="dropdown-item-custom"> Tầm nhìn sứ mệnh</a>
@@ -459,7 +458,7 @@
         <!-- Center Banner/Logo -->
         <div class="center-banner">
             <a href="{{route('customer.home')}}" class="logo-banner">
-                <img src="https://i.imgur.com/Uq3SwRa.jpg" alt="Logo">
+                <img src="{{ asset("logo 5.jpg") }}" alt="Logo" >
             </a>
         </div>
 
