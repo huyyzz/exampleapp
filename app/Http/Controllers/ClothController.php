@@ -166,7 +166,7 @@ class ClothController extends Controller
             'QuantityInWareHouse' => 'numeric|max:1000',
             'product_price' => 'required|max:255',
             'category_id' => 'numeric',
-            'product_image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'product_image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:16132',
         ]);
 
         if ($request->hasFile('product_image_url')) {

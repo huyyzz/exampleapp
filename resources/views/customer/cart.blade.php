@@ -8,253 +8,665 @@
     <title>Cart</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-{{--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">--}}
-{{--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />--}}
-{{--    <link rel="stylesheet" href="{{asset('bootstrap-5.3.3/bootstrap-5.3.3-dist/css/bootstrap.min.css')}}">--}}
-
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
-        .products {
-            margin-top: 20px;
+        * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .caption {
+        body {
+            background-color: #ffffff;
+            color: #2d3748;
+        }
+
+        .cart-container {
+            background-color: #ffffff;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .cart-card {
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .cart-header {
+            background: linear-gradient(135deg,rgb(220, 162, 80) 0%,rgb(197, 127, 41) 100%);
+            color: white;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .cart-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .clear-cart-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .clear-cart-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+
+        .cart-item {
+            background: #ffffff;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .product-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .product-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .product-price {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #4299e1;
+            margin-bottom: 1rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .quantity-input {
+            width: 80px;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
             text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .img-size {
-            width: 225px !important;
-            height: 153px;
-            margin-left: 20px;
-            margin-top: 10px;
+        .quantity-input:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
         }
 
-        .cart-delete {
-            margin-left: 5px;
-            text-decoration: none;
-            color: grey;
-            font-size: 16px;
-            margin-top: 5px;
+        .remove-btn {
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: none;
             cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .cart-delete:hover {
-            color: red;
-        }
-
-        .check-btn {
-            float: right;
-        }
-
-        .shopping-btn {
-            background: #fcfcfc;
-            border: 1px solid #7c7e81 !important;
-        }
-        .cart-icon{
-            color: black;
+        .remove-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3);
+            color: white;
             text-decoration: none;
         }
-        .cart-icon:hover{
-            text-decoration: none;
-            color: red;
+
+        .subtotal {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2d3748;
+            text-align: right;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .hidden2 {
+        .cart-summary {
+            background: #f7fafc;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .total-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .payment-select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white;
+        }
+
+        .payment-select:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+
+        .checkout-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .continue-shopping-btn {
+            background: white;
+            color: #4299e1;
+            border: 2px solid #4299e1;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-right: 1rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .continue-shopping-btn:hover {
+            background: #4299e1;
+            color: white;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .customer-info {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .customer-info h5 {
+            color: #2d3748;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: #f7fafc;
+            border-radius: 8px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .info-icon {
+            color: #4299e1;
+            width: 20px;
+            height: 20px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+            font-size: 1.25rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .empty-cart i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #cbd5e0;
+        }
+
+        .customer-name-input {
+            background: transparent;
+            border: none;
+            font-weight: 600;
+            color: #2d3748;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .customer-name-input:focus {
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+
+        /* Notification Toast - Updated */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: linear-gradient(135deg, #68d391 0%, #48bb78 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-width: 320px;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-left: 4px solid #38a169;
+        }
+
+        .toast.show {
+            transform: translateX(0);
             opacity: 1;
-            transition: opacity 1.2s ease-in-out;
         }
 
-        .hidden2.fade {
+        .toast.hide {
+            transform: translateX(400px);
             opacity: 0;
         }
 
+        .toast-icon {
+            font-size: 1.25rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast-message {
+            flex: 1;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Custom confirmation dialog */
+        .confirmation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confirmation-dialog {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .confirmation-overlay.show .confirmation-dialog {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .confirmation-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .confirmation-message {
+            color: #4a5568;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .confirmation-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .confirm-btn {
+            background: #e53e3e;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .confirm-btn:hover {
+            background: #c53030;
+        }
+
+        .cancel-btn {
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .cancel-btn:hover {
+            background: #cbd5e0;
+        }
+
+        @media (max-width: 768px) {
+            .cart-container {
+                padding: 1rem;
+            }
+            
+            .cart-header {
+                padding: 1.5rem;
+            }
+            
+            .cart-title {
+                font-size: 2rem;
+            }
+            
+            .cart-item {
+                padding: 1rem;
+            }
+            
+            .product-image {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .total-amount {
+                font-size: 1.5rem;
+            }
+
+            .toast {
+                min-width: 280px;
+                margin: 0 10px;
+            }
+
+            .confirmation-dialog {
+                margin: 0 20px;
+            }
+        }
     </style>
 </head>
 
 <body>
 @extends('customer.layout')
 @section('content')
-    <div class="row" style="margin-top: 5rem">
-        <div class="col-lg-12 col-sm-12 col-12 main-section">
-            <div class="cart-table dropdown">
-                <a href="{{ url('clear-cart') }}" class="cart-icon"><i class="fas fa-trash"></i> Clear cart</a>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
 
-
+    <!-- Custom Confirmation Dialog -->
+    <div class="confirmation-overlay" id="confirmationOverlay">
+        <div class="confirmation-dialog">
+            <h3 class="confirmation-title">Xác nhận xóa</h3>
+            <p class="confirmation-message">Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?</p>
+            <div class="confirmation-buttons">
+                <button class="confirm-btn" id="confirmDelete">
+                    <i class="fas fa-trash mr-2"></i>
+                    Xóa
+                </button>
+                <button class="cancel-btn" id="cancelDelete">
+                    <i class="fas fa-times mr-2"></i>
+                    Hủy
+                </button>
             </div>
         </div>
     </div>
-    <form method="post" action="{{route('checkOut')}}">
-        @csrf
-    <table id="cart" class="table table-bordered table-hover table-condensed mt-3">
-        <thead>
-        <tr>
-            <th style="width:50%">Sản phẩm</th>
-            <th style="width:10%">Giá</th>
-{{--            <th style="width:8%">Giá</th>--}}
-            <th style="width:8%">Số lượng</th>
-            <th style="width:22%" class="text-center">Tổng</th>
-        </tr>
-        </thead>
-        <tbody>
 
-        <?php
-        $total = 0;
-        $index= 0;
-        ?>
-        @if(session()->has('success'))
-            <div class="alert alert-success ">
-                {{ session()->get('success') }}
-            </div>
-        @endif
-        @if(session('cart'))
+    <div class="cart-container">
+        <div class="container mx-auto max-w-7xl">
+            <div class="cart-card">
+                <!-- Cart Header -->
+                <div class="cart-header">
+                    <div class="flex justify-between items-center">
+                        <h1 class="cart-title">
+                            <i class="fas fa-shopping-cart mr-4"></i>
+                            Giỏ hàng của bạn
+                        </h1>
+                        <a href="{{ url('clear-cart') }}" class="clear-cart-btn">
+                            <i class="fas fa-trash mr-2"></i>
+                            Xóa tất cả
+                        </a>
+                    </div>
+                </div>
 
-            @foreach(session('cart') as $id => $details)
-                <div id="index"></div>
+                <!-- Cart Content -->
+                <div class="p-6">
+                    <form method="post" action="{{route('checkOut')}}">
+                        @csrf
+                        
+                        <?php
+                        $total = 0;
+                        $index = 0;
+                        ?>
 
-                    <?php
-                    $total += $details['price'] * $details['quantity'];
-                    $index+= 1;
+                        @if(session('cart'))
+                            @foreach(session('cart') as $id => $details)
+                                <?php
+                                $total += $details['price'] * $details['quantity'];
+                                $index += 1;
+                                ?>
 
-                    ?>
+                                <div class="cart-item">
+                                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                                        <!-- Product Image -->
+                                        <div class="md:col-span-2">
+                                            <img src='{{asset("storage/images/". $details["image"]) }}' 
+                                                 alt="{{ $details['name'] }}" 
+                                                 class="product-image w-full h-auto object-cover">
+                                        </div>
 
-                <tr>
-                    <td data-th="Product">
-                        <div class="row">
-                            <div class="col-sm-3 hidden-xs"><img src='{{asset("storage/images/". $details["image"]) }}' width="150" height="150" class="img-responsive" />
+                                        <!-- Product Info -->
+                                        <div class="md:col-span-4">
+                                            <h3 class="product-name">{{ $details['name'] }}</h3>
+                                            <p class="product-price">Giá tiền: {{ number_format($details['price'], 0, ',', '.') }} VNĐ</p>
+                                            <button type="button" class="remove-btn remove-from-cart" data-id="{{ $id }}" data-name="{{ $details['name'] }}">
+                                                <i class="fas fa-trash"></i>
+                                                Xóa
+                                            </button>
+                                        </div>
 
+                                        <!-- Quantity -->
+                                        <div class="md:col-span-2">
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">Số lượng:</label>
+                                            <input name="data[{{$index}}][quantity]" 
+                                                   type="number" 
+                                                   min="1" 
+                                                   max="{{$details['QuantityInWareHouse']}}" 
+                                                   value="{{$details['quantity']}}" 
+                                                   class="quantity-input quantity">
+                                        </div>
+
+                                        <!-- Subtotal -->
+                                        <div class="md:col-span-2">
+                                            <div class="subtotal" data-th="Subtotal"></div>
+                                        </div>
+
+                                        <!-- Hidden Fields -->
+                                        <input name="data[{{$index}}][id]" type="hidden" value="{{$details['id']}}">
+                                        <div style="display: none" data-th="Price">{{$details['price']}}</div>
+                                        <div style="display: none" data-th="Id">{{$details['id']}}</div>
+                                        <div style="display: none" data-th="QuantityInWareHouse">{{$details['QuantityInWareHouse']}}</div>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            <!-- Cart Summary -->
+                            <div class="cart-summary">
+                                <div class="total-amount">
+                                    <span>Tổng cộng: </span>
+                                    <span id="total" data-td="total"></span>
+                                </div>
+
+                                <!-- Payment Method -->
+                                <div class="mb-6">
+                                    <label for="payment_type" class="block text-lg font-semibold text-gray-700 mb-3">
+                                        Phương thức thanh toán:
+                                    </label>
+                                    <select class="payment-select" id="payment_type" name="payment_type" required>
+                                        <option value="COD">Thanh toán khi nhận hàng (COD)</option>
+                                        <option value="VNPAY">VNPay</option>
+                                    </select>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="flex flex-col sm:flex-row gap-4">
+                                    <a href="{{ route('customer.home') }}" class="continue-shopping-btn">
+                                        <i class="fas fa-arrow-left mr-2"></i>
+                                        Tiếp tục mua hàng
+                                    </a>
+                                    <a onclick="this.closest('form').submit();return false;" 
+                                       href="#" 
+                                       class="checkout-btn flex-1">
+                                        <i class="fas fa-credit-card mr-2"></i>
+                                        Đặt hàng ngay
+                                    </a>
+                                </div>
                             </div>
 
-                            <div class="col-sm-9">
-                                <p class="nomargin">{{ $details['name'] }}</p>
-                                <p class="remove-from-cart cart-delete" data-id="{{ $id }}" title="Delete"><i class="fas fa-trash"></i> Remove</p>
+                        @else
+                            <div class="empty-cart">
+                                <i class="fas fa-shopping-cart"></i>
+                                <h3>Giỏ hàng trống</h3>
+                                <p>Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm</p>
+                                <a href="{{ route('customer.home') }}" class="continue-shopping-btn mt-4">
+                                    <i class="fas fa-shopping-bag mr-2"></i>
+                                    Bắt đầu mua sắm
+                                </a>
+                            </div>
+                        @endif
+                    </form>
+                </div>
+            </div>
+
+            <!-- Customer Information -->
+            @if(!empty($details))
+                <div class="customer-info">
+                    <h5>
+                        <i class="fas fa-user-circle mr-2"></i>
+                        Thông tin khách hàng
+                    </h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="info-item">
+                            <i class="fas fa-user info-icon"></i>
+                            <div>
+                                <strong>Tên khách hàng:</strong>
+                                <input type="text" value="{{$user->name}}" class="customer-name-input ml-2">
                             </div>
                         </div>
-                    </td>
-                    <td style="display: none" data-th="Price">{{$details['price']}}</td>
-                    <td style="display: none" data-th="Id">
-                        {{$details['id']}}
-                        <input name="data[{{$index}}][id]" type="text" value="{{$details['id']}}">
-
-                    </td>
-                    <td>
-                        {{$details['price']}}
-                    </td>
-                    <td data-th="Quantity">
-                        <input style="" name="data[{{$index}}][quantity]" type="number" min="1" max="{{$details['QuantityInWareHouse']}}" value="{{$details['quantity']}}" class="form-control quantity" />
-                    </td>
-                    <td style="display: none" data-th="QuantityInWareHouse">
-                        {{$details['QuantityInWareHouse']}}
-                    </td>
-
-                    <td data-th="Subtotal" class="text-center"></td>
-                </tr>
-
-            @endforeach
-        @endif
-
-        </tbody>
-        <tfoot>
-        @if(!empty($details))
-            <tr class="visible-xs">
-                <th class="text-left" colspan="3"><strong>Total</strong></th>
-                <th id="total" class="text-center" data-td="total"></th>
-            </tr>
-        @else
-            <tr>
-                <td class="text-center" colspan="4">Your Cart is Empty.....</td>
-            <tr>
-        @endif
-        </tfoot>
-
-    </table>
-    <a href="{{ route('customer.home') }}" class="btn shopping-btn">Continue Shopping</a>
-    
-
-    <div class="form-group mt-4">
-        <label for="payment_type"><strong>Chọn phương thức thanh toán:</strong></label>
-        <select class="form-control" id="payment_type" name="payment_type" required>
-            <option value="COD">Thanh toán khi nhận hàng (COD)</option>
-            <option value="VNPAY">VNPay</option>
-        </select>
-    </div>
-
-    <a onclick="this.closest('form').submit();return false;" id="submit" href="#" class="btn btn-warning check-btn">Đặt hàng</a>
-
-    </form>
-    <div> <br><hr>   </div>
-    <div class="table table-bordered table-hover table-condensed mt-3 text-center"><h5>Thông tin mua hàng của bạn </h5>
-    </div>
-
-     <div class="bg-white rounded-lg shadow">
-            <div class="p-6">
-                <div class="flex items-start gap-6">
-                <div class=" text-sm text-gray-600">
-                    <span>Tên khách hàng:<input type="text" value="{{$user->name}}"></span>
-                   </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-gray-600">
-                            <div class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
-                                </svg>
-                                <span>{{ $user->email }}</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                                </svg>
-                                <span>{{ $user->phone }}</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                                </svg>
-                                <span>Khách hàng từ {{ $user->since }}</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                                <span>{{ $user->address }}</span>
-                            </div>
+                        <div class="info-item">
+                            <i class="fas fa-envelope info-icon"></i>
+                            <span><strong>Email:</strong> {{ $user->email }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-phone info-icon"></i>
+                            <span><strong>Điện thoại:</strong> {{ $user->phone }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-calendar info-icon"></i>
+                            <span><strong>Khách hàng từ:</strong> {{ $user->created_at->format('d/m/Y') }}</span>
+                        </div>
+                        <div class="info-item md:col-span-2">
+                            <i class="fas fa-map-marker-alt info-icon"></i>
+                            <span><strong>Địa chỉ:</strong> {{ $user->address }}</span>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
         </div>
-
-
-
-{{--    {{ route('checkOut')}}--}}
-{{--    {!!json_encode(session('cart'))!!}--}}
-{{--    <div class="container products">--}}
-
-{{--        <div class="row">--}}
-
-{{--            @foreach($products as $product)--}}
-{{--                <div class="col-xs-12 col-sm-6 col-md-4">--}}
-{{--                    <div class="card mb-4">--}}
-{{--                        <img src="{{asset("storage/images/". $product->product_image_url )}}" class="card-img-top img-size" alt="{{ $product->name }}">--}}
-{{--                        <div class="card-body">--}}
-{{--                            <h5 class="card-title">{{ $product->name }}</h5>--}}
-{{--                            <p class="card-text">{{ \Illuminate\Support\Str::limit(strtolower($product->description), 50) }}--}}
-{{--                            </p>--}}
-{{--                            <p class="card-text"><strong>Price: </strong> ${{ $product->price }}</p>--}}
-{{--                            <a href="{{ url('add-to-cart/'.$product->id) }}" class="btn btn-warning btn-block text-center" role="button">Add to cart</a>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            @endforeach--}}
-
-{{--        </div>--}}
-
-{{--    </div>--}}
+    </div>
 
 @endsection
 </body>
@@ -266,62 +678,127 @@
         });
 
         var quantityInputs = document.querySelectorAll('.quantity');
-        var total = document.querySelector('[data-th="total"]');
+        var total = 0;
+        
         quantityInputs.forEach(function(quantityInput) {
             //init
             var Quantity = parseInt(quantityInput.value);
-            var QuantityInWareHouse = parseInt(quantityInput.closest('tr').querySelector('[data-th="QuantityInWareHouse"]').innerHTML.split(' ')[0]);
-            // if (Quantity > QuantityInWareHouse) {
-            //     quantityInput.value = QuantityInWareHouse;
-            // }
-
-            // if (Quantity > $product->QuantityInWareHouse)
-            var price = parseFloat(quantityInput.closest('tr').querySelector('[data-th="Price"]').innerHTML.split(' ')[0]);
+            var QuantityInWareHouse = parseInt(quantityInput.closest('.cart-item').querySelector('[data-th="QuantityInWareHouse"]').innerHTML.trim());
+            var price = parseFloat(quantityInput.closest('.cart-item').querySelector('[data-th="Price"]').innerHTML.trim());
             var Subtotal = price * Quantity;
-            var formattedSubtotal = formatter.format(price * Quantity)
+            var formattedSubtotal = formatter.format(price * Quantity);
 
-            quantityInput.closest('tr').querySelector('[data-th="Subtotal"]').innerHTML = formattedSubtotal;
-            //end
-            total = total + Subtotal //Tong gia init
+            quantityInput.closest('.cart-item').querySelector('[data-th="Subtotal"]').innerHTML = formattedSubtotal;
+            total = total + Subtotal;
             document.getElementById('total').innerHTML = formatter.format(total);
 
-            var productId = parseInt(quantityInput.closest('tr').querySelector('[data-th="Id"]').innerHTML.split(' ')[0]) ;
+            var productId = parseInt(quantityInput.closest('.cart-item').querySelector('[data-th="Id"]').innerHTML.trim());
+            
             quantityInput.addEventListener('change', function() {
-                price = parseFloat(quantityInput.closest('tr').querySelector('[data-th="Price"]').innerHTML.split(' ')[0]);
-                var oldPrice = Quantity*price
+                price = parseFloat(quantityInput.closest('.cart-item').querySelector('[data-th="Price"]').innerHTML.trim());
+                var oldPrice = Quantity * price;
 
-
-                productId = parseInt(quantityInput.closest('tr').querySelector('[data-th="Id"]').innerHTML.split(' ')[0]) ;
+                productId = parseInt(quantityInput.closest('.cart-item').querySelector('[data-th="Id"]').innerHTML.trim());
                 Quantity = parseInt(quantityInput.value);
-                if (Quantity >= QuantityInWareHouse+1) {
+                
+                if (Quantity >= QuantityInWareHouse + 1) {
                     Quantity = QuantityInWareHouse;
                     quantityInput.value = QuantityInWareHouse;
                 }
+                
                 Subtotal = price * Quantity;
-                formattedSubtotal = formatter.format(price * Quantity)
+                formattedSubtotal = formatter.format(price * Quantity);
+                priceChange = Quantity * price - oldPrice;
 
-                priceChange = Quantity*price - oldPrice
-
-                quantityInput.closest('tr').querySelector('[data-th="Subtotal"]').innerHTML = formattedSubtotal;
-
-                var tempPrice = Subtotal
-                total = total + priceChange
-
+                quantityInput.closest('.cart-item').querySelector('[data-th="Subtotal"]').innerHTML = formattedSubtotal;
+                total = total + priceChange;
                 document.getElementById('total').innerHTML = formatter.format(total);
 
                 localStorage.setItem('quantity' + productId, Quantity);
-
-                // quantityInput.value = localStorage.getItem('quantity' + productId);
-
             });
-
         });
+
+        // Enhanced Toast notification function
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <span class="toast-message">${message}</span>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Show toast with animation
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 200);
+            
+            // Hide toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => {
+                    if (toastContainer.contains(toast)) {
+                        toastContainer.removeChild(toast);
+                    }
+                }, 400);
+            }, 3000);
+        }
+
+        // Custom confirmation dialog
+        function showConfirmDialog(message, onConfirm) {
+            const overlay = document.getElementById('confirmationOverlay');
+            const confirmBtn = document.getElementById('confirmDelete');
+            const cancelBtn = document.getElementById('cancelDelete');
+            
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.classList.add('show');
+            }, 10);
+            
+            // Remove existing event listeners
+            const newConfirmBtn = confirmBtn.cloneNode(true);
+            const newCancelBtn = cancelBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+            cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+            
+            // Add new event listeners
+            newConfirmBtn.addEventListener('click', function() {
+                hideConfirmDialog();
+                onConfirm();
+            });
+            
+            newCancelBtn.addEventListener('click', hideConfirmDialog);
+            
+            // Close on overlay click
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    hideConfirmDialog();
+                }
+            });
+        }
+
+        function hideConfirmDialog() {
+            const overlay = document.getElementById('confirmationOverlay');
+            overlay.classList.remove('show');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+        }
+
+        // Updated remove from cart functionality
         $(".remove-from-cart").click(function(e) {
             e.preventDefault();
-
             var ele = $(this);
+            var productName = ele.attr("data-name");
 
-            if (confirm("Are you sure want to remove product from the cart.")) {
+            showConfirmDialog("Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?", function() {
                 $.ajax({
                     url: '{{ url("remove-from-cart") }}',
                     method: "DELETE",
@@ -330,12 +807,18 @@
                         id: ele.attr("data-id")
                     },
                     success: function(response) {
-                        window.location.reload();
+                        showToast("Xóa khỏi giỏ hàng thành công!", "success");
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    },
+                    error: function() {
+                        showToast("Có lỗi xảy ra. Vui lòng thử lại!", "error");
                     }
                 });
-            }
+            });
         });
     </script>
+@endsection
 
 </html>
-@endsection
