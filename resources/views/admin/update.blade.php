@@ -200,7 +200,7 @@
                 </div>
             @endif
             
-            <form id='form' method="post" action="{{ route('Cloths.update', $cloths->id) }}">
+            <form id='form' method="post" action="{{ route('Cloths.update', $cloths->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
                 
@@ -261,6 +261,17 @@
                            value="{{ $cloths->product_price }}" 
                            placeholder="Nhập giá sản phẩm"
                            required/>
+                </div>
+
+                <div class="form-group">
+                    <label for="product_image_url" class="form-label">
+                        <i class="fas fa-image"></i> Hình Ảnh Sản Phẩm
+                    </label>
+                    <input type="file" 
+                           class="form-control file-input" 
+                           name="product_image_url"
+                           id="product_image_url"
+                           accept="image/*"/>
                 </div>
                 
                 <button type="submit" class="submit-btn">

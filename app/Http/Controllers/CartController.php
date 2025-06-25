@@ -191,6 +191,9 @@ class CartController extends Controller
         $order = Order::create([
             'customer_id' => $userid->id,
             'sub_total' => $subtotal,
+            'shipping_address' => $userid->address,
+            'shipping_phone' => $userid->phone,
+            ''
         ]);
 
         foreach ($validatedData['data'] as $item) {

@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOption\None;
+use Illuminate\Support\Facades\Auth;
 
 
 use App\Models\collections;
@@ -25,7 +26,7 @@ class ClothController extends Controller
 
         $cloths = Cloth::all();
         $categories = category::all();
-        $orders = Order::all();
+        $orders = Order::where("status",'=','Chờ duyệt đơn')->get();
 
 
 
@@ -118,6 +119,7 @@ class ClothController extends Controller
 
     public function home()
     {
+        
         $specific = null;
         $cloths = Cloth::all();
         $categories = category::all();
@@ -239,9 +241,33 @@ class ClothController extends Controller
             'product_description' => 'required|max:4000',
             'product_price' => 'required|max:255',
             'QuantityInWareHouse' => 'max:255',
+            'product_image_url' => 'image|mimes:jpeg,png,jpg,gif|max:16132',
         ]);
 
         $updateData['QuantityInWareHouse'] = $updated;
+
+
+
+
+        if ($request->hasFile('product_image_url')) {
+            $image = $request->file('product_image_url');
+
+            // Validate file extension and MIME type
+            $validExtensions = ['jpeg', 'png', 'jpg', 'gif'];
+            $validMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+
+            if (!in_array($image->getClientOriginalExtension(), $validExtensions) || !in_array($image->getMimeType(), $validMimeTypes)) {
+                // Invalid file type
+                return redirect()->back()->withErrors(['product_image_url' => 'The product image must be a file of type: jpeg, png, jpg, gif.']);
+            }
+
+            // Store the file
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('public/images', $imageName);
+            $updateData['product_image_url'] = $imageName;
+        }else{
+            $updateData['product_image_url'] = Cloth::where('id',$id)->first()->product_image_url;
+        }
 
         Cloth::whereId($id)->update($updateData);
 
@@ -277,12 +303,15 @@ class ClothController extends Controller
     {
         $specific = null;
         $search = strtolower($request->input('term'));
-
-        $cloths = Cloth::where('product_name', 'like', "%$search%")->get();
+        // $categories = category::all();
+        $products = Cloth::where('product_name', 'like', "%$search%")->paginate(16);
         $categories = category::all();
 
+        $productCount = Count($products);
+        $allCount = Count(Cloth::where('product_name', 'like', "%$search%")->get());
 
-        return view('customer.home', compact('cloths','categories','specific'));
+
+        return view('customer.showall', compact('products','categories','allCount','productCount','specific'));
     }
 
     public function find($id)
@@ -300,7 +329,7 @@ class ClothController extends Controller
 
         $specific = $types;
 
-        $orders = Order::where('status', $types)->orderBy('updated_at','desc')->get();
+        $orders = Order::where('status', $types)->orderBy('updated_at','asc')->get();
         $order_item = Order_items::all();
 
         return view('admin.order', compact('orders','specific'));
@@ -314,6 +343,9 @@ class ClothController extends Controller
 
         if ($request->status == 'Đang giao hàng'){
             $updateData['shipment_code'] = $request->shipment_code;
+        }
+        if ($request->status == 'Đã giao'){
+            $updateData['isPaid'] = 1;
         }
 
         $products = Order_items::where('order_id',$id)->get();
@@ -354,16 +386,22 @@ class ClothController extends Controller
         return view($role.'.order_details', compact('items','categories','order'));
     }
 
-    public function orderHistory(string $name){
+    public function orderHistory(string $id){
 //        dd($name);
+        if (Auth::id() != $id) {
+            abort(403, 'Unauthorized access');
+        }
         $categories = category::all();
-        $userid = User::where('name',$name)->first()->id;
-        $orders = Order::where('customer_id', $userid)->orderBy('updated_at','desc')->get();
+        // $userid = User::where('id', $name)->first()->id;
+        $orders = Order::where('customer_id', $id)->orderBy('updated_at','desc')->get();
         return view('customer.order_history', compact('orders','categories'));
     }
     
     public function profile($id)
-{
+{   
+    if (Auth::id() != $id) {
+        abort(403, 'Unauthorized access');
+    }
     $user = User::find($id);
     $orders = Order::where('customer_id', $id)
         ->latest()
@@ -409,19 +447,10 @@ class ClothController extends Controller
     public function statistic(){
 
         $hourStats = [];
-//        $ordersByYear = Order::where('status','Đã giao')
-//            ->get()
-//            ->groupBy(function($order) {
-//                return $order->updated_at->format('Y');
-//            })
-//            ->sortBy(function($orders, $date) {
-//                return $date;
-//            });
-
         $ordersByDay = Order::where('status','Đã giao')
             ->get()
             ->groupBy(function($order) {
-                return $order->updated_at->format('Y');
+                return $order->updated_at->format('D');
             })
             ->sortBy(function($orders, $date) {
                 return $date;
@@ -452,9 +481,82 @@ class ClothController extends Controller
             $hourStatsObj[] = $stats;
         }
 
+        $yearStats = [];
+        $ordersByYear = Order::where('status','Đã giao')
+            ->get()
+            ->groupBy(function($order) {
+                return $order->updated_at->format('Y');
+            })
+            ->sortBy(function($orders, $date) {
+                return $date;
+            });
+        $orders = null;
+        foreach($ordersByYear as $year => $orders) {
+
+            $stats = (object) [
+                'time' => $year,
+                'order_count' => count($orders),
+                'total_subtotal' => 0
+            ];
+
+            foreach($orders as $order) {
+                $stats->total_subtotal += $order->sub_total;
+            }
+
+            $stats->average_order_value = $stats->total_subtotal / $stats->order_count;
+
+            $yearStats[] = $stats;
+
+        }
+        
+//        dd($hourStats);
+        $yearStatsObj = [];
+
+        foreach($yearStats as $stats) {
+            $yearStatsObj[] = $stats;
+        }
+
         $categories = category::all();
 
-        return view('admin.statistic', compact('orders','categories','hourStatsObj'));
+
+        $monthStats = Order::where('status','Đã giao')
+            ->get()
+            ->groupBy(function($order) {
+                return $order->updated_at->format('M');
+            })
+            ->sortBy(function($orders, $date) {
+                return $date;
+            });
+        $orders = null;
+        foreach($monthStats as $month => $orders) {
+            $stats = (object) [
+                'time' => $month,
+                'order_count' => count($orders),
+                'total_subtotal' => 0
+            ];
+
+            foreach($orders as $order) {
+                $stats->total_subtotal += $order->sub_total;
+            }
+
+            $stats->average_order_value = $stats->total_subtotal / $stats->order_count;
+
+            $monthStat[] = $stats;
+
+        }
+        $monthStatsObj = [];
+        foreach($monthStat as $stats) {
+            $monthStatsObj[] = $stats;
+        }
+
+
+
+        $orders = Order::where('status','Chờ duyệt đơn')->get();
+        // dd($orders);
+
+        
+
+        return view('admin.statistic', compact('orders','categories','hourStatsObj', 'yearStatsObj','monthStatsObj'));
     }
 }
 

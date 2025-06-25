@@ -128,7 +128,7 @@
         font-size: 2.5rem;
         font-weight: 700;
         background: linear-gradient(45deg,rgb(0, 0, 0) 0%,rgb(103, 100, 100) 100%);
-        -webkit-background-clip: text;
+-webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         margin-bottom: 10px;
@@ -262,7 +262,7 @@
     }
 
     .add-to-cart-btn {
-        background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+background: linear-gradient(45deg, #ff6b6b, #ee5a52);
         color: white;
         border: none;
         border-radius: 50px;
@@ -377,7 +377,7 @@
         
         .sale-title {
             font-size: 2.2rem;
-        }
+}
         
         .summer-sale-section {
             padding: 40px 20px;
@@ -443,7 +443,7 @@
                                 <button class="add-to-cart-btn" type="submit">
                                     <i class="bi bi-cart-plus"></i>
                                 </button>
-                            </form>
+</form>
                         </div>
                     </div>
                 </div>
@@ -474,11 +474,6 @@
         @endif
     </div>
 
-    <!-- Button dang cap -->
-    <section class="summer-sale-section" style="background: #ffffff;">
-        <a href="{{ route('customer.showall') }}"><div class="discount-badge">Xem tất cả sản phẩm</div></a>
-    </section>
-
     <!-- Summer Sale Section -->
     <section class="summer-sale-section">
         <h2 class="sale-title">ƯU ĐÃI CHÀO HÈ</h2>
@@ -501,7 +496,7 @@
                     </div>
                     <div class="product-info">
                         <h5 class="product-name" style="text-align: left;">{{ \Illuminate\Support\Str::limit($item->product_name, 50) }}</h5>
-                        <div class="product-footer">
+<div class="product-footer">
                             <span class="product-price">{{ number_format($item->product_price, 0) }}đ</span>
                             <form method="get" action="{{ route('addToCart', $item->id) }}">
                                 <input type="hidden" value="1" name="inputQuantity" id="inputQuantity" min="1" max="999">
@@ -516,6 +511,8 @@
             </div>
 
     </div>
+
+    
     </div>
 </div>
 
@@ -555,7 +552,7 @@
             <div class="row mt-3">
                 <!-- Grid column -->
                 <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                    <!-- Content -->
+<!-- Content -->
                     <h6 class="text-uppercase fw-bold mb-4">
                         <i class="fas fa-gem me-3"></i>TIN TIN 
                     </h6>
@@ -629,7 +626,7 @@
             const div = document.querySelector('.hidden2');
             setTimeout(() => {
                 div.classList.add('fade');
-                div.addEventListener('transitionend', () => {
+div.addEventListener('transitionend', () => {
                     div.remove();
                 });
             }, 3000);

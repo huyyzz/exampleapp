@@ -314,7 +314,7 @@
         padding: 20px;
         display: flex;
         flex-direction: column;
-        height: 140px;
+        height: 160px;
         justify-content: space-between;
     }
 
@@ -328,6 +328,9 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
+        height: 40px; /* Adjust height to fit two lines */
+        text-overflow: ellipsis;
+        
     }
 
     .product-footer {
@@ -585,7 +588,7 @@
                 <div class="product-card mt-5">
                     <div class="product-image-container">
                         <a href="{{ route('showcus', $item->id) }}">
-                            <img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="{{ $item->product_name }}" class="product-image" width="250px">
+                            <img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="{{ $item->product_name }}" class="product-image">
                         </a>
                         
                         <!-- @php
@@ -596,7 +599,7 @@
                         <span class="badge bg-danger position-absolute" style="top: 10px; right: 10px; font-size: 0.75rem; padding: 5px 8px; border-radius: 15px;">GIẢM GIÁ</span>
                     </div>
                     <div class="product-info">
-                        <h5 class="product-name">{{ \Illuminate\Support\Str::limit($item->product_name, 50) }}</h5>
+                        <h5 class="product-name" height="">{{ \Illuminate\Support\Str::limit($item->product_name, 50) }}</h5>
                         <div class="product-footer">
                             <div>
                                 <span class="product-price">{{ number_format($item->product_price, 0) }}đ</span>

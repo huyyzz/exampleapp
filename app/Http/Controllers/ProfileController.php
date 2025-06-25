@@ -35,7 +35,7 @@ class ProfileController extends Controller
         $user->save();
         
 
-        return redirect()->route('editProfile')->with('success', 'Cập nhật thành công!');
+        return redirect()->route('profile',  ['id' => $user->id])->with('success', 'Cập nhật thành công!');
     }
 
 }

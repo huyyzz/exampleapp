@@ -356,21 +356,21 @@
                             <td>
                                 <small class="text-muted">
                                     <i class="fas fa-map-marker-alt me-1"></i>
-                                    {{$order->user->address}}
+                                    {{$order->shipping_address}}
                                 </small>
                             </td>
                             <td>
-                                <a href="tel:{{$order->user->phone}}" class="text-decoration-none">
-                                    <i class="fas fa-phone me-1 mr"></i>{{$order->user->phone}}
+                                <a href="tel:{{$order->shipping_phone}}" class="text-decoration-none">
+                                    <i class="fas fa-phone me-1 mr"></i>{{$order->shipping_phone}}
                                 </a>
                             </td>
                             <td>
-                                <span class="status-badge 
+                                <span class="" 
                                     @if($order->status == 'Chờ duyệt đơn') status-pending
                                     @elseif($order->status == 'Đang giao hàng') status-shipping
                                     @elseif($order->status == 'Đã giao') status-delivered
                                     @else status-cancelled
-                                    @endif">
+                                    @endif>
                                     {{$order->status}}
                                 </span>
                             </td>
@@ -389,43 +389,63 @@
                             <td>
                                 <div class="d-flex justify-content-center flex-wrap">
                                     <!-- Thông tin đơn hàng -->
-                                    <form method="get" action="{{route('order.details',$order->id)}}">
-                                        <button class="action-btn btn-info-custom">
-                                            <i class="fas fa-info-circle me-1"></i>Chi tiết
-                                        </button>
-                                    </form>
+                                    
 
                                     @if($specific == 'Chờ duyệt đơn')
-                                        <!-- Chấp nhận -->
-                                        <form method="post" action="{{route('orderUpdate',$order->id)}}">
+                                        <form method="post" action="{{ route('orderUpdate', $order->id) }}" class="mb-2">
                                             @csrf
-                                            <div style="margin-bottom: 8px;">
-                                                <label for="shipment_code">Mã vận đơn:</label>
-                                                <input type="text" name="shipment_code" id="shipment_code" required placeholder="Nhập mã vận đơn" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
+                                            <div class="mb-2">
+                                                <label for="shipment_code" class="form-label">Mã vận đơn</label>
+                                                <input type="text" name="shipment_code" id="shipment_code"
+                                                    placeholder="Nhập mã vận đơn"
+                                                    required
+                                                    class="form-control"
+                                                    style="max-width: 300px;">
                                             </div>
-                                            <input type="hidden" name="status" value='Đang giao hàng'>
-                                            <button class="action-btn btn-success-custom">
-                                                <i class="fas fa-check me-1"></i>Chấp nhận
+                                            <input type="hidden" name="status" value="Đang giao hàng">
+                                            <button type="submit" class="btn btn-success w-100 mb-2">
+                                                <i class="fas fa-check me-1"></i> Chấp nhận
                                             </button>
                                         </form>
-                                        <!-- Hủy -->
-                                        <form method="post" action="{{route('orderUpdate',$order->id)}}">
-                                            @csrf
-                                            <input type="hidden" name="status" value='Đã hủy'>
-                                            <button class="action-btn btn-danger-custom" type="submit">
-                                                <i class="fas fa-times me-1"></i>Hủy
-                                            </button>
-                                        </form>
+
+                                        <div class="d-flex flex-column gap-2" style="max-width: 300px;">
+                                            <!-- Chi tiết -->
+                                            <form method="get" action="{{ route('order.details', $order->id) }}">
+                                                <button class="btn btn-info w-100">
+                                                    <i class="fas fa-info-circle me-1"></i> Chi tiết
+                                                </button>
+                                            </form>
+
+                                            <!-- Hủy -->
+                                            <form method="post" action="{{ route('orderUpdate', $order->id) }}">
+                                                @csrf
+                                                <input type="hidden" name="status" value="Đã hủy">
+                                                <button type="submit" class="btn btn-danger w-100">
+                                                    <i class="fas fa-times me-1"></i> Hủy
+                                                </button>
+                                            </form>
+                                        </div>
                                     @elseif($specific == 'Đang giao hàng')
-                                        <!-- Hoàn thành -->
-                                        <form method="post" action="{{route('orderUpdate',$order->id)}}">
+                                        <form method="post" action="{{ route('orderUpdate', $order->id) }}">
                                             @csrf
-                                            <input type="hidden" name="status" value='Đã giao'>
-                                            <button class="action-btn btn-success-custom">
-                                                <i class="fas fa-check-double me-1"></i>Hoàn thành
+                                            <input type="hidden" name="status" value="Đã giao">
+                                            <button class="btn btn-success w-100">
+                                                <i class="fas fa-check-double me-1"></i> Hoàn thành
                                             </button>
                                         </form>
+                                        <form method="get" action="{{ route('order.details', $order->id) }}">
+                                            <button class="btn btn-info w-100">
+                                                <i class="fas fa-info-circle me-1"></i> Chi tiết
+                                            </button>
+                                        </form>
+                                    @else
+                                    <form method="get" action="{{ route('order.details', $order->id) }}">
+                                        <button class="btn btn-info w-100">
+                                            <i class="fas fa-info-circle me-1"></i> Chi tiết
+                                        </button>
+                                    </form>
                                     @endif
+
                                 </div>
                             </td>
                         </tr>
