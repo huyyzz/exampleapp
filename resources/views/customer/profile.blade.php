@@ -140,15 +140,15 @@
                     <li class="mr-2" role="presentation">
                         <button class="inline-block p-4 border-b-2 border-blue-600 rounded-t-lg active" id="orders-tab" data-tabs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="true">Lịch sử đơn hàng</button>
                     </li>
-                    <li class="mr-2" role="presentation">
+                    <!-- <li class="mr-2" role="presentation">
                         <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="preferences-tab" data-tabs-target="#preferences" type="button" role="tab" aria-controls="preferences" aria-selected="false">Sở thích</button>
-                    </li>
+                    </li> -->
                     <li class="mr-2" role="presentation">
                         <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="addresses-tab" data-tabs-target="#addresses" type="button" role="tab" aria-controls="addresses" aria-selected="false">Địa chỉ</button>
                     </li>
-                    <li role="presentation">
+                    <!-- <li role="presentation">
                         <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="activity-tab" data-tabs-target="#activity" type="button" role="tab" aria-controls="activity" aria-selected="false">Hoạt động</button>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <div id="customerTabContent">
@@ -156,7 +156,7 @@
                     <div class="bg-white rounded-lg">
                         <div class="p-4">
                             <h3 class="text-lg font-semibold mb-1">Đơn hàng gần đây</h3>
-                            <p class="text-sm text-gray-600 mb-4">5 đơn hàng mới nhất của khách hàng</p>
+                            <!-- <p class="text-sm text-gray-600 mb-4">5 đơn hàng mới nhất của khách hàng</p> -->
                             <div class="space-y-4">
                                 @foreach($orders as $order)
                                 <div class="flex items-center justify-between p-4 border rounded-lg">
@@ -171,10 +171,18 @@
                                             <p class="font-medium">Mã đơn: #{{ $order->id }}</p>
                                             <p class="text-sm text-gray-600">{{ $order['items'] }}</p>
                                             <p class="text-xs text-gray-500">Ngày: {{ $order->created_at->format('d/m/Y H:i') }}</p>
+                                            <p class="text-xs text-gray-500">Mã vận đơn: {{ $order->shipping_code }}</p>
                                         </div>
                                     </div>
                                     <div class="text-right">
                                         <p class="font-semibold">{{ number_format($order->sub_total, 0, ',', '.') }} đ</p>
+                                        <span class="text-xs font-medium px-2.5 py-0.5 rounded border border-green-600 text-green-600">
+                                               @if($order->isPaid)
+                                               Đã thanh toán
+                                               @else
+                                               Chưa thanh toán
+                                               @endif
+                                        </span>
                                         <span class="text-xs font-medium px-2.5 py-0.5 rounded border border-green-600 text-green-600">
                                                {{ $order->status }}
                                         </span>

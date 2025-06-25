@@ -399,7 +399,7 @@
                     <a href="#" class="dropdown-item-custom">Túi xách</a>
                     <a href="#" class="dropdown-item-custom">Giày cao gót</a>
                 </div>
-            </div> -->
+            </div> 
 
             <!-- Nam -->
             <div class="menu-item"> 
@@ -415,7 +415,7 @@
                     <a href="#" class="dropdown-item-custom">Giày thể thao</a>
                     <a href="#" class="dropdown-item-custom">Phụ kiện nam</a>
                 </div>
-            </div> -->
+            </div>
 
             <!-- Đại tiệc mùa hè -->
             <div class="menu-item sale-item">
@@ -433,8 +433,8 @@
             <!-- Bộ sưu tập -->
             <div class="menu-item">
                 <a href="" class="menu-item">Bộ sưu tập</a>
-            <!-- <a href="#" class="menu-item">
-                Bộ sưu tập
+             <a href="#" class="menu-item">
+                
                 <div class="dropdown-menu-custom">
                     <a href="#" class="dropdown-item-custom"> Spring Collection</a>
                     <a href="#" class="dropdown-item-custom"> Summer Collection</a>
@@ -445,7 +445,7 @@
                 </div>
             </div>
 
-            <!-- Về chúng tôi -->
+            <!-- Về chúng tôi
             <div class="menu-item">
                 <a href="" class="menu-item">Về chúng tôi</a>
                 <div class="dropdown-menu-custom">
@@ -456,9 +456,10 @@
                     <a href="#" class="dropdown-item-custom"> Hệ thống cửa hàng</a>
                     <a href="#" class="dropdown-item-custom"> Chính sách</a>
                 </div>
-            </a> -->
+            </a>
+    -->
 
-            <!-- Về chúng tôi -->
+
             <a href="{{ route('customer.showall') }} " class="menu-item">
                 Sản phẩm
             </a>
@@ -534,7 +535,7 @@
                             <a href="{{ route('profile', Session('id')) }}" class="icon-dropdown-item">
                                 <i class="fas fa-user-circle" style="color: #63E6BE;"></i> Thông tin cá nhân
                             </a>
-                            <a href="{{ route('order.history', Session('user_name')) }}" class="icon-dropdown-item">
+                            <a href="{{ route('order.history', Session('id')) }}" class="icon-dropdown-item">
                                 <i class="fas fa-history" style="color: #63E6BE;"></i> Lịch sử đơn hàng
                             </a>
                             <form method="post" action="{{ route('logout') }}" style="margin: 0;">
@@ -544,13 +545,18 @@
                                 </button>
                             </form>
 
-                            @if (Session('role') == 'admin')
-                                <a href="{{ route('Cloths.index') }}" class="icon-dropdown-item">
-                                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                                </a>
-                            @endif
+                        @elseif (Session('role') == 'admin')
+                            <form method="post" action="{{ route('logout') }}" style="margin: 0;">
+                                @csrf
+                                <button type="submit" class="icon-dropdown-item">
+                                    <i class="fas fa-sign-out-alt" style="color: #63E6BE;"></i> Đăng xuất
+                                </button>
+                            </form>
+                            <a href="{{ route('Cloths.index') }}" class="icon-dropdown-item">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
                         @else
-                        
+
                             <a href="{{ route('login') }}" class="icon-dropdown-item">
                                 <i class="fas fa-sign-in-alt"></i> Đăng nhập
                             </a>

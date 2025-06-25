@@ -286,7 +286,7 @@
                                 <i class="fas fa-list"></i> Danh Mục
                             </label>
                             <select name="category_id" id="category_id" class="form-select">
-                                <option value="" selected>NO SPECIFY</option>
+                                <option value="1" selected>Không danh mục</option>
                                 @foreach($categories as $category)
                                     <option value="{{$category->id}}">{{$category->name}}</option>
                                 @endforeach

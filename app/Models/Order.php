@@ -23,5 +23,10 @@ class Order extends Model
         'customer_id',
         'status',
         'sub_total',
+        'shipping_fee',
+        'isPaid',
+        'isOnlinePaid',
+        'shipping_address',
+        'shipping_phone',
     ];
 }

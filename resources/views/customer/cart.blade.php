@@ -552,6 +552,7 @@
                                         <div class="md:col-span-4">
                                             <h3 class="product-name">{{ $details['name'] }}</h3>
                                             <p class="product-price">Giá tiền: {{ number_format($details['price'], 0, ',', '.') }} VNĐ</p>
+                                            <p>Sản phẩm có sẵn: {{ $details['QuantityInWareHouse'] }}</p>
                                             <button type="button" class="remove-btn remove-from-cart" data-id="{{ $id }}" data-name="{{ $details['name'] }}">
                                                 <i class="fas fa-trash"></i>
                                                 Xóa

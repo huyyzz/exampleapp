@@ -143,11 +143,16 @@ class VnpayController extends Controller
                     'p_code_bank' => $inputData['vnp_BankCode'] ?? null,
                     'p_time' => now(),
                 ]);
+                
+                $order->isOnlinePaid = 1;
+                $order->isPaid = 1;
 
-                $order = Order::find($inputData['vnp_TxnRef']);
                 $order->update([
                     'isOnlinePaid' => 1,
-                    'isPaid' => 1,]);
+                    'isPaid' => 1
+                ]);
+                // dd($order);
+            
 
                 session()->forget('cart');
                 return redirect()->route('customer.home')->with('success', 'Thanh toán thành công');
