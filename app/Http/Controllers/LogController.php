@@ -19,23 +19,25 @@ class LogController extends Controller
         $email = $request->get('email');
         $password = $request->get('password');
         if (Auth::attempt(['email'=> $email, 'password' => $password])){
-
+            $request->session()->regenerate();
             $user = Auth::user();
-
-            session()->put('user_name', $user->name);
+            session()->put('user_name', $user->email);
             session()->put('role', $user->role);
             session()->put('id', $user->id);
-//            dd($user->role);
-            switch($user->role){
+        //    dd($user->email);
+            switch ($user->role) {
                 case 'admin':
                     return redirect()->route('statistic');
-                    break;
                 case 'customer':
                     return redirect()->route('customer.home');
-                    break;
+                default:
+                    return redirect()->route('customer.home');
             }
+
         }else{
-            return redirect()->back();
+            return redirect()->back()->withErrors([
+                'email' => 'Email hoặc mật khẩu không chính xác.',
+            ]);
         }
     }
     function logout(){

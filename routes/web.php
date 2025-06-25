@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CollectionController;
 
 use App\Http\Controllers\AdminCollectionController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VnpayController;
 
 //Route::get('/customer/home', function () {
@@ -75,8 +76,10 @@ Route::get('/login',[\App\Http\Controllers\LogController::class,'viewLogin'])->n
 Route::post('/login',[\App\Http\Controllers\LogController::class,'login']);
 Route::get('/', [\App\Http\Controllers\ClothController::class,'home']
 )->name("customer.home");
+
 Route::get('/customer/home', [\App\Http\Controllers\ClothController::class,'home']
 )->name("customer.home");
+
 Route::get('/showcus-detail/{id}',[\App\Http\Controllers\ClothController::class,'showcus'])->name('showcus');
 Route::get('/profile/{id}',[\App\Http\Controllers\LogController::class,'profile'])->name('profile');
 Route::get('/search',[\App\Http\Controllers\ClothController::class,'search'])->name('search');
@@ -84,6 +87,15 @@ Route::get('/search',[\App\Http\Controllers\ClothController::class,'search'])->n
 
 Route::get('/collections', [CollectionController::class, 'index'])->name('collections.index');
 Route::get('/collections/{collection}', [CollectionController::class, 'show'])->name('collections.show');
+
+
+Route::get('/customer/product', [\App\Http\Controllers\ClothController::class,'home2']
+)->name("customer.showall");
+
+Route::post('/customer/product', [\App\Http\Controllers\ClothController::class,'filter']
+)->name("itemFilter");
+
+
 
 
 
@@ -113,7 +125,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('vnpay/return', [VnpayController::class, 'return'])->name('vnpay.return');
     Route::get('/vnpay/ipn', [VNPayController::class, 'ipn'])->name('vnpay.ipn');
 
+    Route::get('/profileEdit', [ProfileController::class, 'edit'])->name('editProfile');
+    Route::post('/profileUpdate', [ProfileController::class, 'update'])->name('updateProfile');
     Route::get('/profile/{id}', [ClothController::class, 'profile'])->name('profile');
+    
 
 });
 
