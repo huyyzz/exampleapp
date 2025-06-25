@@ -15,7 +15,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            \App\Models\Order::where('status', 'Pending')
+                ->where('is_online_paid', false)
+                ->where('created_at', '<', now()->subMinutes(15))
+                ->update(['status' => 'Cancelled']);
+        })->everyMinute();
     }
 
     /**

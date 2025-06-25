@@ -16,16 +16,16 @@
         <!-- Header -->
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">Thông tin khách hàng</h1>
+                <h1 class="text-3xl font-bold text-gray-900">Thông tin cá nhân</h1>
                 <p class="text-gray-600 mt-1">Quản lý thông tin và lịch sử mua hàng</p>
             </div>
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2">
+            <a href="{{ route('editProfile') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                 </svg>
                 Chỉnh sửa
-            </button>
+            </a>
         </div>
 
         <!-- Customer Overview -->
@@ -181,6 +181,9 @@
                                     </div>
                                 </div>
                                 @endforeach
+                                <div class="d-flex justify-content-center mt-4">
+                                    {{ $orders->links() }}
+                                </div>
                             </div>
                         </div>
                     </div>

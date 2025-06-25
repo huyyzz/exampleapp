@@ -279,20 +279,6 @@
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label for="brand_id" class="form-label">
-                                <i class="fas fa-copyright"></i> Thương Hiệu
-                            </label>
-                            <select name="brand_id" id="brand_id" class="form-select">
-                                <option value="1" selected>NO BRAND</option>
-                                @foreach($brands as $brand)
-                                    <option value="{{$brand->id}}">{{$brand->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
                     
                     <div class="form-col">
                         <div class="form-group">

@@ -474,6 +474,11 @@
         @endif
     </div>
 
+    <!-- Button dang cap -->
+    <section class="summer-sale-section" style="background: #ffffff;">
+        <a href="{{ route('customer.showall') }}"><div class="discount-badge">Xem tất cả sản phẩm</div></a>
+    </section>
+
     <!-- Summer Sale Section -->
     <section class="summer-sale-section">
         <h2 class="sale-title">ƯU ĐÃI CHÀO HÈ</h2>
@@ -511,62 +516,6 @@
             </div>
 
     </div>
-
-    <div class="products-grid">
-        @if ($specific != null)
-            @foreach($specific->skip(5)->take(5) as $item)
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <a href="{{ route('showcus', $item->id) }}">
-                            <img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="{{ $item->product_name }}" class="product-image">
-                        </a>
-                        <span class="badge bg-danger position-absolute" style="top: 10px; left: 10px; font-size: 0.75rem; padding: 5px 8px; border-radius: 15px;">Best Seller</span>
-                        <span class="badge bg-warning position-absolute" style="top: 10px; right: 10px; font-size: 0.75rem; padding: 5px 8px; border-radius: 15px;">-50%</span>
-                    </div>
-                    <div class="product-info">
-                        <h5 class="product-name">{{ \Illuminate\Support\Str::limit($item->product_name, 50) }}</h5>
-                        <div class="product-footer">
-                            <div>
-                                <span class="product-price">{{ number_format($item->product_price * 0.5, 0) }}đ</span>
-                                <small class="text-muted text-decoration-line-through ms-2">{{ number_format($item->product_price, 0) }}đ</small>
-                            </div>
-                            <form method="get" action="{{ route('addToCart', $item->id) }}">
-                                <button class="add-to-cart-btn" type="submit">
-                                    <i class="bi bi-cart-plus"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        @else
-            @foreach($cloths->skip(5)->take(5) as $item)
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <a href="{{ route('showcus', $item->id) }}">
-                            <img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="{{ $item->product_name }}" class="product-image">
-                        </a>
-                        <span class="badge bg-danger position-absolute" style="top: 10px; left: 10px; font-size: 0.75rem; padding: 5px 8px; border-radius: 15px;">Best Seller</span>
-                        <span class="badge bg-warning position-absolute" style="top: 10px; right: 10px; font-size: 0.75rem; padding: 5px 8px; border-radius: 15px;">-50%</span>
-                    </div>
-                    <div class="product-info">
-                        <h5 class="product-name">{{ \Illuminate\Support\Str::limit($item->product_name, 50) }}</h5>
-                        <div class="product-footer">
-                            <div>
-                                <span class="product-price">{{ number_format($item->product_price * 0.5, 0) }}đ</span>
-                                <small class="text-muted text-decoration-line-through ms-2">{{ number_format($item->product_price, 0) }}đ</small>
-                            </div>
-                            <form method="get" action="{{ route('addToCart', $item->id) }}">
-                                <input type="hidden" value="1" name="inputQuantity" id="inputQuantity" min="1" max="999">
-                                <button class="add-to-cart-btn" type="submit">
-                                    <i class="bi bi-cart-plus"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        @endif
     </div>
 </div>
 
