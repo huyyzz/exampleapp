@@ -335,6 +335,7 @@
                             <th width="150px"><i class="fas fa-map-marker-alt me-1"></i>Địa chỉ</th>
                             <th><i class="fas fa-phone me-1"></i>Số điện thoại</th>
                             <th><i class="fas fa-info-circle me-1"></i>Trạng thái</th>
+                            <th><i class="fas fa-info-circle me-1"></i>Mã vận đơn</th>
                             <th><i class="fas fa-clock me-1"></i>Cập nhật</th>
                             <th class="text-center"><i class="fas fa-cogs me-1"></i>Thao tác</th>
                         </tr>
@@ -375,6 +376,12 @@
                             </td>
                             <td>
                                 <small class="text-muted">
+                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                    {{$order->shipment_code}}
+                                </small>
+                            </td>
+                            <td>
+                                <small class="text-muted">
                                     <i class="fas fa-calendar me-1"></i>
                                     {{$order->updated_at}}
                                 </small>
@@ -392,6 +399,10 @@
                                         <!-- Chấp nhận -->
                                         <form method="post" action="{{route('orderUpdate',$order->id)}}">
                                             @csrf
+                                            <div style="margin-bottom: 8px;">
+                                                <label for="shipment_code">Mã vận đơn:</label>
+                                                <input type="text" name="shipment_code" id="shipment_code" required placeholder="Nhập mã vận đơn" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
+                                            </div>
                                             <input type="hidden" name="status" value='Đang giao hàng'>
                                             <button class="action-btn btn-success-custom">
                                                 <i class="fas fa-check me-1"></i>Chấp nhận
