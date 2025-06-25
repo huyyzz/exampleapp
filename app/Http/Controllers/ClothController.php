@@ -312,6 +312,10 @@ class ClothController extends Controller
             'status' => 'required|max:255',
         ]);
 
+        if ($request->status == 'Đang giao hàng'){
+            $updateData['shipment_code'] = $request->shipment_code;
+        }
+
         $products = Order_items::where('order_id',$id)->get();
         foreach($products as $product) {
             $cloth = Cloth::withTrashed()->where('id', $product->product_id)->first();
