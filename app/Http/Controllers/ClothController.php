@@ -37,12 +37,93 @@ class ClothController extends Controller
         return view('admin.index', compact('cloths','brands','categories','orders'));
     }
 
+    public function home2()
+    {
+        $specific = null;
+        $products = Cloth::paginate(16);
+        $brands = Brand::all();
+        $categories = category::all();
+
+        $productCount = Count($products);
+        $allCount = Count(Cloth::all());
+        // $sizes = $cloths->variants();
+
+
+        
+
+        return view('customer.showall', compact('products','brands','categories','productCount','allCount'));
+    }
+
+    public function filter(Request $request)
+    {
+        $storeData = $request->validate([
+            'minPriceInput' => 'required|numeric|min:0',
+            'maxPriceInput' => 'required|numeric|min:0|gte:minPriceInput',
+            // 'size' => 'nullable|array',
+            'category' => 'nullable|integer',
+            'sortPrice'     => 'required|in:asc,desc',
+        ]);
+
+        // dd($request->sortPrice);
+
+        $specific = null;
+        $minPrice = $storeData['minPriceInput'];
+        $maxPrice = $storeData['maxPriceInput'];
+        
+
+
+
+        $query = Cloth::query();
+        
+        
+        if ($request->sortOption === 'Mới nhất') {
+            $query->orderBy('created_at', 'desc');
+        } elseif ($request->sortOption === 'Bán chạy') {
+            $bestSellerIds = DB::table('order_items')
+                ->select('product_id', DB::raw('SUM(quantity) as total_sold'))
+                ->groupBy('product_id')
+                ->orderByDesc('total_sold')
+                ->pluck('product_id');
+
+            $query->whereIn('id', $bestSellerIds);
+        }
+
+        // $discount = random
+        if (empty($request->category)){
+            $products = Cloth::whereRaw('CAST(product_price AS UNSIGNED) BETWEEN ? AND ?', [$minPrice, $maxPrice])
+            ->orderByRaw('CAST(product_price AS UNSIGNED) '.$request->sortPrice)
+            ->paginate(16);
+        }else{
+            $products = Cloth::whereRaw('CAST(product_price AS UNSIGNED) BETWEEN ? AND ?', [$minPrice, $maxPrice])
+            ->orderByRaw('CAST(product_price AS UNSIGNED) '.$request->sortPrice)
+            ->where('category_id', $request->category)
+            ->paginate(16);
+        }
+
+
+        
+
+        // dd($request->category);
+
+        $brands = Brand::all();
+        $categories = category::all();
+
+        $productCount = Count($products);
+        $allCount = Count(Cloth::all());
+
+
+        
+
+        
+
+        // $sizes = $cloths->variants();
+        return view('customer.showall', compact('products','brands','categories','productCount','allCount'));
+    }
+
     public function home()
     {
         $specific = null;
         $cloths = Cloth::all();
-//        doi thanh category
-        // 1 la ao, 2 la quan
         $brands = Brand::all();
         $categories = category::all();
 
@@ -304,8 +385,7 @@ class ClothController extends Controller
     $user = User::find($id);
     $orders = Order::where('customer_id', $id)
         ->latest()
-        ->take(5)
-        ->get();
+        ->paginate(5);
     $addresses = null;
     if ($user->address) {
        $addresses = $user->address;

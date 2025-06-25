@@ -115,11 +115,10 @@ class VnpayController extends Controller
             }
         }
         $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
-        
+        $order = Order::find($inputData['vnp_TxnRef']);
         if ($secureHash == $vnp_SecureHash) {
             if ($inputData['vnp_ResponseCode'] == '00') {
                 // Payment Success
-                $order = Order::find($inputData['vnp_TxnRef']);
                 // $order->update(['status' => 'Đang giao hàng']);
 
                 $items = Order_items::where("order_id", "=" ,$inputData['vnp_TxnRef'])->get();
@@ -140,6 +139,8 @@ class VnpayController extends Controller
                     'p_code_vnpay' => $inputData['vnp_TransactionNo'] ?? null,
                     'p_code_bank' => $inputData['vnp_BankCode'] ?? null,
                     'p_time' => now(),
+                    'isOnlinePaid' => 1,
+                    'isPaid' => 1,
                 ]);
                 session()->forget('cart');
                 return redirect()->route('customer.home')->with('success', 'Thanh toán thành công');
@@ -153,6 +154,8 @@ class VnpayController extends Controller
                 return redirect()->route('customer.home')->with('error', 'Giao dịch không thành công');
             }
         } else {
+            $order = Order::find($inputData['vnp_TxnRef']);
+            $order->update(['status' => 'Đã hủy']);
             return redirect()->route('customer.home')->with('error', 'Sai chữ ký');
         }
     }

@@ -16,7 +16,7 @@
         <!-- Header -->
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">Thông tin khách hàng</h1>
+                <h1 class="text-3xl font-bold text-gray-900">Thông tin cá nhân</h1>
                 <p class="text-gray-600 mt-1">Quản lý thông tin và lịch sử mua hàng</p>
             </div>
             <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2">
@@ -181,6 +181,9 @@
                                     </div>
                                 </div>
                                 @endforeach
+                                <div class="d-flex justify-content-center mt-4">
+                                    {{ $orders->links() }}
+                                </div>
                             </div>
                         </div>
                     </div>

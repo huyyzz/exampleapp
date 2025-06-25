@@ -384,7 +384,7 @@
         <!-- Left Menu -->
         <nav class="left-menu">
             <!-- Nữ -->
-            <div class="menu-item">
+            <!-- <div class="menu-item">
                 <a href="#">Nữ</a>
                 <div class="dropdown-menu-custom">
                     <a href="#" class="dropdown-item-custom">Áo sơ mi nữ</a>
@@ -398,10 +398,10 @@
                     <a href="#" class="dropdown-item-custom">Túi xách</a>
                     <a href="#" class="dropdown-item-custom">Giày cao gót</a>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Nam -->
-            <div class="menu-item">
+            <!-- <div class="menu-item">
                 <a href="#">Nam</a>
                 <div class="dropdown-menu-custom">
                     <a href="#" class="dropdown-item-custom">Áo sơ mi nam</a>
@@ -414,7 +414,7 @@
                     <a href="#" class="dropdown-item-custom">Giày thể thao</a>
                     <a href="#" class="dropdown-item-custom">Phụ kiện nam</a>
                 </div>
-    </div>
+            </div> -->
 
             <!-- Đại tiệc mùa hè -->
             <a href="#" class="menu-item sale-item">
@@ -430,7 +430,7 @@
             </a>
 
             <!-- Bộ sưu tập -->
-            <a href="#" class="menu-item">
+            <!-- <a href="#" class="menu-item">
                 Bộ sưu tập
                 <div class="dropdown-menu-custom">
                     <a href="#" class="dropdown-item-custom"> Spring Collection</a>
@@ -440,19 +440,11 @@
                     <a href="#" class="dropdown-item-custom"> Premium Collection</a>
                     <a href="#" class="dropdown-item-custom"> Limited Edition</a>
                 </div>
-            </a>
+            </a> -->
 
             <!-- Về chúng tôi -->
-            <a href="#" class="menu-item">
-                Về chúng tôi
-                <div class="dropdown-menu-custom">
-                    <a href="#" class="dropdown-item-custom"> Hoạt động cộng đồng</a>
-                    <a href="#" class="dropdown-item-custom"> Tầm nhìn sứ mệnh</a>
-                    <a href="#" class="dropdown-item-custom"> Đội ngũ</a>
-                    <a href="#" class="dropdown-item-custom"> Liên hệ</a>
-                    <a href="#" class="dropdown-item-custom"> Hệ thống cửa hàng</a>
-                    <a href="#" class="dropdown-item-custom"> Chính sách</a>
-                </div>
+            <a href="{{ route('customer.showall') }} " class="menu-item">
+                Sản phẩm
             </a>
         </nav>
 
