@@ -151,6 +151,7 @@ class CartController extends Controller
     {
         
         $userid = User::where('id',Session('id'))->first();
+
         if ($userid->address == '' || $userid->phone == '') {
             return redirect()->route('profile',$userid->id)->with('Error', 'Xin vui lòng điền thông tin trước khi mua hàng.');
         }
@@ -219,6 +220,7 @@ class CartController extends Controller
         ]);
 
         if ($request->payment_type == 'VNPAY') {
+            // dd($request);
             return redirect()->route('vnpay_index', [
                 'order_id' => $order->id,
                 'payment_id' => $payment->id,

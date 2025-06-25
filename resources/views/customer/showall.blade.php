@@ -462,6 +462,7 @@
         <div class="filter-container">
             <form method="POST" action="{{ route('itemFilter') }}">
                 @csrf
+                @method('POST')
                 <!-- Size Section -->
                 <div class="filter-section collapsed">
                     <div class="section-header" onclick="toggleSection(this)">

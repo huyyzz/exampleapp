@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\brand;
 use App\Models\category;
 use App\Models\Cloth;
 use App\Models\Order;
@@ -25,7 +24,6 @@ class ClothController extends Controller
 //        $admin = User::where('role','admin');
 
         $cloths = Cloth::all();
-        $brands = Brand::all();
         $categories = category::all();
         $orders = Order::all();
 
@@ -34,14 +32,13 @@ class ClothController extends Controller
 
         
 
-        return view('admin.index', compact('cloths','brands','categories','orders'));
+        return view('admin.index', compact('cloths','categories','orders'));
     }
 
     public function home2()
     {
         $specific = null;
         $products = Cloth::paginate(16);
-        $brands = Brand::all();
         $categories = category::all();
 
         $productCount = Count($products);
@@ -51,7 +48,7 @@ class ClothController extends Controller
 
         
 
-        return view('customer.showall', compact('products','brands','categories','productCount','allCount'));
+        return view('customer.showall', compact('products','categories','productCount','allCount'));
     }
 
     public function filter(Request $request)
@@ -105,7 +102,6 @@ class ClothController extends Controller
 
         // dd($request->category);
 
-        $brands = Brand::all();
         $categories = category::all();
 
         $productCount = Count($products);
@@ -117,14 +113,13 @@ class ClothController extends Controller
         
 
         // $sizes = $cloths->variants();
-        return view('customer.showall', compact('products','brands','categories','productCount','allCount'));
+        return view('customer.showall', compact('products','categories','productCount','allCount'));
     }
 
     public function home()
     {
         $specific = null;
         $cloths = Cloth::all();
-        $brands = Brand::all();
         $categories = category::all();
 
 
@@ -148,7 +143,7 @@ class ClothController extends Controller
         $productIds = $bestSellers->pluck('product_id');
         $productBestSeller = Cloth::whereIn('id', $productIds)->get();
 
-        return view('customer.home', compact('cloths','brands','specific','categories','featuredCollections','productBestSeller'));
+        return view('customer.home', compact('cloths','specific','categories','featuredCollections','productBestSeller'));
     }
 
     /**
@@ -156,9 +151,8 @@ class ClothController extends Controller
      */
     public function create()
     {
-        $brands = Brand::where('id','!=','1')->orderBy('id','asc')->get();
         $categories = category::all();
-        return view('admin.create',compact('brands','categories'));
+        return view('admin.create',compact('categories'));
     }
 
     /**
@@ -171,7 +165,6 @@ class ClothController extends Controller
             'product_description' => 'required|max:1000',
             'QuantityInWareHouse' => 'numeric|max:1000',
             'product_price' => 'required|max:255',
-            'brand_id' => 'numeric',
             'category_id' => 'numeric',
             'product_image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -209,14 +202,12 @@ class ClothController extends Controller
 
     public function showcus(string $id)
     {
-
-        $brands = Brand::all();
         $categories = category::all();
         //
         $cloth = Cloth::findOrFail($id);
 
 //        dd($cloth);
-        return view('customer.showcus-detail',compact('cloth','brands','categories'));
+        return view('customer.showcus-detail',compact('cloth','categories'));
     }
 
 
@@ -288,11 +279,10 @@ class ClothController extends Controller
         $search = strtolower($request->input('term'));
 
         $cloths = Cloth::where('product_name', 'like', "%$search%")->get();
-        $brands = Brand::all();
         $categories = category::all();
 
 
-        return view('customer.home', compact('cloths','categories','brands','specific'));
+        return view('customer.home', compact('cloths','categories','specific'));
     }
 
     public function find($id)
@@ -301,16 +291,6 @@ class ClothController extends Controller
             ->where('id', $id)
             ->first();
         return response()->json($cloth);
-    }
-    public function manuf($name){
-        $cloth = Cloth::all();
-//$name = Versace
-
-        $id = brand::where('name', $name)->first();
-        $brands = Brand::where('id','!=','6')->orderBy('id','asc')->get();
-        $specific = Cloth::where('brand_id', $id->id)->get();
-
-        return view('customer.home', compact('cloth','specific','brands'));
     }
     public function orderIndex($types){
 //        $pending = Order::where('status','Processed')->orderBy('id','desc')->get();
@@ -362,22 +342,20 @@ class ClothController extends Controller
             
         $order = Order::where('id', $id)->first();
 
-        $brands = Brand::all();
         $categories = category::all();
 
         $role = auth()->user()->role;
         // dd($items->cloths);
 
-        return view($role.'.order_details', compact('items','brands','categories','order'));
+        return view($role.'.order_details', compact('items','categories','order'));
     }
 
     public function orderHistory(string $name){
 //        dd($name);
-        $brands = Brand::all();
         $categories = category::all();
         $userid = User::where('name',$name)->first()->id;
         $orders = Order::where('customer_id', $userid)->orderBy('updated_at','desc')->get();
-        return view('customer.order_history', compact('orders','brands','categories'));
+        return view('customer.order_history', compact('orders','categories'));
     }
     
     public function profile($id)
@@ -416,13 +394,11 @@ class ClothController extends Controller
     $since = $user->created_at;
     $user->since = $since;
 
-
-    $brands = Brand::all();
     $categories = category::all();
     if (!$user) {
         return redirect()->back()->with('error', 'User not found');
     }
-    return view('customer.profile', compact('user', 'orders', 'addresses', 'brands', 'categories'));
+    return view('customer.profile', compact('user', 'orders', 'addresses', 'categories'));
 }
 
 
@@ -472,10 +448,9 @@ class ClothController extends Controller
             $hourStatsObj[] = $stats;
         }
 
-        $brands = Brand::all();
         $categories = category::all();
 
-        return view('admin.statistic', compact('orders','brands','categories','hourStatsObj'));
+        return view('admin.statistic', compact('orders','categories','hourStatsObj'));
     }
 }
 

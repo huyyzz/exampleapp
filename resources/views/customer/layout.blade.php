@@ -7,9 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>khach hang</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
     <link rel="stylesheet" href="{{asset('bootstrap-5.3.3/bootstrap-5.3.3-dist/css/bootstrap.min.css')}}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         * {
             margin: 0;
@@ -490,7 +492,7 @@
             <div class="icon-item">
                 <i class="fas fa-user"></i>
                 <div class="icon-dropdown">
-                    @if (Session('user_name'))
+                    <!-- @if (Session('user_name'))
                         <a href="{{ route('profile', Session('id') ) }}" class="icon-dropdown-item">
                             <i class="fas fa-user-circle" style="color: #63E6BE;"></i> Thông tin cá nhân
                         </a>
@@ -508,11 +510,36 @@
                                 <i class="fas fa-tachometer-alt"></i> Dashboard
                             </a>
                         @endif
-                    @else
-                        <a href="{{route('login')}}" class="icon-dropdown-item">
-                            <i class="fas fa-sign-in-alt"></i> Đăng nhập
-                        </a>
-                    @endif
+                        @else
+                            <a href="{{route('login')}}" class="icon-dropdown-item">
+                                <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                            </a>
+                        @endif -->
+                        @if (Session('role') == 'customer')
+                            <a href="{{ route('profile', Session('id')) }}" class="icon-dropdown-item">
+                                <i class="fas fa-user-circle" style="color: #63E6BE;"></i> Thông tin cá nhân
+                            </a>
+                            <a href="{{ route('order.history', Session('user_name')) }}" class="icon-dropdown-item">
+                                <i class="fas fa-history" style="color: #63E6BE;"></i> Lịch sử đơn hàng
+                            </a>
+                            <form method="post" action="{{ route('logout') }}" style="margin: 0;">
+                                @csrf
+                                <button type="submit" class="icon-dropdown-item">
+                                    <i class="fas fa-sign-out-alt" style="color: #63E6BE;"></i> Đăng xuất
+                                </button>
+                            </form>
+
+                            @if (Session('role') == 'admin')
+                                <a href="{{ route('Cloths.index') }}" class="icon-dropdown-item">
+                                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                                </a>
+                            @endif
+                        @else
+                        
+                            <a href="{{ route('login') }}" class="icon-dropdown-item">
+                                <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                            </a>
+                        @endif
                 </div>
             </div>
 

@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CollectionController;
 
 use App\Http\Controllers\AdminCollectionController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VnpayController;
 
 //Route::get('/customer/home', function () {
@@ -124,7 +125,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('vnpay/return', [VnpayController::class, 'return'])->name('vnpay.return');
     Route::get('/vnpay/ipn', [VNPayController::class, 'ipn'])->name('vnpay.ipn');
 
+    Route::get('/profileEdit', [ProfileController::class, 'edit'])->name('editProfile');
+    Route::post('/profileUpdate', [ProfileController::class, 'update'])->name('updateProfile');
     Route::get('/profile/{id}', [ClothController::class, 'profile'])->name('profile');
+    
 
 });
 

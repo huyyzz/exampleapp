@@ -3,36 +3,39 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
-    public function update(Request $request, $id)
+    public function edit()
     {
-        $cart = Cart::findOrFail($id);
-        $cart->quantity = $request->quantity;
-        $cart->save();
-
-        return redirect()->route('Customer.Cart');
+        // dd("1");
+        $user = Auth::user();
+        return view('customer.profile.edit', compact('user'));
     }
 
-    public function store(Request $request)
+    // Handle form submission
+    public function update(Request $request)
     {
-        $cart = Cart::where('user_id', auth()->id())
-            ->where('product_id', $request->product_id)
-            ->first();
+         $request->validate([
+            'phone' => 'required|max:255',
+            'email' => 'required|email|max:255',
+            'address' => 'required|max:255',
+            'name' => 'required|max:255'
+        ]);
 
-        if ($cart) {
-            $cart->quantity += $request->quantity;
-            $cart->save();
-        } else {
-            Cart::create([
-                'user_id' => auth()->id(),
-                'product_id' => $request->product_id,
-                'quantity' => $request->quantity,
-            ]);
-        }
+        // dd($request);
+        $user = Auth::user();
+        
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->address = $request->address;
+        $user->phone = $request->phone;
 
-        return redirect()->route('Customer.Cart');
+        $user->save();
+        
+
+        return redirect()->route('editProfile')->with('success', 'Cập nhật thành công!');
     }
 
 }
