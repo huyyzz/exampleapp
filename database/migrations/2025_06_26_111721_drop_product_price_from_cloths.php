@@ -13,7 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        // Schema::drop('brands');
+        Schema::table('cloths', function (Blueprint $table) {
+            $table->dropColumn('product_price');
+        });
     }
 
     /**
@@ -23,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        // Schema::dropIfExists('brands');
+        Schema::table('cloths', function (Blueprint $table) {
+            //
+        });
     }
 };

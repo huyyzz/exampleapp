@@ -5,20 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class brand extends Model
+class Option extends Model
 {
-    protected $table = 'brands';
+    use HasFactory;
     protected $fillable = [
+        'cloth_id',
         'name',
     ];
-    protected $primaryKey = 'id';
+
     public function cloth()
     {
-        return $this->hasMany(Cloth::class);
+        return $this->belongsTo(Cloth::class);
     }
 
-
-
-    
-    use HasFactory;
+    public function optionValues()
+    {
+        return $this->hasMany(OptionValue::class);
+    }
 }
