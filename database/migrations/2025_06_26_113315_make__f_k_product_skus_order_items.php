@@ -13,7 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::drop('brands');
+        Schema::table('order_items', function (Blueprint $table) {
+            $table->unsignedBigInteger('sku_id')->nullable();
+
+            $table->foreign('sku_id')->references('id')->on('product_skus')->onDelete('set null');
+        });
     }
 
     /**
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('brands');
+        //
     }
 };

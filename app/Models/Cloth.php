@@ -22,10 +22,10 @@ class Cloth extends Model
     //     return $this->hasOne(brand::class);
     // }
 
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class);
-    }
+    // public function brand()
+    // {
+    //     return $this->belongsTo(Brand::class);
+    // }
 
     public function category()
     {
@@ -60,5 +60,9 @@ class Cloth extends Model
         return $this->belongsToMany(collections::class)
             ->withPivot('sort_order')
             ->orderBy('collection_product.sort_order');
+    }
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
     }
 }

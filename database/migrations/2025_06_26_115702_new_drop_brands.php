@@ -13,7 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::drop('brands');
+        Schema::table('cloths', function (Blueprint $table) {
+            $table->dropForeign(['brand_id']);
+        });
+        Schema::dropIfExists('brands');
     }
 
     /**

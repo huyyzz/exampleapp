@@ -13,7 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::drop('brands');
+        Schema::create('product_images', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('cloth_id')->constrained('cloths')->onDelete('cascade');
+            $table->string('image_url');
+            // $table->boolean('is_main');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('brands');
+        Schema::dropIfExists('product_images');
     }
 };

@@ -13,7 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::drop('brands');
+        Schema::create('sku_values', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('brands');
+        Schema::dropIfExists('sku_values');
     }
 };

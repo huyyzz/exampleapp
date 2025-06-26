@@ -13,7 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::drop('brands');
+        Schema::table('order_items', function (Blueprint $table) {
+            $table->dropForeign(['product_id']);
+            $table->dropColumn('product_id');
+        });
     }
 
     /**
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('brands');
+        //
     }
 };
