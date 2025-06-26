@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('sku_values', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_sku_id')->constrained('product_skus')->onDelete('cascade');
+            $table->foreignId('option_id')->constrained('options')->onDelete('cascade');
+            $table->foreignId('option_value_id')->constrained('option_values')->onDelete('cascade');
+            
             $table->timestamps();
         });
     }

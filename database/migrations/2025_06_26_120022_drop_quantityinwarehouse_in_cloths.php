@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('cloths', function (Blueprint $table) {
             $table->dropColumn('QuantityInWareHouse');
-            $table->dropColumn('product_price');
+            // $table->dropColumn('product_price');
             $table->dropColumn('product_image_url');
         });
     }

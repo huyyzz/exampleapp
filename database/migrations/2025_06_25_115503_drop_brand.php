@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::drop('brands');
+        // Schema::drop('brands');
     }
 
     /**
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('brands');
+        // Schema::dropIfExists('brands');
     }
 };

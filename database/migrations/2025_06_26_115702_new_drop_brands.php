@@ -14,7 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::table('cloths', function (Blueprint $table) {
+            // Gỡ foreign key
             $table->dropForeign(['brand_id']);
+            // Xóa cột brand_id
+            $table->dropColumn('brand_id');
         });
         Schema::dropIfExists('brands');
     }
