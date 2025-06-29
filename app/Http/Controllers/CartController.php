@@ -10,6 +10,7 @@ use App\Models\Cloth;
 use App\Models\Order;
 use App\Models\Order_items;
 use App\Models\Payment;
+use App\Models\ProductSku;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -22,62 +23,112 @@ class CartController extends Controller
 //        $cart = Cart::with('product')->where('user_id', auth()->id())->get();
 //        return view('Customer.Cart', compact('cart'));
 //    }
-    public function store(Request $request)
-    {
-        $cart = Cart::where('user_id', auth()->id())
-            ->where('product_id', $request->product_id)
-            ->first();
+//     public function store(Request $request)
+//     {
+//         $cart = Cart::where('user_id', auth()->id())
+//             ->where('product_id', $request->product_id)
+//             ->first();
 
-        if ($cart) {
-            $cart->quantity += $request->quantity;
-            $cart->save();
-        } else {
-            Cart::create([
-                'user_id' => auth()->id(),
-                'product_id' => $request->product_id,
-                'quantity' => $request->quantity,
-            ]);
-        }
+//         if ($cart) {
+//             $cart->quantity += $request->quantity;
+//             $cart->save();
+//         } else {
+//             Cart::create([
+//                 'user_id' => auth()->id(),
+//                 'product_id' => $request->product_id,
+//                 'quantity' => $request->quantity,
+//             ]);
+//         }
 
-        return redirect()->route('Customer.Cart');
-    }
-//    public function index()
-//    {
-//        $variable = auth()->id()->get();
-////        dd($variable);
-//        $cart = Cart::with('product')->where('user_id', auth()->id())->get();
-//        return view('Customer.Cart', compact('cart'));
-//    }
-    public function update(Request $request, $id)
-    {
-        $cart = Cart::findOrFail($id);
-        $cart->quantity = $request->quantity;
-        $cart->save();
+//         return redirect()->route('Customer.Cart');
+//     }
+// //    public function index()
+// //    {
+// //        $variable = auth()->id()->get();
+// ////        dd($variable);
+// //        $cart = Cart::with('product')->where('user_id', auth()->id())->get();
+// //        return view('Customer.Cart', compact('cart'));
+// //    }
+//     public function update(Request $request, $id)
+//     {
+//         $cart = Cart::findOrFail($id);
+//         $cart->quantity = $request->quantity;
+//         $cart->save();
 
-        return redirect()->route('Customer.Cart');
-    }
-    public function destroy($id)
-    {
-        $cart = Cart::findOrFail($id);
-        $cart->delete();
+//         return redirect()->route('Customer.Cart');
+//     }
+//     public function destroy($id)
+//     {
+//         $cart = Cart::findOrFail($id);
+//         $cart->delete();
 
-        return redirect()->route('Customer.Cart');
-    }
+//         return redirect()->route('Customer.Cart');
+//     }
+
+
     public function showCartTable()
     {
         $products = Cloth::all();
-        $brands = Brand::all();
         $categories = category::all();
 //        dd(Session('id'));
         $user = User::where('id', Session('id'))->first();
-        return view('customer.cart', compact('products','brands','categories','user'));
+        return view('customer.cart', compact('products','categories','user'));
     } // lay thong tin -> blade.php fetch qua session
 
+public function addToCart(Request $request, $id)
+{
+    // dd('meombe');
+    $product = Cloth::find($id);
 
+    if (!$product) {
+        abort(404);
+    }
 
-    public function addToCart(Request $request,$id)
+    $skuId = $request->sku_id;
+    $quantity = (int) $request->inputQuantity;
+
+    $sku = $product->skus()->where('id', $skuId)->first();
+
+    if (!$sku) {
+        return redirect()->back()->with('error', 'Không tìm thấy SKU đã chọn.');
+    }
+
+    $cart = session()->get('cart', []);
+
+    // Use a unique key for each product-SKU combination
+    $cartKey = $id . '-' . $skuId;
+
+    // If cart item already exists
+    if (isset($cart[$cartKey])) {
+        $existingQty = $cart[$cartKey]['quantity'];
+        $newQty = min($existingQty + $quantity, $sku->quantity);
+        $cart[$cartKey]['quantity'] = $newQty;
+    } else {
+        // Add new item to cart
+        $cart[$cartKey] = [
+            "product_id" => $product->id,
+            "sku_id" => $sku->id,
+            "name" => $product->product_name,
+            "size" => $sku->skuValues[0]->optionValue->value,
+            "quantity" => min($quantity, $sku->quantity),
+            "price" => $sku->price,
+            "image" => $product->images[0]->image_url ?? null,
+            "QuantityInWareHouse" => $sku->quantity
+        ];
+    }
+
+    session()->put('cart', $cart);
+
+    if ($request->wantsJson()) {
+        return response()->json(['message' => 'Thêm vào giỏ hàng thành công']);
+    }
+
+    return redirect()->back()->with('success', 'Thêm vào giỏ hàng thành công');
+}
+
+    public function addToCart2(Request $request, $id)
     {
-//        dd($id);
+    //    dd($request);
 //        dd($request->inputQuantity);
         $product = Cloth::find($id);
 
@@ -90,16 +141,20 @@ class CartController extends Controller
         $cart = session()->get('cart');
 
         $quantity = $request->inputQuantity;
+        $sku_id = $request->sku_id;
+
+
 //        dd($quantity);
         if (!$cart) {
             $cart = [
                 $id => [
                     "id" => $product->id,
+                    "sku_id" => $sku_id,
                     "name" => $product->product_name,
                     "quantity" => $quantity,
-                    "price" => $product->product_price,
-                    "image" => $product->product_image_url,
-                    "QuantityInWareHouse" => $product->QuantityInWareHouse
+                    "price" => $product->skus[0]->price,
+                    "image" => $product->images[0]->image_url,
+                    "QuantityInWareHouse" => $product->skus[0]->quantity
                 ]
             ];
 //            dd('dmm');
@@ -109,7 +164,7 @@ class CartController extends Controller
         }
 
         if (isset($cart[$id])) {
-//            dd($cart);
+           dd($cart);
             if ($cart[$id]['quantity'] + $quantity > $product->QuantityInWareHouse) {
                 $cart[$id]['quantity'] = $product->QuantityInWareHouse;
             } else {
@@ -127,7 +182,7 @@ class CartController extends Controller
                 "name" => $product->product_name,
                 "quantity" => 0,
                 "price" => $product->product_price,
-                "image" => $product->product_image_url,
+                "image" => $product->images[0]->image_url,
                 "QuantityInWareHouse" => $product->QuantityInWareHouse
             ];
 
@@ -162,19 +217,20 @@ class CartController extends Controller
             'data.*.quantity' => 'required|max:255',
             'payment_type' => 'required|string'
         ]);
+        // dd($validatedData);
 
         $subtotal = 0;
 
         foreach ($validatedData['data'] as $item) {
             //$item[id]
-            $cloth = Cloth::where('id', $item['id'])->first();
-            if ($cloth->QuantityInWareHouse < $item['quantity']){
+            $cloth = ProductSku::where('id', $item['id'])->first();
+            if ($cloth->quantity < $item['quantity']){
                 return redirect()->back()->with('error', 'Không đủ sản phẩm có sẵn');
             }else{
                 // $item['price'] = $cloth->product_price * $item['quantity'];
                 // $tempprice = $item['price'];
                 // $subtotal += $tempprice;
-                $subtotal += $cloth->product_price * $item['quantity'];
+                $subtotal += $cloth->price * $item['quantity'];
                 // $updateData = [
                 //   'QuantityInWareHouse' => $cloth->QuantityInWareHouse - $item['quantity']
                 // ];
@@ -184,7 +240,7 @@ class CartController extends Controller
 
 
 
-
+        // dd($cloth);
 
         // $thisUser = User::where('name',Session('user_name'))->first();
         // $userid = $thisUser->id;
@@ -199,9 +255,9 @@ class CartController extends Controller
         foreach ($validatedData['data'] as $item) {
             Order_items::create([
                 'order_id' => $order->id,
-                'product_id' => $item['id'],
+                'sku_id' => $item['id'],
                 'quantity' => $item['quantity'],
-                'product_price' => Cloth::find($item['id'])->product_price,
+                'product_price' => ProductSku::find($item['id'])->price,
             ]);
             // 15/6/2025
             // $cloth = Cloth::where('id', $item['id'])->first();
@@ -233,8 +289,8 @@ class CartController extends Controller
         if ($request->payment_type == 'COD'){
             //COD
             foreach ($validatedData['data'] as $item) {
-                $cloth = Cloth::find($item['id']);
-                $cloth->QuantityInWareHouse -= $item['quantity'];
+                $cloth = ProductSku::find($item['id']);
+                $cloth->quantity -= $item['quantity'];
                 $cloth->save();
             }
         }
@@ -271,7 +327,7 @@ class CartController extends Controller
     public function showProducts()
     {
         $products = Cloth::all();
-        $brands = Brand::all();
+        // $brands = Brand::all();
         $categories = category::all();
         return view('welcome', compact('products'));
     }

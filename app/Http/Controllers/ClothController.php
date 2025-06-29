@@ -6,14 +6,20 @@ use App\Models\category;
 use App\Models\Cloth;
 use App\Models\Order;
 use App\Models\Order_items;
+use App\Models\ProductImage;
+use App\Models\Option;
+use App\Models\ProductSku;
+use App\Models\OptionValue;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOption\None;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 
 use App\Models\collections;
+use App\Models\SkuValue;
 
 class ClothController extends Controller
 {
@@ -135,15 +141,24 @@ class ClothController extends Controller
             ->get();
 
 
+        // $bestSellers = DB::table('order_items')
+        //     ->select('product_id', DB::raw('SUM(quantity) as total_sold'))
+        //     ->groupBy('product_id')
+        //     ->orderByDesc('total_sold')
+        //     ->limit(8)
+        //     ->get();
+
         $bestSellers = DB::table('order_items')
-            ->select('product_id', DB::raw('SUM(quantity) as total_sold'))
-            ->groupBy('product_id')
+            ->select('sku_id', DB::raw('SUM(quantity) as total_sold'))
+            ->groupBy('sku_id')
             ->orderByDesc('total_sold')
             ->limit(8)
             ->get();
 
-        $productIds = $bestSellers->pluck('product_id');
+        $productIds = $bestSellers->pluck('sku_id');
         $productBestSeller = Cloth::whereIn('id', $productIds)->get();
+
+        
 
         return view('customer.home', compact('cloths','specific','categories','featuredCollections','productBestSeller'));
     }
@@ -156,30 +171,69 @@ class ClothController extends Controller
         $categories = category::all();
         return view('admin.create',compact('categories'));
     }
+    private function generateCombinations(array $arrays)
+    {
+        if (empty($arrays)) return [];
+
+        $result = [[]];
+
+        foreach ($arrays as $propertyValues) {
+            $temp = [];
+
+            foreach ($result as $partialCombination) {
+                foreach ($propertyValues as $value) {
+                    $temp[] = array_merge($partialCombination, [$value]);
+                }
+            }
+
+            $result = $temp;
+        }
+
+        return $result;
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        // $storeData = $request->validate([
+        //     'product_name' => 'required|max:255',
+        //     'product_description' => 'required|max:1000',
+        //     'QuantityInWareHouse' => 'numeric|max:1000',
+        //     'product_price' => 'required|max:255',
+        //     'category_id' => 'numeric',
+        //     'product_image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:16132',
+        // ]);
+        // dd($request->all());
+
         $storeData = $request->validate([
-            'product_name' => 'required|max:255',
-            'product_description' => 'required|max:1000',
-            'QuantityInWareHouse' => 'numeric|max:1000',
-            'product_price' => 'required|max:255',
-            'category_id' => 'numeric',
+            'product_name' => 'required|string|max:255',
+            // 'product_price' => 'nullable|numeric',
+            'product_description' => 'nullable|string',
+            'category_id' => 'nullable|exists:categories,id',
             'product_image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:16132',
+            'options' => 'required|array',
+            'options.*.name' => 'required|string|max:255',
+            'options.*.values' => 'required|array|min:1',
+            'options.*.values.*.name' => 'required|string|max:255',
+            'options.*.values.*.price' => 'required|numeric|min:0',
+        ]);
+        // dd($storeData);
+
+        $product = Cloth::create([
+            'product_name' => $storeData['product_name'],
+            'product_description' => $storeData['product_description'],
+            'category_id' => $storeData['category_id'],
         ]);
 
         if ($request->hasFile('product_image_url')) {
             $image = $request->file('product_image_url');
 
-            // Validate file extension and MIME type
             $validExtensions = ['jpeg', 'png', 'jpg', 'gif'];
             $validMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
 
             if (!in_array($image->getClientOriginalExtension(), $validExtensions) || !in_array($image->getMimeType(), $validMimeTypes)) {
-                // Invalid file type
                 return redirect()->back()->withErrors(['product_image_url' => 'The product image must be a file of type: jpeg, png, jpg, gif.']);
             }
 
@@ -187,8 +241,72 @@ class ClothController extends Controller
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->storeAs('public/images', $imageName);
             $storeData['product_image_url'] = $imageName;
-            $cloths = Cloth::create($storeData);
+            $image = ProductImage::create([
+                'image_url' => $storeData['product_image_url'],
+                'cloth_id' => $product->id,
+            ]);
         }
+        
+
+        $allOptionValueIds = [];
+
+        foreach ($storeData['options'] as $optionData) {
+            // ORM lay option cua product
+            // public function options()
+            // {
+            //     return $this->hasMany(Option::class);
+            // }
+            //Create entity option co name va OptionValue chua name 
+            $option = Option::create([
+                'cloth_id' => $product->id,
+                'name' => $optionData['name'],
+            ]);
+
+            $valueIds = [];
+
+            foreach ($optionData['values'] as $valueName) {
+                $value = OptionValue::create([
+                    'option_id' => $option->id,
+                    'value' => $valueName['name'],
+                ]);
+
+                $sku = ProductSku::create([
+                    'cloth_id' => $product->id,
+                    'sku' => strtoupper('C'.$product->id.'S-'.$valueName['name']),
+                    'price' => $valueName['price'],
+                    'quantity' => 0,
+                    //Default 0 ti vao update change
+                ]);
+                // dd($sku->id);
+                $skuValue = SkuValue::create([
+                    'product_sku_id' => $sku->id,
+                    'option_id' => $option->id,
+                    'option_value_id' => $value->id,
+                ]);
+                // $valueIds[] = $value->id;
+            }
+
+            // $allOptionValueIds[] = $valueIds;
+        }
+
+        // if ($request->hasFile('product_image_url')) {
+        //     $image = $request->file('product_image_url');
+
+        //     // Validate file extension and MIME type
+        //     $validExtensions = ['jpeg', 'png', 'jpg', 'gif'];
+        //     $validMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+
+        //     if (!in_array($image->getClientOriginalExtension(), $validExtensions) || !in_array($image->getMimeType(), $validMimeTypes)) {
+        //         // Invalid file type
+        //         return redirect()->back()->withErrors(['product_image_url' => 'The product image must be a file of type: jpeg, png, jpg, gif.']);
+        //     }
+
+        //     // Store the file
+        //     $imageName = time() . '.' . $image->getClientOriginalExtension();
+        //     $image->storeAs('public/images', $imageName);
+        //     $storeData['product_image_url'] = $imageName;
+        //     // $cloths = Cloth::create($storeData);
+        // }
         return redirect('/Cloths')->with('completed', 'New product has been saved!');
     }
 
@@ -199,7 +317,8 @@ class ClothController extends Controller
     {
         //
         $cloth = Cloth::findOrFail($id);
-        return view('admin.show-detail',compact('cloth'));
+        return view('admin.product_detail_2',compact('cloth'));
+        // return view('admin.show-detail',compact('cloth'));
     }
 
     public function showcus(string $id)
@@ -541,11 +660,11 @@ class ClothController extends Controller
 
             $stats->average_order_value = $stats->total_subtotal / $stats->order_count;
 
-            $monthStat[] = $stats;
+            $monthStats[] = $stats;
 
         }
         $monthStatsObj = [];
-        foreach($monthStat as $stats) {
+        foreach($monthStats as $stats) {
             $monthStatsObj[] = $stats;
         }
 

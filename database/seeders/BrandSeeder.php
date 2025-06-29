@@ -15,11 +15,11 @@ class BrandSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('brands')->insert([
-            [
-                'id' => '1',
-                'name' => 'Không brand'
-            ],
-        ]);
+        // DB::table('brands')->insert([
+        //     [
+        //         'id' => '1',
+        //         'name' => 'Không brand'
+        //     ],
+        // ]);
     }
 }
