@@ -17,4 +17,9 @@ class OptionValue extends Model
     {
         return $this->belongsTo(Option::class);
     }
+
+    public function skuvalue()
+    {
+        return $this->hasMany(SkuValue::class);
+    }
 }

@@ -29,11 +29,15 @@ class DatabaseSeeder extends Seeder
 
         DB::table('categories')->insert([
             'id' => '2',
-            'name' => 'Quần'
+            'name' => 'Quần',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
         DB::table('categories')->insert([
             'id' => '3',
-            'name' => 'Áo'
+            'name' => 'Áo',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
     }

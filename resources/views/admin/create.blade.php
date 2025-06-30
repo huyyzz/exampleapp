@@ -253,35 +253,6 @@
                 <div class="form-row">
                     <div class="form-col">
                         <div class="form-group">
-                            <label for="QuantityInWareHouse" class="form-label">
-                                <i class="fas fa-boxes"></i> Số Lượng Trong Kho
-                            </label>
-                            <input type="number" 
-                                   min="0" 
-                                   class="form-control" 
-                                   name="QuantityInWareHouse"
-                                   id="QuantityInWareHouse"
-                                   placeholder="0"/>
-                        </div>
-                    </div>
-                    
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label for="product_price" class="form-label">
-                                <i class="fas fa-dollar-sign"></i> Giá Sản Phẩm
-                            </label>
-                            <input type="text" 
-                                   class="form-control" 
-                                   name="product_price"
-                                   id="product_price"
-                                   placeholder="Nhập giá sản phẩm..."/>
-                        </div>
-                    </div>
-                </div>
-
-                    
-                    <div class="form-col">
-                        <div class="form-group">
                             <label for="category_id" class="form-label">
                                 <i class="fas fa-list"></i> Danh Mục
                             </label>
@@ -306,6 +277,15 @@
                            accept="image/*"/>
                 </div>
 
+                <div id="TheRealOptionContainer">
+
+                    <!-- <button type="button" onclick="addValue(${optionIndex})">➕ Add Value</button> -->
+                    
+                </div>
+
+
+                <button type="button" onclick="addOption()">Thêm size</button>
+
                 <button type="submit" class="submit-btn">
                     <i class="fas fa-save"></i> Tạo Sản Phẩm
                 </button>
@@ -313,5 +293,60 @@
         </div>
     </div>
 </div>
+
+<script>
+    let optionIndex = 0;
+
+    function addOption() {
+        const container = document.getElementById('TheRealOptionContainer');
+
+        const optionGroup = document.createElement('div');
+        optionGroup.classList.add('option-group');
+        optionGroup.style.marginBottom = '1em';
+
+        optionGroup.innerHTML = `
+            <input type="hidden" name="options[${optionIndex}][name]" placeholder="Size" value="Size" required><br>
+
+            <div id="values-container-${optionIndex}">
+                <label>Values:</label><br>
+                <input type="text" name="options[${optionIndex}][values][0][name]" placeholder="Small" required>
+                <input type="number" step="1000" name="options[${optionIndex}][values][0][price]" placeholder="Giá (VND)" required>
+            </div>
+
+            <button type="button" onclick="addValue(${optionIndex})">➕ Add Value</button>
+            <hr>
+        `;
+
+        container.appendChild(optionGroup);
+        optionIndex++;
+    }
+
+    function addValue(index) {
+        const container = document.getElementById(`values-container-${index}`);
+        const count = container.querySelectorAll('input[name^="options[' + index + '][values]"]').length / 2;
+
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <br><input type="text" name="options[${index}][values][${count}][name]" placeholder="e.g. Medium" required>
+            <input type="number" step="0.01" name="options[${index}][values][${count}][price]" placeholder="Giá (VND)" required>
+        `;
+        container.appendChild(div);
+    }
+
+
+    // function addSku() {
+    //     const tbody = document.getElementById('sku-rows');
+    //     const html = `
+    //         <tr>
+    //             <td><input type="text" name="skus[${skuIndex}][sku]" required></td>
+    //             <td><input type="number" name="skus[${skuIndex}][price]" required></td>
+    //             <td><input type="number" name="skus[${skuIndex}][quantity]" required></td>
+    //             <td><input type="text" name="skus[${skuIndex}][options]" placeholder="Size:M,Color:Đỏ"></td>
+    //         </tr>
+    //     `;
+    //     tbody.insertAdjacentHTML('beforeend', html);
+    //     skuIndex++;
+    // } Skip, tự gen
+</script>
 
 @endsection

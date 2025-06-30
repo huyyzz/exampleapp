@@ -9,15 +9,15 @@ class SkuValue extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'cloth_sku_id',
+        'product_sku_id',
         'option_id',
         'option_value_id',
     ];
 
     public function clothSku()
-    {
-        return $this->belongsTo(ProductSku::class);
-    }
+{
+    return $this->belongsTo(ProductSku::class, 'product_sku_id');
+}
 
     public function option()
     {

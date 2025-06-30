@@ -23,6 +23,8 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('Matkhau123'),
                 'phone' => '1234567890',
                 'address' => 'Admin Address',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'Customer',
@@ -31,6 +33,8 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('Matkhau123'),
                 'phone' => '0987654321',
                 'address' => 'User Address',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }

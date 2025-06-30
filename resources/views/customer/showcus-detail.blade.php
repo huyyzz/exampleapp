@@ -7,25 +7,40 @@
             
             <!-- Left: Image -->
             <div class="col-12 col-md-6">
-                <img src="{{ asset('storage/images/' . $cloth->product_image_url) }}" class="img-fluid" alt="Product Image">
+                <img src="{{ asset('storage/images/' . $cloth->images[0]->image_url) }}" class="img-fluid" alt="Product Image">
             </div>
 
             <!-- Right: Product Details -->
             <div class="col-12 col-md-6">
                 <h1 class="display-5 fw-bold">{{ $cloth->product_name }}</h1>
-                <h2 class="text-danger mt-4">{{ number_format($cloth->product_price, 0, ',', '.') }} VNĐ</h2>
+                <h2 class="text-danger mt-4">{{ number_format($cloth->skus[0]->price, 0, ',', '.') }} VNĐ</h2>
 
                 <div class="lead mt-3">
                     Mô tả sản phẩm
                     <br>
                     {!! nl2br(e($cloth->product_description)) !!}
                 </div>
-
                 <form class="mt-4" method="get" action="{{ route('addToCart', $cloth->id) }}">
+                    <label>Kích cỡ:</label>
+                    <div class="mb-3" id="sizeButtons">
+                        @foreach($cloth->skus as $sku)
+                            <button 
+                                type="button" 
+                                class="btn btn-outline-dark me-2 mb-2 size-btn" 
+                                data-sku-id="{{ $sku->id }}" 
+                                data-quantity="{{ $sku->quantity }}"
+                                data-size="{{ $sku->skuValues[0]->optionValue->value }}">
+                                {{ $sku->skuValues[0]->optionValue->value }}
+                            </button>
+                        @endforeach
+                    </div>
+<!-- Value default la lay size dau tien -->
+                    <input type="hidden" name="sku_id" id="selectedSkuId" value="{{ $cloth->skus[0]->id }}">
+
                     <label>Số lượng:</label>
                     <div class="d-flex align-items-center mb-3">
-                        <input type="number" name="inputQuantity" min="1" max="{{ $cloth->QuantityInWareHouse ?? 999 }}" value="1" class="form-control w-auto me-3">
-                        <span class="text-muted">{{ $cloth->QuantityInWareHouse }} sản phẩm có sẵn</span>
+                        <input id="quantityInput" type="number" name="inputQuantity" min="1" max="{{ $cloth->skus[0]->quantity ?? 999 }}" value="1" class="form-control w-auto me-3">
+                        <span id="quantityAvailable" class="text-muted">{{ $cloth->skus[0]->quantity }} sản phẩm có sẵn</span>
                     </div>
                     <button type="submit" class="btn btn-dark">
                         <i class="bi bi-cart-fill me-1"></i> Thêm vào giỏ
@@ -158,6 +173,31 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Core theme JS-->
 <script src="js/scripts.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.size-btn');
+        const quantityInput = document.getElementById('quantityInput');
+        const quantityAvailable = document.getElementById('quantityAvailable');
+        const selectedSkuId = document.getElementById('selectedSkuId');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                // Update hidden input
+                selectedSkuId.value = this.getAttribute('data-sku-id');
+
+                // Update quantity
+                const quantity = this.getAttribute('data-quantity');
+                quantityInput.max = quantity;
+                quantityInput.value = 1;
+                quantityAvailable.textContent = `${quantity} sản phẩm có sẵn`;
+
+                // Highlight selected button
+                buttons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    });
+</script>
 </body>
 </html>
 @endsection('content')

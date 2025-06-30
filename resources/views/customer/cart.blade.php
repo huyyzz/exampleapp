@@ -537,6 +537,7 @@
                                 <?php
                                 $total += $details['price'] * $details['quantity'];
                                 $index += 1;
+                                // dd($details);
                                 ?>
 
                                 <div class="cart-item">
@@ -552,6 +553,11 @@
                                         <div class="md:col-span-4">
                                             <h3 class="product-name">{{ $details['name'] }}</h3>
                                             <p class="product-price">Giá tiền: {{ number_format($details['price'], 0, ',', '.') }} VNĐ</p>
+                                            
+                                            <p>
+                                                <strong>Kích cỡ:</strong>
+                                                 {{ $details['size'] ?? 'Không rõ' }}</p>
+                                            
                                             <p>Sản phẩm có sẵn: {{ $details['QuantityInWareHouse'] }}</p>
                                             <button type="button" class="remove-btn remove-from-cart" data-id="{{ $id }}" data-name="{{ $details['name'] }}">
                                                 <i class="fas fa-trash"></i>
@@ -576,9 +582,9 @@
                                         </div>
 
                                         <!-- Hidden Fields -->
-                                        <input name="data[{{$index}}][id]" type="hidden" value="{{$details['id']}}">
+                                        <input name="data[{{$index}}][id]" type="hidden" value="{{$details['sku_id']}}">
                                         <div style="display: none" data-th="Price">{{$details['price']}}</div>
-                                        <div style="display: none" data-th="Id">{{$details['id']}}</div>
+                                        <div style="display: none" data-th="Id">{{$details['sku_id']}}</div>
                                         <div style="display: none" data-th="QuantityInWareHouse">{{$details['QuantityInWareHouse']}}</div>
                                     </div>
                                 </div>
