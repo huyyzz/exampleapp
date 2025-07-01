@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClothController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SkuController;
 
 use App\Http\Controllers\CollectionController;
 
@@ -55,6 +56,8 @@ Route::middleware('isAdmin')->group(function(){
             ->name('collections.products.update');
 
     });
+
+    Route::post('/detailUpdate', [\App\Http\Controllers\SkuController::class, 'update'])->name('SkuUpdate');
 });
 
 

@@ -231,37 +231,20 @@
                               wrap="soft"
                               placeholder="Nhập mô tả chi tiết về sản phẩm">{{ $cloths->product_description }}</textarea>
                 </div>
-                
+
                 <div class="form-group">
-                    <label class="form-label" for="inputQuantity">
-                        <i class="fas fa-boxes"></i>
-                        Thêm Số Lượng Sản Phẩm
+                    <label class="form-label" for="category">
+                        <i class="fas fa-tag"></i>
+                        Danh mục sản phẩm
                     </label>
-                    <input type="number" 
-                           class="form-control" 
-                           id="inputQuantity"
-                           name="inputQuantity" 
-                           min="0" 
-                           placeholder="Nhập số lượng cần thêm"/>
-                    <div class="quantity-info">
-                        <i class="fas fa-warehouse"></i>
-                        {{ $cloths->QuantityInWareHouse }} sản phẩm có sẵn trong kho
-                    </div>
+                    <select class="form-select" name="category_id" id="category_id" required>
+                        <option value="{{ $cloths->category_id }}" selected hidden>{{ $cloths->category->name }}</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="product_price">
-                        <i class="fas fa-dollar-sign"></i>
-                        Giá Sản Phẩm
-                    </label>
-                    <input type="text" 
-                           class="form-control" 
-                           id="product_price"
-                           name="product_price" 
-                           value="{{ $cloths->product_price }}" 
-                           placeholder="Nhập giá sản phẩm"
-                           required/>
-                </div>
+            
 
                 <div class="form-group">
                     <label for="product_image_url" class="form-label">
@@ -269,10 +252,42 @@
                     </label>
                     <input type="file" 
                            class="form-control file-input" 
-                           name="product_image_url"
+                           name="product_image_url[]"
                            id="product_image_url"
-                           accept="image/*"/>
+                           accept="image/*"
+                           multiple/>
                 </div>
+                @if ($cloths->images && $cloths->images->count() > 0)
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-images"></i> Ảnh Hiện Có
+                        </label>
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                            @foreach ($cloths->images as $image)
+                                <div style="position: relative;">
+                                    <img src="{{ asset('storage/images/' . $image->image_url) }}" width="100" height="100" style="object-fit: cover; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                                    
+                                    <!-- Delete Checkbox -->
+                                    <div>
+                                        <label style="font-size: 0.85rem;">
+                                            <input type="checkbox" name="delete_images[]" value="{{ $image->id }}">
+                                            Xóa
+                                        </label>
+                                    </div>
+
+                                    <!-- Thumbnail Radio -->
+                                    <div>
+                                        <label style="font-size: 0.85rem;">
+                                            <input type="radio" name="thumb_id" value="{{ $image->id }}" 
+                                                {{ $image->isThumb ? 'checked' : '' }}>
+                                            Ảnh Chính
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
                 
                 <button type="submit" class="submit-btn">
                     <i class="fas fa-save"></i>
