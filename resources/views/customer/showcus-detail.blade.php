@@ -51,8 +51,8 @@
         </div>
     </div>
 </section>
-
-<<footer class="text-center text-lg-start bg-body-tertiary text-muted">
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-body-tertiary text-muted">
     <!-- Section: Social media -->
     <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
         <!-- Left -->
@@ -75,8 +75,6 @@
             <a href="https://www.facebook.com/tao1407?locale=vi_VN" class="me-4 text-reset">
                 <i class="fab fa-instagram"></i>
             </a>
-
-
         </div>
         <!-- Right -->
     </section>
@@ -89,9 +87,9 @@
             <div class="row mt-3">
                 <!-- Grid column -->
                 <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                    <!-- Content -->
+<!-- Content -->
                     <h6 class="text-uppercase fw-bold mb-4">
-                        <i class="fas fa-gem me-3"></i>Huy shop
+                        <i class="fas fa-gem me-3"></i>TIN TIN 
                     </h6>
                     <p>
                         Cảm ơn bạn đã xem sản phẩm của chúng tôi. Ngoài ra,
@@ -104,21 +102,6 @@
                 <!-- Grid column -->
                 <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
                     <!-- Links -->
-                    {{--                    <h6 class="text-uppercase fw-bold mb-4">--}}
-                    {{--                        Sản phẩm--}}
-                    {{--                    </h6>--}}
-                    {{--                    <p>--}}
-                    {{--                        <a href="#!" class="text-reset" style="text-decoration: none">Adidas</a>--}}
-                    {{--                    </p>--}}
-                    {{--                    <p>--}}
-                    {{--                        <a href="#"  class="text-reset" style="text-decoration: none">Nike</a>--}}
-                    {{--                    </p>--}}
-                    {{--                    <p>--}}
-                    {{--                        <a href="#!" class="text-reset" style="text-decoration: none">LV</a>--}}
-                    {{--                    </p>--}}
-                    {{--                    <p>--}}
-                    {{--                        <a href="#!" class="text-reset" style="text-decoration: none">Gucci</a>--}}
-                    {{--                    </p>--}}
                 </div>
                 <!-- Grid column -->
 
@@ -138,7 +121,7 @@
                         <a href="#!" class="text-reset" style="text-decoration: none">Orders</a>
                     </p>
                     <p>
-                        <a  href="#!" class="text-reset" style="text-decoration: none">Help</a>
+                        <a href="#!" class="text-reset" style="text-decoration: none">Help</a>
                     </p>
                 </div>
                 <!-- Grid column -->
@@ -150,7 +133,7 @@
                     <p><i class="fas fa-home me-3"></i> Hanoi, Hadong Vietnam</p>
                     <p>
                         <i class="fas fa-envelope me-3"></i>
-                        HUYShop@gmail.com
+                        TINTINShop@gmail.com
                     </p>
                     <p><i class="fas fa-phone me-3"></i> + 0563 456 195</p>
                     <p><i class="fas fa-print me-3"></i> + 0904 775 377</p>
@@ -164,12 +147,12 @@
 
     <!-- Copyright -->
     <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-
         Domestic goods:
-        <a class="text-reset fw-bold">Cloth SHOP VIP123</a>
+        <a class="text-reset fw-bold">TIN TIN SHOP</a>
     </div>
     <!-- Copyright -->
 </footer>
+<!-- Footer -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Core theme JS-->
 <script src="js/scripts.js"></script>
