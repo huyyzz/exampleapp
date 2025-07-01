@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\DB;
 use PhpOption\None;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 use App\Models\collections;
 use App\Models\SkuValue;
@@ -36,7 +37,10 @@ class ClothController extends Controller
 
 
 
-
+        foreach ($cloths as $product){
+            // dd($product->skus[0]->cloth->images[0]->image_url);
+            $product->product_image_url = $product->skus[0]->cloth->images[0]->image_url;
+        }
         
 
         return view('admin.index', compact('cloths','categories','orders'));
@@ -182,26 +186,6 @@ class ClothController extends Controller
         $categories = category::all();
         return view('admin.create',compact('categories'));
     }
-    private function generateCombinations(array $arrays)
-    {
-        if (empty($arrays)) return [];
-
-        $result = [[]];
-
-        foreach ($arrays as $propertyValues) {
-            $temp = [];
-
-            foreach ($result as $partialCombination) {
-                foreach ($propertyValues as $value) {
-                    $temp[] = array_merge($partialCombination, [$value]);
-                }
-            }
-
-            $result = $temp;
-        }
-
-        return $result;
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -240,6 +224,7 @@ class ClothController extends Controller
         ]);
 
         if ($request->hasFile('product_image_url')) {
+            $index = 0;
             foreach ($request->file('product_image_url') as $image){
                 // $image = $request->file('product_image_url');
 
@@ -251,13 +236,14 @@ class ClothController extends Controller
                 }
 
                 // Store the file
-                $imageName = time() . '-' . $product->id . '.' . $image->getClientOriginalExtension();
+                $imageName = time() . '-' . $index . '.' . $image->getClientOriginalExtension();
                 $image->storeAs('public/images', $imageName);
                 $storeData['product_image_url'] = $imageName;
                 $image = ProductImage::create([
                     'image_url' => $storeData['product_image_url'],
                     'cloth_id' => $product->id,
                 ]);
+                $index++;
             }
         }
         
@@ -281,7 +267,7 @@ class ClothController extends Controller
             foreach ($optionData['values'] as $valueName) {
                 $value = OptionValue::create([
                     'option_id' => $option->id,
-                    'value' => $valueName['name'],
+                    'value' => strtoupper($valueName['name']),
                 ]);
 
                 $sku = ProductSku::create([
@@ -290,6 +276,8 @@ class ClothController extends Controller
                     'price' => $valueName['price'],
                     'quantity' => 0,
                     //Default 0 ti vao update change
+
+                    //Neu them color phai sua ->S = short cai option name 
                 ]);
                 // dd($sku->id);
                 $skuValue = SkuValue::create([
@@ -331,6 +319,8 @@ class ClothController extends Controller
     {
         //
         $cloth = Cloth::findOrFail($id);
+        // dd($cloth->images);
+        $cloth->product_image_url = $cloth->images[0]->image_url;
         return view('admin.product_detail_2',compact('cloth'));
         // return view('admin.show-detail',compact('cloth'));
     }
@@ -340,7 +330,7 @@ class ClothController extends Controller
         $categories = category::all();
         //
         $cloth = Cloth::findOrFail($id);
-
+        
 //        dd($cloth);
         return view('customer.showcus-detail',compact('cloth','categories'));
     }
@@ -353,8 +343,9 @@ class ClothController extends Controller
     public function edit(string $id)
     {
         $cloths = Cloth::findOrFail($id);
+        $categories = Category::all();
 
-        return view('admin.update', compact('cloths'));
+        return view('admin.update', compact('cloths','categories'));
     }
 
     /**
@@ -362,46 +353,57 @@ class ClothController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $quantity = Cloth::where('id',$id)->first()->QuantityInWareHouse;
-        $inputQuantity = $request->inputQuantity;
-//        dd($inputQuantity);
+        $product = Cloth::where('id',$id)->first();
 
-        $updated = $quantity + $inputQuantity;
+        // $inputQuantity = $request->inputQuantity;
+
+        // $updated = $quantity + $inputQuantity;
 
 
         $updateData = $request->validate([
             'product_name' => 'required|max:255',
             'product_description' => 'required|max:4000',
-            'product_price' => 'required|max:255',
-            'QuantityInWareHouse' => 'max:255',
-            'product_image_url' => 'image|mimes:jpeg,png,jpg,gif|max:16132',
+            'category_id' => 'required|numeric',
+            'product_image_url' => 'array',
+            'product_image_url.*' => 'image|mimetypes:image/jpeg,image/png,image/webp|max:16132',
         ]);
 
-        $updateData['QuantityInWareHouse'] = $updated;
-
-
-
-
-        if ($request->hasFile('product_image_url')) {
-            $image = $request->file('product_image_url');
-
-            // Validate file extension and MIME type
-            $validExtensions = ['jpeg', 'png', 'jpg', 'gif'];
-            $validMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
-
-            if (!in_array($image->getClientOriginalExtension(), $validExtensions) || !in_array($image->getMimeType(), $validMimeTypes)) {
-                // Invalid file type
-                return redirect()->back()->withErrors(['product_image_url' => 'The product image must be a file of type: jpeg, png, jpg, gif.']);
+        if ($request->has('delete_images')) {
+            foreach ($request->delete_images as $imageId) {
+                $image = ProductImage::find($imageId);
+                if ($image) {
+                    Storage::delete('public/images/' . $image->image_url);
+                    $image->delete();
+                }
             }
-
-            // Store the file
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images', $imageName);
-            $updateData['product_image_url'] = $imageName;
-        }else{
-            $updateData['product_image_url'] = Cloth::where('id',$id)->first()->product_image_url;
         }
 
+        if ($request->has('thumb_id')) {
+            ProductImage::where('cloth_id', $product->id)->update(['isThumb' => false]);
+            ProductImage::where('id', $request->thumb_id)->update(['isThumb' => true]);
+        }
+
+        if ($request->hasFile('product_image_url')) {
+            foreach ($request->file('product_image_url') as $image){
+                $validExtensions = ['jpeg', 'png', 'jpg', 'gif','webp'];
+                $validMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif','image/webp'];
+
+                if (!in_array($image->getClientOriginalExtension(), $validExtensions) || !in_array($image->getMimeType(), $validMimeTypes)) {
+                    return redirect()->back()->withErrors(['product_image_url' => 'The product image must be a file of type: jpeg, png, jpg, gif.']);
+                }
+
+                // Store the file
+                $imageName = time() . '-' . $product->id . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/images', $imageName);
+                $storeData['product_image_url'] = $imageName;
+                $image = ProductImage::create([
+                    'image_url' => $storeData['product_image_url'],
+                    'cloth_id' => $product->id,
+                ]);
+            }
+        }
+
+        unset($updateData['product_image_url']);
         Cloth::whereId($id)->update($updateData);
 
         return redirect('/Cloths')->with('completed', 'This product has been saved!');
@@ -486,15 +488,15 @@ class ClothController extends Controller
 
         $products = Order_items::where('order_id',$id)->get();
         foreach($products as $product) {
-            $cloth = Cloth::withTrashed()->where('id', $product->product_id)->first();
+            $cloth = ProductSku::where('id', $product->sku_id)->first();
             // dd($cloth);
 //            $quantity = [
 //                $product->quantity
             if ($updateData['status'] == "Đã hủy") {
                 $quantity = [
-                    "QuantityInWareHouse" => $product->quantity + $cloth->QuantityInWareHouse
+                    "quantity" => $product->quantity + $cloth->QuantityInWareHouse
                 ];
-                Cloth::whereId($product->product_id)->update($quantity);
+                ProductSku::whereId($product->sku_id)->update($quantity);
             }
 
         }
@@ -517,7 +519,9 @@ class ClothController extends Controller
         $role = auth()->user()->role;
 
         foreach($items as $item){
+            // dd($item->sku->cloth);
             $item->product_name = $item->sku->cloth->product_name;
+
             $item->product_image_url = $item->sku->cloth->images[0]->image_url;
             $item->size = $item->sku->skuValues[0]->optionValue->value;
         }
@@ -587,125 +591,65 @@ class ClothController extends Controller
 }
 
 
-    public function statistic(){
+    public function statistic(Request $request)
+    {
 
-        $hourStats = [];
-        $ordersByDay = Order::where('status','Đã giao')
-            ->get()
-            ->groupBy(function($order) {
-                return $order->updated_at->format('D');
-            })
-            ->sortBy(function($orders, $date) {
-                return $date;
-            });
-        $orders = null;
-        foreach($ordersByDay as $hour => $orders) {
-
-            $stats = (object) [
-                'time' => $hour,
-                'order_count' => count($orders),
-                'total_subtotal' => 0
-            ];
-
-            foreach($orders as $order) {
-                $stats->total_subtotal += $order->sub_total;
-            }
-
-            $stats->average_order_value = $stats->total_subtotal / $stats->order_count;
-
-            $hourStats[] = $stats;
-
-        }
+        $categories = Category::all();
+        $orders = Order::where('status', 'Chờ duyệt đơn')->get();
         
-//        dd($hourStats);
-        $hourStatsObj = [];
-
-        foreach($hourStats as $stats) {
-            $hourStatsObj[] = $stats;
-        }
-
-        $yearStats = [];
-        $ordersByYear = Order::where('status','Đã giao')
-            ->get()
-            ->groupBy(function($order) {
-                return $order->updated_at->format('Y');
-            })
-            ->sortBy(function($orders, $date) {
-                return $date;
-            });
-        $orders = null;
-        foreach($ordersByYear as $year => $orders) {
-
-            $stats = (object) [
-                'time' => $year,
-                'order_count' => count($orders),
-                'total_subtotal' => 0
-            ];
-
-            foreach($orders as $order) {
-                $stats->total_subtotal += $order->sub_total;
-            }
-
-            $stats->average_order_value = $stats->total_subtotal / $stats->order_count;
-
-            $yearStats[] = $stats;
-
-        }
-        
-//        dd($hourStats);
-        $yearStatsObj = [];
-
-        foreach($yearStats as $stats) {
-            $yearStatsObj[] = $stats;
-        }
-
-        $categories = category::all();
-
-        $monthStats = [];
-        $orderByMonth = Order::where('status','Đã giao')
-            ->get()
-            ->groupBy(function($order) {
-                return $order->updated_at->format('M');
-            })
-            ->sortBy(function($orders, $date) {
-                return $date;
-            });
-        $orders = null;
-        foreach($orderByMonth as $month => $orders) {
-            $stats = (object) [
-                'time' => $month,
-                'order_count' => count($orders),
-                'total_subtotal' => 0
-            ];
-            // dd($stats);
-
-            foreach($orders as $order) {
-                $stats->total_subtotal += $order->sub_total;
-            }
-
-            $stats->average_order_value = $stats->total_subtotal / $stats->order_count;
-            
-            $monthStats[] = $stats;
-            
-            
-
-        }
-        // dd($monthStats);
-        $monthStatsObj = [];
-        foreach($monthStats as $stats) {
-            $monthStatsObj[] = $stats;
-            
-        }
-
-
-
-        $orders = Order::where('status','Chờ duyệt đơn')->get();
-        // dd($monthStatsObj);
-
         
 
-        return view('admin.statistic', compact('orders','categories','hourStatsObj', 'yearStatsObj','monthStatsObj'));
+
+
+
+
+// <<<<<<< CSSSualaitatca
+//         $monthStats = [];
+//         $orderByMonth = Order::where('status','Đã giao')
+//             ->get()
+//             ->groupBy(function($order) {
+//                 return $order->updated_at->format('M');
+//             })
+//             ->sortBy(function($orders, $date) {
+//                 return $date;
+//             });
+//         $orders = null;
+//         foreach($orderByMonth as $month => $orders) {
+//             $stats = (object) [
+//                 'time' => $month,
+//                 'order_count' => count($orders),
+//                 'total_subtotal' => 0
+//             ];
+//             // dd($stats);
+
+//             foreach($orders as $order) {
+//                 $stats->total_subtotal += $order->sub_total;
+//             }
+//
+        $start = $request->start_date ?? now()->startOfMonth()->toDateString();
+        $end = $request->end_date ?? now()->toDateString();
+
+        $end = date('Y-m-d', strtotime($end . ' +1 day'));
+
+        $revenueStats = Order::selectRaw('DATE(updated_at) as time, SUM(sub_total) as total_subtotal')
+            ->whereBetween('updated_at', [$start, $end])
+            ->groupBy('time')
+            ->orderBy('time')
+            ->get();
+        // dd($revenueStats);
+
+        $earliest = Order::orderBy('updated_at','asc')->first()->updated_at;
+        $earliest = date('Y-m-d', strtotime($earliest));
+
+
+
+
+
+        return view('admin.statistic', compact(
+            'orders', 'categories','revenueStats','earliest'
+        ));
     }
+
 }
 
 

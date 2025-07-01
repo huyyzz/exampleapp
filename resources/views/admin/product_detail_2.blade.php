@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
 @section('content')
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <style>
     .product-detail-container {
         max-width: 1400px;
@@ -341,27 +341,10 @@
         <div class="product-main">
             <!-- Left Side - Product Image & Info -->
             <div class="product-image-section">
-                <img" 
+                <img src="{{asset('storage/images/'.$cloth->product_image_url)}}" 
                      alt="{{ $cloth->product_name }}" 
-                     class="product-image">
-                
-                <div class="product-info">
-                    <h1>{{ $cloth->product_name }}</h1>
-                    <div class="product-price"></div>
-    
-                    <span class="product-units">{{ $cloth->total_quantity }} units</span>
-                    <!-- <div class="profitability">
-                        @php
-                            $profit = ($cloth->base_price ?? 0) - ($cloth->cost_price ?? 0);
-                            $profitMargin = $cloth->cost_price > 0 ? ($profit / $cloth->cost_price) * 100 : 0;
-                        @endphp
-                        @if($profitMargin > 0)
-                            Profitable ({{ number_format($profitMargin, 1) }}% margin)
-                        @else
-                            Not Profitable
-                        @endif
-                    </div> -->
-                </div>
+                     class="product-image"
+                     style="width: 300px; height: 100%; object-fit: cover;">
 
                 <div class="product-link">
                     <h4>Product url link to share</h4>
@@ -374,34 +357,75 @@
             <!-- Right Side - Product Details -->
             <div class="product-details">
                 <div class="detail-row">
-                    <span class="detail-label">Type:</span>
-                    <span class="detail-value">Product</span>
+                    <span class="detail-label">Danh mục:</span>
+                    <span class="detail-value">{{ $cloth->category->name ?? 'Không danh mục' }}</span>
                 </div>
                 
                 <div class="detail-row">
-                    <span class="detail-label">Category:</span>
-                    <span class="detail-value">{{ $cloth->category->name ?? 'Uncategorized' }}</span>
+                    <span class="detail-label">Tạo lúc:</span>
+                    <span class="detail-value">{{ $cloth->created_at ? $cloth->created_at->format('d/m/Y') : 'N/A' }}</span>
                 </div>
-                <div class="detail-row">
-                    <span class="detail-label">Created:</span>
-                    <span class="detail-value">{{ $cloth->created_at ? $cloth->created_at->format('M d, Y') : 'N/A' }}</span>
-                </div>
+
             </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="action-buttons">
             <button class="btn btn-outline" onclick="shareProduct()">
-                <i class="fas fa-share"></i> Share product
+                <i class="fas fa-share"></i> Chia sẻ
             </button>
-            <a href="" class="btn btn-outline">
-                <i class="fas fa-boxes"></i> Update Stock
+            <a href="#" class="btn btn-outline" 
+                data-bs-toggle="modal" 
+                data-bs-target="#updateStockModal">
+                Cập nhật số lượng sản phẩm
             </a>
-            <!-- <button class="btn btn-outline" onclick="addToCollection()">
-                <i class="fas fa-plus"></i> Add to a collection
-            </button> -->
-            <a href="" class="btn btn-primary">
-                <i class="fas fa-edit"></i> Edit Product
+            <div class="modal fade" 
+            id="updateStockModal" 
+            tabindex="-1" 
+            aria-labelledby="updateStockModalLabel" 
+            aria-hidden="true"
+            data-bs-backdrop="false"
+            data-bs-keyboard="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateStockModalLabel">
+                            <i class="fas fa-boxes"></i> Cập nhật số lượng sản phẩm
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    
+                    <form method="POST" action="{{ route('SkuUpdate') }}">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="stock_quantity" class="form-label">SKU</label>
+                                <select name="id" class="form-control" required>
+                                    @foreach ($cloth->skus as $sku)
+                                    <option value="{{ $sku->id }}">{{ $sku->sku }} - Kích cỡ: {{ $sku->skuValues[0]->optionValue->value }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="stock_quantity" class="form-label">Thêm số lượng</label>
+                                <input type="number" name="quantity" id="stock_quantity" class="form-control" required min="0">
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        </div>
+                        
+                    </form>
+                    </div>
+                </div>
+            </div>
+            <a href="{{ route('Cloths.edit',$cloth->id) }}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Cập nhật thông tin sản phẩm
             </a>
         </div>
     </div>
@@ -421,25 +445,77 @@
         <div class="tabs-nav">
             <button class="tab-button" onclick="showTab('information')">Product Information</button>
             <button class="tab-button" onclick="showTab('variants')">Product Variants</button>
+            <a href="#" class="btn btn-primary btn-outline-primary float-end" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#createSize">
+                    Thêm size
+            </a>
+            <div class="modal fade" 
+                id="createSize" 
+                tabindex="-1" 
+                aria-labelledby="createSizeLabel" 
+                aria-hidden="true"
+                data-bs-backdrop="false"
+                data-bs-keyboard="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createSizeLabel">
+                            <i class="fas fa-boxes"></i> Thêm size
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    
+                    <form method="POST" action="{{ route('SkuCreate') }}">
+                        @csrf
+                        <div class="modal-body" style="display: none">
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Thêm số lượng</label>
+                                <input type="number" name="cloth_id" id="cloth_id" class="form-control" value="{{ $cloth->id }}" required>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="size" class="form-label">Size</label>
+                                <input type="text" name="size" id="size" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Giá</label>
+                                <input type="number" name="price" id="price" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        </div>
+                        
+                    </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
             <!-- Product Information Tab -->
-            <div id="information-tab" class="tab-pane" style="display: none;">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4>Product Options</h4>
-                        @if($cloth->options && count($cloth->options) > 0)
-                            @foreach($cloth->options as $option)
-                                <div class="mb-3">
-                                    <strong>{{ $option->name }}:</strong>
-                                    <div class="mt-1">
-                                        @foreach($option->optionValues as $value)
-                                            <span class="badge badge-secondary mr-1">
-                                                {{ $value->value }}
-                                            </span>
-                                            <span class="badge badge-secondary mr-1">
-                                                {{ $value->skuvalue[0]->clothSku->sku }}
+            <div id="information-tab" class="tab-pane active">
+                <div class="product-options">
+                    <!-- <h4 style="margin-bottom: 24px; color: #1a202c; font-size: 1.25rem;">Product Options</h4> -->
+                    @if($cloth->options && count($cloth->options) > 0)
+                        @foreach($cloth->options as $option)
+                            <div class="mb-3">
+                                <strong>{{ $option->name }}:</strong>
+                                <div class="mt-1">
+                                    @foreach($option->optionValues as $value)
+                                        <span class="badge badge-secondary">
+                                            {{ $value->value }}
+                                        </span>
+                                        @if(isset($value->skuvalue[0]) && isset($value->skuvalue[0]->clothSku))
+                                            <span class="badge badge-light">
+                                                SKU: {{ $value->skuvalue[0]->clothSku->sku }}
                                             </span>
                                             <span class="badge badge-secondary mr-1">
                                                 {{ $value->skuvalue[0]->clothSku->price }} VND
@@ -541,7 +617,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <button class="btn btn-sm btn-outline-primary" onclick="editSKU( {{ $sku->id }} );">
+                                            <button class="btn btn-sm btn-outline-primary" onclick="editSKU()">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                         </td>
@@ -561,13 +637,12 @@
 </div>
 
 <script>
+
 function showTab(tabName) {
-    // Hide all tab panes
     document.querySelectorAll('.tab-pane').forEach(pane => {
         pane.style.display = 'none';
     });
     
-    // Remove active class from all buttons
     document.querySelectorAll('.tab-button').forEach(button => {
         button.classList.remove('active');
     });
@@ -578,7 +653,6 @@ function showTab(tabName) {
     // Add active class to clicked button
     event.target.classList.add('active');
 }
-
 function shareProduct() {
     const url = "{{ route('showcus', $cloth->id) }}";
     if (navigator.share) {
@@ -588,22 +662,20 @@ function shareProduct() {
             url: url
         });
     } else {
-        // Fallback - copy to clipboard
         navigator.clipboard.writeText(url).then(() => {
             alert('Product link copied to clipboard!');
         });
     }
 }
 
-function addToCollection() {
-    // Implement add to collection functionality
-    alert('Add to collection functionality would be implemented here');
-}
 
 function editSKU(skuId) {
-    // Implement SKU editing functionality
-    window.location.href = `/admin/products/{{ $cloth->id }}/skus/${skuId}/edit`;
+    alert('Tính lăng tương lai -> disable SKU')
 }
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('.tab-button').classList.add('active');
+    document.querySelector('.tab-pane').classList.add('active');
+});
 </script>
 
 @endsection
