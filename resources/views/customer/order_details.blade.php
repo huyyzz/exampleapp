@@ -69,6 +69,7 @@
                     <thead>
                         <tr>
                             <td>Tên sản phẩm</td>
+                            <td>Kích cỡ</td>
                             <td>Số lượng sản phẩm</td>
                             <td>Hình ảnh</td>
                             <td>Giá sản phẩm</td>
@@ -77,9 +78,10 @@
                     <tbody>
                     @foreach($items as $item)
                         <tr>
-                            <td>{{$item->cloths->product_name}}</td>
+                            <td>{{$item->product_name}}</td>
+                            <td>{{$item->size}}</td>
                             <td>{{$item->quantity}}</td>
-                            <td width="150px"><img src="{{asset('storage/images/'.$item->cloths->product_image_url)}}" height="100%" width="100%"></td>
+                            <td width="150px"><img src="{{asset('storage/images/'.$item->product_image_url)}}" height="100%" width="100%"></td>
                             
                             <td>{{number_format($item->product_price,0)}} VNĐ</td>
                         </tr>
@@ -87,7 +89,7 @@
                     </tbody>
                     <tfoot>
                         <td colspan="5">
-                            Subtotal
+                            Tổng giá trị đơn hàng
                             <span class="float-end">{{number_format($order->sub_total,0)}} VNĐ</span>
                         </td>
 

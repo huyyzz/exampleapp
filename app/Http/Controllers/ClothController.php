@@ -61,69 +61,68 @@ class ClothController extends Controller
     }
 
     public function filter(Request $request)
-    {
-        $storeData = $request->validate([
-            'minPriceInput' => 'required|numeric|min:0',
-            'maxPriceInput' => 'required|numeric|min:0|gte:minPriceInput',
-            // 'size' => 'nullable|array',
-            'category' => 'nullable|integer',
-            'sortPrice'     => 'required|in:asc,desc',
-        ]);
+{
+    $storeData = $request->validate([
+        'minPriceInput' => 'required|numeric|min:0',
+        'maxPriceInput' => 'required|numeric|min:0|gte:minPriceInput',
+        'category'      => 'nullable|integer',
+        'sortPrice'     => 'required|in:asc,desc',
+    ]);
 
-        // dd($request->sortPrice);
+    $minPrice = $storeData['minPriceInput'];
+    $maxPrice = $storeData['maxPriceInput'];
 
-        $specific = null;
-        $minPrice = $storeData['minPriceInput'];
-        $maxPrice = $storeData['maxPriceInput'];
-        
+    $query = Cloth::whereHas('skus', function ($q) use ($minPrice, $maxPrice) {
+        $q->whereRaw('CAST(price AS UNSIGNED) BETWEEN ? AND ?', [$minPrice, $maxPrice]);
+    });
 
-
-
-        $query = Cloth::query();
-        
-        
-        if ($request->sortOption === 'Mới nhất') {
-            $query->orderBy('created_at', 'desc');
-        } elseif ($request->sortOption === 'Bán chạy') {
-            $bestSellerIds = DB::table('order_items')
-                ->select('product_id', DB::raw('SUM(quantity) as total_sold'))
-                ->groupBy('product_id')
-                ->orderByDesc('total_sold')
-                ->pluck('product_id');
-
-            $query->whereIn('id', $bestSellerIds);
-        }
-
-        // $discount = random
-        if (empty($request->category)){
-            $products = Cloth::whereRaw('CAST(product_price AS UNSIGNED) BETWEEN ? AND ?', [$minPrice, $maxPrice])
-            ->orderByRaw('CAST(product_price AS UNSIGNED) '.$request->sortPrice)
-            ->paginate(16);
-        }else{
-            $products = Cloth::whereRaw('CAST(product_price AS UNSIGNED) BETWEEN ? AND ?', [$minPrice, $maxPrice])
-            ->orderByRaw('CAST(product_price AS UNSIGNED) '.$request->sortPrice)
-            ->where('category_id', $request->category)
-            ->paginate(16);
-        }
-
-
-        
-
-        // dd($request->category);
-
-        $categories = category::all();
-
-        $productCount = Count($products);
-        $allCount = Count(Cloth::all());
-
-
-        
-
-        
-
-        // $sizes = $cloths->variants();
-        return view('customer.showall', compact('products','categories','productCount','allCount'));
+    if (!empty($request->category)) {
+        $query->where('category_id', $request->category);
     }
+
+    if ($request->sortOption === 'Mới nhất') {
+        $query->orderBy('created_at', 'desc');
+    } elseif ($request->sortOption === 'Bán chạy') {
+        $bestSellers = DB::table('order_items')
+            ->select('sku_id', DB::raw('SUM(quantity) as total_sold'))
+            ->groupBy('sku_id')
+            ->orderByDesc('total_sold')
+            ->get();
+
+        $skuBestSeller = ProductSku::whereIn('id', $bestSellers->pluck('sku_id'))->get();
+        $clothIds = $skuBestSeller->pluck('cloth_id')->unique();
+        $query->whereIn('id', $clothIds);
+    }
+    ///Dang loi moi nhat + ban chay k chay nen bo di
+
+    $products = $query->with(['skus' => function ($q) use ($minPrice, $maxPrice) {
+        $q->whereRaw('CAST(price AS UNSIGNED) BETWEEN ? AND ?', [$minPrice, $maxPrice]);
+    }])->get();
+
+    foreach ($products as $product) {
+        $product->product_price = $product->skus->min('price');
+    }
+
+    $products = $products->sortBy('product_price', SORT_REGULAR, $storeData['sortPrice'] === 'desc');
+
+    $page = $request->input('page', 1);
+    $perPage = 16;
+    $products = new \Illuminate\Pagination\LengthAwarePaginator(
+        $products->forPage($page, $perPage),
+        $products->count(),
+        $perPage,
+        $page,
+        ['path' => $request->url(), 'query' => $request->query()]
+    );
+
+    $categories = Category::all();
+    $productCount = $products->count();
+    $allCount = Cloth::count();
+
+    return view('customer.showall', compact('products', 'categories', 'productCount', 'allCount'));
+}
+
+
 
     public function home()
     {
@@ -439,6 +438,9 @@ class ClothController extends Controller
         $search = strtolower($request->input('term'));
         // $categories = category::all();
         $products = Cloth::where('product_name', 'like', "%$search%")->paginate(16);
+        foreach ($products as $product){
+            $product->product_price = $product->skus->min("price");
+        }
         $categories = category::all();
 
         $productCount = Count($products);
@@ -505,17 +507,24 @@ class ClothController extends Controller
     public function orderDetails(Request $request, string $id){
 
         $items = Order_items::where('order_id', $id)
-            ->with(['cloths' => function ($query) {
-                $query->withTrashed();
-            }])->get();
-
+            ->with(['sku.cloth'])
+            ->get();
             
         $order = Order::where('id', $id)->first();
 
         $categories = category::all();
 
         $role = auth()->user()->role;
-        // dd($items->cloths);
+
+        foreach($items as $item){
+            $item->product_name = $item->sku->cloth->product_name;
+            $item->product_image_url = $item->sku->cloth->images[0]->image_url;
+            $item->size = $item->sku->skuValues[0]->optionValue->value;
+        }
+
+        // dd($items);
+
+        // dd($items->cloth);
 
         return view($role.'.order_details', compact('items','categories','order'));
     }
