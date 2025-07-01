@@ -167,6 +167,180 @@
         flex: 1;
     }
     
+    /* Size Selection Styling */
+    .size-options-section {
+        background: #f8faff;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 25px;
+        transition: all 0.3s ease;
+    }
+    
+    .size-options-section:hover {
+        border-color: #d1d5db;
+        background-color: #ffffff;
+    }
+    
+    .size-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e5e7eb;
+    }
+    
+    .size-section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #374151;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .add-size-btn {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .add-size-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+    }
+    
+    .add-size-btn:active {
+        transform: translateY(0);
+    }
+    
+    .option-group {
+        background: #ffffff;
+        border: 2px solid #f3f4f6;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        animation: slideIn 0.4s ease-out;
+    }
+    
+    .option-group:hover {
+        border-color: #d1d5db;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    .size-values-container {
+        margin-top: 15px;
+    }
+    
+    .size-values-header {
+        font-weight: 600;
+        color: #4b5563;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .size-value-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 12px;
+        align-items: center;
+        padding: 12px;
+        background: #f9fafb;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .size-value-row:hover {
+        background: #f3f4f6;
+    }
+    
+    .size-value-input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 2px solid #e5e7eb;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background-color: #ffffff;
+    }
+    
+    .size-value-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .price-input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 2px solid #e5e7eb;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background-color: #ffffff;
+    }
+    
+    .price-input:focus {
+        outline: none;
+        border-color: #f59e0b;
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+    }
+    
+    .add-value-btn {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 10px;
+    }
+    
+    .add-value-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+    
+    .size-divider {
+        border: none;
+        height: 2px;
+        background: linear-gradient(90deg, #e5e7eb 0%, #d1d5db 50%, #e5e7eb 100%);
+        margin: 20px 0;
+        opacity: 0.6;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 30px 20px;
+        color: #6b7280;
+        font-style: italic;
+    }
+    
+    .empty-state i {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        opacity: 0.5;
+    }
+    
     /* Responsive Design */
     @media (max-width: 768px) {
         .form-container {
@@ -187,6 +361,26 @@
             flex-direction: column;
             gap: 0;
         }
+        
+        .size-options-section {
+            padding: 20px 15px;
+        }
+        
+        .size-section-header {
+            flex-direction: column;
+            gap: 15px;
+            align-items: stretch;
+        }
+        
+        .size-value-row {
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .size-value-input,
+        .price-input {
+            width: 100%;
+        }
     }
     
     /* Animation */
@@ -203,6 +397,32 @@
             opacity: 1;
             transform: translateY(0);
         }
+    }
+    
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    /* Input placeholder styling */
+    .form-control::placeholder,
+    .size-value-input::placeholder,
+    .price-input::placeholder {
+        color: #9ca3af;
+        opacity: 1;
+    }
+    
+    /* Focus states for better accessibility */
+    .add-size-btn:focus,
+    .add-value-btn:focus {
+        outline: 2px solid #667eea;
+        outline-offset: 2px;
     }
 </style>
 
@@ -278,14 +498,23 @@
                            multiple/>
                 </div>
 
-                <div id="TheRealOptionContainer">
-
-                    <!-- <button type="button" onclick="addValue(${optionIndex})">➕ Add Value</button> -->
+                <div class="size-options-section">
+                    <div class="size-section-header">
+                        <div class="size-section-title">
+                            <i class="fas fa-rulers"></i> Tùy Chọn Size & Giá
+                        </div>
+                        <button type="button" class="add-size-btn" onclick="addOption()">
+                            <i class="fas fa-plus"></i> Thêm Size
+                        </button>
+                    </div>
                     
+                    <div id="TheRealOptionContainer">
+                        <div class="empty-state">
+                            <i class="fas fa-tshirt"></i>
+                            <p>Chưa có size nào. Nhấn "Thêm Size" để bắt đầu thêm các tùy chọn size và giá.</p>
+                        </div>
+                    </div>
                 </div>
-
-
-                <button type="button" onclick="addOption()">Thêm size</button>
 
                 <button type="submit" class="submit-btn">
                     <i class="fas fa-save"></i> Tạo Sản Phẩm
@@ -300,22 +529,33 @@
 
     function addOption() {
         const container = document.getElementById('TheRealOptionContainer');
+        
+        // Hide empty state if it exists
+        const emptyState = container.querySelector('.empty-state');
+        if (emptyState) {
+            emptyState.style.display = 'none';
+        }
 
         const optionGroup = document.createElement('div');
         optionGroup.classList.add('option-group');
-        optionGroup.style.marginBottom = '1em';
 
         optionGroup.innerHTML = `
-            <input type="hidden" name="options[${optionIndex}][name]" placeholder="Size" value="Size" required><br>
+            <input type="hidden" name="options[${optionIndex}][name]" placeholder="Size" value="Size" required>
 
-            <div id="values-container-${optionIndex}">
-                <label>Values:</label><br>
-                <input type="text" name="options[${optionIndex}][values][0][name]" placeholder="Small" required>
-                <input type="number" step="1000" name="options[${optionIndex}][values][0][price]" placeholder="Giá (VND)" required>
+            <div id="values-container-${optionIndex}" class="size-values-container">
+                <div class="size-values-header">
+                    <i class="fas fa-list-ul"></i> Danh sách Size:
+                </div>
+                <div class="size-value-row">
+                    <input type="text" name="options[${optionIndex}][values][0][name]" placeholder="Ví dụ: S, M, L..." class="size-value-input" required>
+                    <input type="number" step="1000" name="options[${optionIndex}][values][0][price]" placeholder="Giá (VND)" class="price-input" required>
+                </div>
             </div>
 
-            <button type="button" onclick="addValue(${optionIndex})">➕ Add Value</button>
-            <hr>
+            <button type="button" class="add-value-btn" onclick="addValue(${optionIndex})">
+                <i class="fas fa-plus"></i> Thêm Size Khác
+            </button>
+            <hr class="size-divider">
         `;
 
         container.appendChild(optionGroup);
@@ -327,27 +567,13 @@
         const count = container.querySelectorAll('input[name^="options[' + index + '][values]"]').length / 2;
 
         const div = document.createElement('div');
+        div.classList.add('size-value-row');
         div.innerHTML = `
-            <br><input type="text" name="options[${index}][values][${count}][name]" placeholder="e.g. Medium" required>
-            <input type="number" step="0.01" name="options[${index}][values][${count}][price]" placeholder="Giá (VND)" required>
+            <input type="text" name="options[${index}][values][${count}][name]" placeholder="Ví dụ: XL, XXL..." class="size-value-input" required>
+            <input type="number" step="1000" name="options[${index}][values][${count}][price]" placeholder="Giá (VND)" class="price-input" required>
         `;
         container.appendChild(div);
     }
-
-
-    // function addSku() {
-    //     const tbody = document.getElementById('sku-rows');
-    //     const html = `
-    //         <tr>
-    //             <td><input type="text" name="skus[${skuIndex}][sku]" required></td>
-    //             <td><input type="number" name="skus[${skuIndex}][price]" required></td>
-    //             <td><input type="number" name="skus[${skuIndex}][quantity]" required></td>
-    //             <td><input type="text" name="skus[${skuIndex}][options]" placeholder="Size:M,Color:Đỏ"></td>
-    //         </tr>
-    //     `;
-    //     tbody.insertAdjacentHTML('beforeend', html);
-    //     skuIndex++;
-    // } Skip, tự gen
 </script>
 
 @endsection
