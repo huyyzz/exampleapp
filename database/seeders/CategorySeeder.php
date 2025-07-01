@@ -18,7 +18,9 @@ class CategorySeeder extends Seeder
         DB::table('categories')->insert([
             [
                 'id' => '1',
-                'name' => 'Không danh mục'
+                'name' => 'Không danh mục',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }

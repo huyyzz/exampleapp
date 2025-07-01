@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('product_name');
             $table->longText('product_description');
             $table->bigInteger('QuantityInWareHouse')->default(0);
-            $table->string('product_price');
+            $table->decimal('product_price',10,2);
             $table->string('product_image_url');
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();

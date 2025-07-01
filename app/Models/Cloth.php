@@ -22,10 +22,10 @@ class Cloth extends Model
     //     return $this->hasOne(brand::class);
     // }
 
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class);
-    }
+    // public function brand()
+    // {
+    //     return $this->belongsTo(Brand::class);
+    // }
 
     public function category()
     {
@@ -44,11 +44,11 @@ class Cloth extends Model
     protected $fillable = [
         'product_name',
         'product_description',
-        'QuantityInWareHouse',
-        'product_price',
+        // 'QuantityInWareHouse',
+        // 'product_price',
         'category_id',
-        'brand_id',
-        'product_image_url',
+        // 'brand_id',
+        // 'product_image_url',
     ];
 
     protected $dates = ['deleted_at'];
@@ -61,4 +61,19 @@ class Cloth extends Model
             ->withPivot('sort_order')
             ->orderBy('collection_product.sort_order');
     }
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
+
+    public function options()
+    {
+        return $this->hasMany(Option::class,'cloth_id');
+    }
+
+    public function skus()
+    {
+        return $this->hasMany(ProductSku::class);
+    }
+
 }

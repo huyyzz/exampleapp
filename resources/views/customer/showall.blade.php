@@ -549,22 +549,20 @@
                 </div> -->
 
                 <!-- Advanced Section -->
-                <div class="filter-section collapsed">
+                <!-- <div class="filter-section collapsed">
                     <div class="section-header" onclick="toggleSection(this)">
                         <h4 class="section-title">Nâng cao</h4>
                         <div class="toggle-btn">+</div>
                     </div>
                     <div class="section-content">
                         <div class="option-grid">
-                            <!-- <div class="option-item" onclick="toggleOption(this)">Mới nhất</div>
-                            <div class="option-item" onclick="toggleOption(this)">Bán chạy</div> -->
                             <div class="option-item" onclick="selectSortOption(this, 'newest')">Mới nhất</div>
                             <div class="option-item" onclick="selectSortOption(this, 'bestseller')">Bán chạy</div>
 
                             <input type="hidden" name="sortOption" id="sortOption" value="">
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Filter Buttons -->
                 <div class="filter-buttons">
@@ -588,7 +586,7 @@
                 <div class="product-card mt-5">
                     <div class="product-image-container">
                         <a href="{{ route('showcus', $item->id) }}">
-                            <img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="{{ $item->product_name }}" class="product-image">
+                            <img src="{{ asset('storage/images/' . $item->images[0]->image_url) }}" alt="{{ $item->product_name }}" class="product-image">
                         </a>
                         
                         <!-- @php

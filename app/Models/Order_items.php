@@ -15,7 +15,13 @@ class Order_items extends Model
 
     public function cloths()
     {
-        return $this->belongsTo(Cloth::class, 'product_id', 'id');
+        return $this->belongsTo(ProductSku::class, 'sku_id', 'id');
+    } // Lỗi xóa sau
+
+
+    public function sku()
+    {
+        return $this->belongsTo(ProductSku::class, 'sku_id');
     }
 
 
@@ -23,7 +29,7 @@ class Order_items extends Model
 
     protected $fillable = [
         'order_id',
-        'product_id',
+        'sku_id',
         'quantity',
         'product_price',
     ];

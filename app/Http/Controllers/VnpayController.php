@@ -8,6 +8,7 @@ use App\Models\Cloth;
 use App\Models\Order;
 use App\Models\Order_items;
 use App\Models\Payment;
+use App\Models\ProductSku;
 
 class VnpayController extends Controller
 {
@@ -126,8 +127,8 @@ class VnpayController extends Controller
 
                 $items = Order_items::where("order_id", "=" ,$inputData['vnp_TxnRef'])->get();
                 foreach($items as $item){
-                    $cloth = Cloth::find($item['product_id']);
-                    $cloth->QuantityInWareHouse -= $item['quantity'];
+                    $cloth = ProductSku::find($item['sku_id']);
+                    $cloth->quantity -= $item['quantity'];
                     $cloth->save();
                 }
 

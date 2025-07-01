@@ -13,7 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        // Schema::drop('brands');
+        Schema::create('option_values', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('option_id')->constrained('options')->onDelete('cascade');
+            $table->string('value');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        // Schema::dropIfExists('brands');
+        Schema::dropIfExists('option_values');
     }
 };
