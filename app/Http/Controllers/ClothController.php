@@ -593,65 +593,6 @@ class ClothController extends Controller
 
     public function statistic(Request $request)
     {
-        $now = Carbon::now();
-        $ordersByDay = Order::where('status', 'Đã giao')
-            ->where('updated_at', '>=', $now->copy()->subDays(6)->startOfDay())
-            ->get()
-            ->groupBy(fn($order) => $order->updated_at->format('Y-m-d'))
-            ->sortKeys();
-
-        $filled = collect();
-        for ($date = $now->copy()->subDays(6)->startOfDay(); $date->lte($now->endOfDay()); $date->addDay()) {
-            $dateKey = $date->format('Y-m-d');
-            $orders = $ordersByDay->get($dateKey, collect());
-
-            $orderCount = $orders->count();
-            $totalSubtotal = $orders->sum('sub_total');
-            $averageOrderValue = $orderCount > 0 ? $totalSubtotal / $orderCount : 0;
-
-            $filled->push((object) [
-                'time' => $dateKey,
-                'order_count' => $orderCount,
-                'total_subtotal' => $totalSubtotal,
-                'average_order_value' => round($averageOrderValue, 2),
-            ]);
-        }
-
-        $hourStatsObj = $filled->values()->all();
-
-        $yearStatsObj = Order::where('status', 'Đã giao')
-            ->get()
-            ->groupBy(fn($order) => $order->updated_at->format('Y'))
-            ->map(function ($orders, $year) {
-                $count = $orders->count();
-                $total = $orders->sum('sub_total');
-                return (object) [
-                    'time' => $year,
-                    'order_count' => $count,
-                    'total_subtotal' => $total,
-                    'average_order_value' => $count ? round($total / $count, 2) : 0,
-                ];
-            })
-            ->sortBy('time')
-            ->values()
-            ->all();
-
-        $monthStatsObj = Order::where('status', 'Đã giao')
-            ->get()
-            ->groupBy(fn($order) => $order->updated_at->format('m'))
-            ->map(function ($orders, $month) {
-                $count = $orders->count();
-                $total = $orders->sum('sub_total');
-                return (object) [
-                    'time' => $month,
-                    'order_count' => $count,
-                    'total_subtotal' => $total,
-                    'average_order_value' => $count ? round($total / $count, 2) : 0,
-                ];
-            })
-            ->sortBy('time')
-            ->values()
-            ->all();
 
         $categories = Category::all();
         $orders = Order::where('status', 'Chờ duyệt đơn')->get();
@@ -682,7 +623,7 @@ class ClothController extends Controller
 
 
         return view('admin.statistic', compact(
-            'orders', 'categories', 'hourStatsObj', 'yearStatsObj', 'monthStatsObj','revenueStats','earliest'
+            'orders', 'categories','revenueStats','earliest'
         ));
     }
 
