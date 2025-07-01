@@ -18,7 +18,7 @@ class ProductSku extends Model
 
     public function cloth()
     {
-        return $this->belongsTo(Cloth::class);
+        return $this->belongsTo(Cloth::class)->withTrashed();
     }
 
     public function skuValues()

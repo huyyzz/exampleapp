@@ -329,8 +329,6 @@
                         <td><i class="fas fa-hashtag"></i> ID</td>
                         <td><i class="fas fa-tag"></i> Tên sản phẩm</td>
                         <td><i class="fas fa-info-circle"></i> Mô tả</td>
-                        <td><i class="fas fa-boxes"></i> Hàng tồn kho</td>
-                        <td><i class="fas fa-dollar-sign"></i> Giá tiền</td>
                         <td><i class="fas fa-image"></i> Hình ảnh</td>
                         <td><i class="fas fa-calendar-plus"></i> Tạo lúc</td>
                         <td><i class="fas fa-calendar-edit"></i> Cập nhật lúc</td>
@@ -345,8 +343,8 @@
                             <td>{{$item->id}}</td>
                             <td>{{$item->product_name}}</td>
                             <td>{{$item->product_description}}</td>
-                            <td>{{$item->QuantityInWareHouse}}</td>
-                            <td>{{$item->product_price}}.VNĐ</td>
+                            <!-- <td>{{$item->QuantityInWareHouse}}</td> -->
+                            <!-- <td>{{$item->product_price}}.VNĐ</td> -->
                             <td><img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="Product Image" width="120px" height="120px"></td>
                             <td>{{$item->created_at}}</td>
                             <td>{{$item->updated_at}}</td>

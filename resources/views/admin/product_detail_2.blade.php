@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
 @section('content')
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <style>
     * {
         box-sizing: border-box;
@@ -438,27 +438,10 @@
         <div class="product-main">
             <!-- Left Side - Product Image & Info -->
             <div class="product-image-section">
-                <img src="{{ $cloth->product_image ?? '/placeholder-image.jpg' }}" 
+                <img src="{{asset('storage/images/'.$cloth->product_image_url)}}" 
                      alt="{{ $cloth->product_name }}" 
-                     class="product-image">
-                
-                <div class="product-info">
-                    <h1>{{ $cloth->product_name }}</h1>
-                    <div class="product-price">{{ number_format($cloth->base_price ?? 0) }} VNĐ</div>
-                    <div class="product-total">Base Price</div>
-    
-                    <span class="product-units">{{ $cloth->total_quantity }} units</span>
-                    
-                    @php
-                        $profit = ($cloth->base_price ?? 0) - ($cloth->cost_price ?? 0);
-                        $profitMargin = $cloth->cost_price > 0 ? ($profit / $cloth->cost_price) * 100 : 0;
-                    @endphp
-                    @if($profitMargin > 0)
-                        <div class="profitability">
-                            Profitable ({{ number_format($profitMargin, 1) }}% margin)
-                        </div>
-                    @endif
-                </div>
+                     class="product-image"
+                     style="width: 300px; height: 100%; object-fit: cover;">
 
                 <div class="product-link">
                     <h4>Product URL Link to Share</h4>
@@ -471,32 +454,75 @@
             <!-- Right Side - Product Details -->
             <div class="product-details">
                 <div class="detail-row">
-                    <span class="detail-label">Type:</span>
-                    <span class="detail-value">Product</span>
+                    <span class="detail-label">Danh mục:</span>
+                    <span class="detail-value">{{ $cloth->category->name ?? 'Không danh mục' }}</span>
                 </div>
                 
                 <div class="detail-row">
-                    <span class="detail-label">Category:</span>
-                    <span class="detail-value">{{ $cloth->category->name ?? 'Uncategorized' }}</span>
+                    <span class="detail-label">Tạo lúc:</span>
+                    <span class="detail-value">{{ $cloth->created_at ? $cloth->created_at->format('d/m/Y') : 'N/A' }}</span>
                 </div>
-                
-                <div class="detail-row">
-                    <span class="detail-label">Created:</span>
-                    <span class="detail-value">{{ $cloth->created_at ? $cloth->created_at->format('M d, Y') : 'N/A' }}</span>
-                </div>
+
             </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="action-buttons">
             <button class="btn btn-outline" onclick="shareProduct()">
-                <i class="fas fa-share"></i> Share Product
+                <i class="fas fa-share"></i> Chia sẻ
             </button>
-            <a href="#" class="btn btn-outline">
-                <i class="fas fa-boxes"></i> Update Stock
+            <a href="#" class="btn btn-outline" 
+                data-bs-toggle="modal" 
+                data-bs-target="#updateStockModal">
+                Cập nhật số lượng sản phẩm
             </a>
-            <a href="#" class="btn btn-primary">
-                <i class="fas fa-edit"></i> Edit Product
+            <div class="modal fade" 
+            id="updateStockModal" 
+            tabindex="-1" 
+            aria-labelledby="updateStockModalLabel" 
+            aria-hidden="true"
+            data-bs-backdrop="false"
+            data-bs-keyboard="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateStockModalLabel">
+                            <i class="fas fa-boxes"></i> Cập nhật số lượng sản phẩm
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    
+                    <form method="POST" action="{{ route('SkuUpdate') }}">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="stock_quantity" class="form-label">SKU</label>
+                                <select name="id" class="form-control" required>
+                                    @foreach ($cloth->skus as $sku)
+                                    <option value="{{ $sku->id }}">{{ $sku->sku }} - Kích cỡ: {{ $sku->skuValues[0]->optionValue->value }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="stock_quantity" class="form-label">Thêm số lượng</label>
+                                <input type="number" name="quantity" id="stock_quantity" class="form-control" required min="0">
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        </div>
+                        
+                    </form>
+                    </div>
+                </div>
+            </div>
+            <a href="{{ route('Cloths.edit',$cloth->id) }}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Cập nhật thông tin sản phẩm
             </a>
         </div>
     </div>
