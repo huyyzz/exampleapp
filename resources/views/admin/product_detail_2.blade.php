@@ -3,396 +3,326 @@
 @section('content')
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
-
     .product-detail-container {
         max-width: 1400px;
         margin: 0 auto;
         padding: 20px;
-        background-color: #f5f7fa;
+        background-color: #f8f9fa;
         min-height: 100vh;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* Header Section */
     .product-header {
-        background: #ffffff;
-        border-radius: 16px;
-        padding: 32px;
-        margin-bottom: 24px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e2e8f0;
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
     .product-main {
         display: grid;
-        grid-template-columns: 400px 1fr;
+        grid-template-columns: 1fr 1fr;
         gap: 40px;
         align-items: start;
-        margin-bottom: 32px;
     }
 
-    /* Product Image Section */
     .product-image-section {
         display: flex;
         flex-direction: column;
-        gap: 24px;
+        gap: 20px;
     }
 
     .product-image {
-        width: 100%;
-        height: 300px;
+        width: 120px;
+        height: 120px;
         border-radius: 12px;
         object-fit: cover;
-        border: 2px solid #e2e8f0;
-        background-color: #f8fafc;
+        border: 3px solid #e9ecef;
     }
 
-    /* Product Info */
     .product-info h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
         font-weight: 700;
-        color: #1a202c;
-        margin: 0 0 16px 0;
-        line-height: 1.2;
+        color: #2c3e50;
+        margin-bottom: 10px;
     }
 
     .product-price {
-        font-size: 1.75rem;
+        font-size: 1.5rem;
         font-weight: 600;
-        color: #059669;
-        margin-bottom: 8px;
+        color: #27ae60;
+        margin-bottom: 5px;
     }
 
     .product-total {
-        color: #64748b;
-        font-size: 0.95rem;
-        margin-bottom: 16px;
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
     }
 
     .product-units {
-        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-        color: #1e40af;
-        padding: 8px 16px;
-        border-radius: 24px;
-        font-size: 0.875rem;
-        font-weight: 500;
+        background: #e3f2fd;
+        color: #1976d2;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
         display: inline-block;
-        margin-bottom: 16px;
-        border: 1px solid #93c5fd;
+        margin-bottom: 10px;
     }
 
     .profitability {
-        color: #059669;
+        color: #27ae60;
         font-weight: 500;
-        font-size: 0.95rem;
-        margin-bottom: 20px;
-        padding: 8px 12px;
-        background: #ecfdf5;
-        border-radius: 8px;
-        border-left: 4px solid #059669;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
     }
 
-    /* Product Link */
     .product-link {
-        background: #f8fafc;
-        padding: 20px;
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
     }
 
     .product-link h4 {
-        font-size: 0.95rem;
-        color: #374151;
-        margin: 0 0 12px 0;
-        font-weight: 600;
+        font-size: 0.9rem;
+        color: #495057;
+        margin-bottom: 8px;
     }
 
     .product-link a {
-        color: #2563eb;
+        color: #007bff;
         text-decoration: none;
-        font-size: 0.875rem;
+        font-size: 0.85rem;
         word-break: break-all;
-        display: block;
-        padding: 8px 12px;
-        background: #ffffff;
-        border-radius: 6px;
-        border: 1px solid #e2e8f0;
     }
 
-    .product-link a:hover {
-        background: #eff6ff;
-        border-color: #3b82f6;
-    }
-
-    /* Product Details */
     .product-details {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
+        display: grid;
+        gap: 15px;
     }
 
     .detail-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 16px 0;
-        border-bottom: 1px solid #e2e8f0;
-    }
-
-    .detail-row:last-child {
-        border-bottom: none;
+        padding: 12px 0;
+        border-bottom: 1px solid #e9ecef;
     }
 
     .detail-label {
-        font-weight: 600;
-        color: #374151;
-        font-size: 0.95rem;
+        font-weight: 500;
+        color: #495057;
     }
 
     .detail-value {
-        color: #64748b;
+        color: #6c757d;
         font-weight: 400;
-        font-size: 0.95rem;
     }
 
-    /* Action Buttons */
+    .description-section {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .description-section h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .no-description {
+        color: #6c757d;
+        font-style: italic;
+    }
+
     .action-buttons {
         display: flex;
-        gap: 16px;
+        gap: 15px;
         flex-wrap: wrap;
-        margin-top: 24px;
-        padding-top: 24px;
-        border-top: 1px solid #e2e8f0;
+        margin-top: 20px;
     }
 
     .btn {
-        padding: 12px 24px;
+        padding: 10px 20px;
         border: none;
-        border-radius: 10px;
-        font-size: 0.95rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
         font-weight: 500;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        min-height: 44px;
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        background: #007bff;
         color: white;
-        border: 1px solid #2563eb;
     }
 
     .btn-outline {
-        background: #ffffff;
-        color: #64748b;
-        border: 1px solid #d1d5db;
+        background: white;
+        color: #6c757d;
+        border: 2px solid #e9ecef;
     }
 
     .btn-success {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        background: #28a745;
         color: white;
-        border: 1px solid #059669;
     }
 
     .btn:hover {
-        transform: translateY(-1px);
+        transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    }
-
-    .btn-outline:hover {
-        background: #f8fafc;
-        border-color: #9ca3af;
-    }
-
-    /* Description Section */
-    .description-section {
-        background: #ffffff;
-        border-radius: 16px;
-        padding: 32px;
-        margin-bottom: 24px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e2e8f0;
-    }
-
-    .description-section h3 {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #1a202c;
-        margin: 0 0 16px 0;
-    }
-
-    .no-description {
-        color: #64748b;
-        font-style: italic;
-        font-size: 0.95rem;
-    }
-
-    /* Tabs Section */
     .tabs-section {
-        background: #ffffff;
-        border-radius: 16px;
-        margin-bottom: 24px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e2e8f0;
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         overflow: hidden;
     }
 
     .tabs-nav {
         display: flex;
-        border-bottom: 1px solid #e2e8f0;
-        background: #f8fafc;
+        border-bottom: 1px solid #e9ecef;
+        background: #f8f9fa;
     }
 
     .tab-button {
-        padding: 20px 32px;
+        padding: 15px 25px;
         background: none;
         border: none;
         cursor: pointer;
         font-weight: 500;
-        color: #64748b;
-        transition: all 0.2s ease;
+        color: #6c757d;
+        transition: all 0.3s ease;
         border-bottom: 3px solid transparent;
-        font-size: 0.95rem;
     }
 
     .tab-button.active {
-        color: #2563eb;
-        border-bottom-color: #2563eb;
-        background: #ffffff;
-    }
-
-    .tab-button:hover:not(.active) {
-        color: #374151;
-        background: #f1f5f9;
+        color: #007bff;
+        border-bottom-color: #007bff;
+        background: white;
     }
 
     .tab-content {
-        padding: 32px;
+        padding: 30px;
     }
 
-    .tab-pane {
-        display: none;
+    .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
     }
 
-    .tab-pane.active {
-        display: block;
-    }
-
-    /* Table Styles */
-    .table-responsive {
-        overflow-x: auto;
-        margin-top: 20px;
-    }
-
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        background: #ffffff;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    }
-
-    .table th {
-        background: #f8fafc;
-        padding: 16px;
-        text-align: left;
+    .stats-section h3 {
+        font-size: 1.2rem;
         font-weight: 600;
-        color: #374151;
-        border-bottom: 1px solid #e2e8f0;
-        font-size: 0.9rem;
+        color: #2c3e50;
+        margin-bottom: 20px;
     }
 
-    .table td {
-        padding: 16px;
-        border-bottom: 1px solid #f1f5f9;
-        color: #64748b;
-        font-size: 0.9rem;
+    .stats-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
     }
 
-    .table tr:hover {
-        background: #f8fafc;
-    }
-
-    /* Badges */
-    .badge {
-        padding: 4px 12px;
-        border-radius: 16px;
-        font-size: 0.75rem;
-        font-weight: 500;
-        display: inline-block;
-        margin: 2px;
-    }
-
-    .badge-secondary {
-        background: #e2e8f0;
-        color: #475569;
-    }
-
-    .badge-success {
-        background: #dcfce7;
-        color: #166534;
-    }
-
-    .badge-danger {
-        background: #fee2e2;
-        color: #dc2626;
-    }
-
-    .badge-warning {
-        background: #fef3c7;
-        color: #d97706;
-    }
-
-    .badge-light {
-        background: #f1f5f9;
-        color: #475569;
-    }
-
-    /* Product Options */
-    .product-options .mb-3 {
-        margin-bottom: 24px;
+    .stat-card {
+        background: #f8f9fa;
         padding: 20px;
-        background: #f8fafc;
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid #e9ecef;
     }
 
-    .product-options strong {
-        color: #374151;
-        font-size: 1rem;
-        display: block;
-        margin-bottom: 12px;
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 5px;
     }
 
-    /* Responsive Design */
-    @media (max-width: 1024px) {
-        .product-main {
-            grid-template-columns: 1fr;
-            gap: 24px;
-        }
-        
-        .product-detail-container {
-            padding: 16px;
-        }
+    .stat-label {
+        font-size: 0.85rem;
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .customers-section {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+    }
+
+    .customer-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .customer-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .customer-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #007bff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+    }
+
+    .customer-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .action-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .action-icon:hover {
+        background: #007bff;
+        color: white;
     }
 
     @media (max-width: 768px) {
-        .product-header,
-        .description-section,
-        .tabs-section {
-            padding: 20px;
+        .product-main {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .stats-grid {
+            grid-template-columns: 1fr;
         }
         
         .action-buttons {
@@ -401,33 +331,6 @@
         
         .tabs-nav {
             flex-wrap: wrap;
-        }
-        
-        .tab-button {
-            padding: 16px 20px;
-        }
-        
-        .btn {
-            flex: 1;
-            justify-content: center;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .product-info h1 {
-            font-size: 1.5rem;
-        }
-        
-        .product-price {
-            font-size: 1.5rem;
-        }
-        
-        .action-buttons {
-            flex-direction: column;
-        }
-        
-        .btn {
-            width: 100%;
         }
     }
 </style>
@@ -438,30 +341,30 @@
         <div class="product-main">
             <!-- Left Side - Product Image & Info -->
             <div class="product-image-section">
-                <img src="{{ $cloth->product_image ?? '/placeholder-image.jpg' }}" 
+                <img" 
                      alt="{{ $cloth->product_name }}" 
                      class="product-image">
                 
                 <div class="product-info">
                     <h1>{{ $cloth->product_name }}</h1>
-                    <div class="product-price">{{ number_format($cloth->base_price ?? 0) }} VNĐ</div>
-                    <div class="product-total">Base Price</div>
+                    <div class="product-price"></div>
     
                     <span class="product-units">{{ $cloth->total_quantity }} units</span>
-                    
-                    @php
-                        $profit = ($cloth->base_price ?? 0) - ($cloth->cost_price ?? 0);
-                        $profitMargin = $cloth->cost_price > 0 ? ($profit / $cloth->cost_price) * 100 : 0;
-                    @endphp
-                    @if($profitMargin > 0)
-                        <div class="profitability">
+                    <!-- <div class="profitability">
+                        @php
+                            $profit = ($cloth->base_price ?? 0) - ($cloth->cost_price ?? 0);
+                            $profitMargin = $cloth->cost_price > 0 ? ($profit / $cloth->cost_price) * 100 : 0;
+                        @endphp
+                        @if($profitMargin > 0)
                             Profitable ({{ number_format($profitMargin, 1) }}% margin)
-                        </div>
-                    @endif
+                        @else
+                            Not Profitable
+                        @endif
+                    </div> -->
                 </div>
 
                 <div class="product-link">
-                    <h4>Product URL Link to Share</h4>
+                    <h4>Product url link to share</h4>
                     <a href="{{ route('showcus', $cloth->id) }}" target="_blank">
                         {{ route('showcus', $cloth->id) }}
                     </a>
@@ -479,7 +382,6 @@
                     <span class="detail-label">Category:</span>
                     <span class="detail-value">{{ $cloth->category->name ?? 'Uncategorized' }}</span>
                 </div>
-                
                 <div class="detail-row">
                     <span class="detail-label">Created:</span>
                     <span class="detail-value">{{ $cloth->created_at ? $cloth->created_at->format('M d, Y') : 'N/A' }}</span>
@@ -490,12 +392,15 @@
         <!-- Action Buttons -->
         <div class="action-buttons">
             <button class="btn btn-outline" onclick="shareProduct()">
-                <i class="fas fa-share"></i> Share Product
+                <i class="fas fa-share"></i> Share product
             </button>
-            <a href="#" class="btn btn-outline">
+            <a href="" class="btn btn-outline">
                 <i class="fas fa-boxes"></i> Update Stock
             </a>
-            <a href="#" class="btn btn-primary">
+            <!-- <button class="btn btn-outline" onclick="addToCollection()">
+                <i class="fas fa-plus"></i> Add to a collection
+            </button> -->
+            <a href="" class="btn btn-primary">
                 <i class="fas fa-edit"></i> Edit Product
             </a>
         </div>
@@ -507,58 +412,100 @@
         @if($cloth->product_description)
             <p>{{ $cloth->product_description }}</p>
         @else
-            <p class="no-description">No product description available</p>
+            <p class="no-description">No product description</p>
         @endif
     </div>
 
     <!-- Tabs Section -->
     <div class="tabs-section">
         <div class="tabs-nav">
-            <button class="tab-button active" onclick="showTab('information')">Product Information</button>
+            <button class="tab-button" onclick="showTab('information')">Product Information</button>
             <button class="tab-button" onclick="showTab('variants')">Product Variants</button>
         </div>
 
-        <div class="tab-content">
+
             <!-- Product Information Tab -->
-            <div id="information-tab" class="tab-pane active">
-                <div class="product-options">
-                    <h4 style="margin-bottom: 24px; color: #1a202c; font-size: 1.25rem;">Product Options</h4>
-                    @if($cloth->options && count($cloth->options) > 0)
-                        @foreach($cloth->options as $option)
-                            <div class="mb-3">
-                                <strong>{{ $option->name }}:</strong>
-                                <div class="mt-1">
-                                    @foreach($option->optionValues as $value)
-                                        <span class="badge badge-secondary">
-                                            {{ $value->value }}
-                                        </span>
-                                        @if(isset($value->skuvalue[0]) && isset($value->skuvalue[0]->clothSku))
-                                            <span class="badge badge-light">
-                                                SKU: {{ $value->skuvalue[0]->clothSku->sku }}
+            <div id="information-tab" class="tab-pane" style="display: none;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Product Options</h4>
+                        @if($cloth->options && count($cloth->options) > 0)
+                            @foreach($cloth->options as $option)
+                                <div class="mb-3">
+                                    <strong>{{ $option->name }}:</strong>
+                                    <div class="mt-1">
+                                        @foreach($option->optionValues as $value)
+                                            <span class="badge badge-secondary mr-1">
+                                                {{ $value->value }}
                                             </span>
-                                            <span class="badge badge-light">
-                                                {{ number_format($value->skuvalue[0]->clothSku->price) }} VND
+                                            <span class="badge badge-secondary mr-1">
+                                                {{ $value->skuvalue[0]->clothSku->sku }}
+                                            </span>
+                                            <span class="badge badge-secondary mr-1">
+                                                {{ $value->skuvalue[0]->clothSku->price }} VND
                                             </span>
                                             <span class="badge badge-{{ $value->skuvalue[0]->clothSku->quantity > 0 ? 'success' : 'danger' }}">
                                                 {{ $value->skuvalue[0]->clothSku->quantity > 0 ? 'In Stock' : 'Out of Stock' }}
                                             </span>
-                                        @endif
-                                        <br>
-                                    @endforeach
+                                            <br>
+                                        @endforeach
+                                        
+                                    </div>
                                 </div>
-                            </div>
-                        @endforeach
-                    @else
-                        <p class="no-description">No options configured</p>
-                    @endif
+                            @endforeach
+                        @else
+                            <p class="no-description">No options configured</p>
+                        @endif
+                    </div>
                 </div>
             </div>
 
-            <!-- Product Variants Tab -->
-            <div id="variants-tab" class="tab-pane">
-                <h4 style="margin-bottom: 24px; color: #1a202c; font-size: 1.25rem;">Product Variants (SKUs)</h4>
+            <!-- Stock History Tab
+            <div id="stock-history-tab" class="tab-pane" style="display: none;">
+                <h4>Stock Movement History</h4>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>SKU</th>
+                                <th>Action</th>
+                                <th>Quantity</th>
+                                <th>Remaining Stock</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(isset($stockHistory) && count($stockHistory) > 0)
+                                @foreach($stockHistory as $history)
+                                    <tr>
+                                        <td>{{ $history->created_at->format('M d, Y H:i') }}</td>
+                                        <td>{{ $history->sku }}</td>
+                                        <td>
+                                            <span class="badge badge-{{ $history->action == 'increase' ? 'success' : 'warning' }}">
+                                                {{ ucfirst($history->action) }}
+                                            </span>
+                                        </td>
+                                        <td>{{ $history->quantity }}</td>
+                                        <td>{{ $history->remaining_stock }}</td>
+                                        <td>{{ $history->notes ?? '-' }}</td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="6" class="text-center">No stock history available</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div> -->
+
+            <!-- Product Variants Tab -->
+            <div id="variants-tab" class="tab-pane" style="display: none;">
+                <h4>Product Variants (SKUs)</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>SKU</th>
@@ -579,13 +526,22 @@
                                                 {{ $sku->quantity }} units
                                             </span>
                                         </td>
+                                        <!-- <td>
+                                            @if(isset($sku->options) && count($sku->options) > 0)
+                                                @foreach($sku->options as $key => $value)
+                                                    <small class="badge badge-light">{{ $key }}: {{ $value }}</small>
+                                                @endforeach
+                                            @else
+                                                <small class="text-muted">No options</small>
+                                            @endif
+                                        </td> -->
                                         <td>
                                             <span class="badge badge-{{ $sku->quantity > 0 ? 'success' : 'danger' }}">
                                                 {{ $sku->quantity > 0 ? 'In Stock' : 'Out of Stock' }}
                                             </span>
                                         </td>
                                         <td>
-                                            <button class="btn btn-sm btn-outline-primary" onclick="editSKU({{ $sku->id }})">
+                                            <button class="btn btn-sm btn-outline-primary" onclick="editSKU( {{ $sku->id }} );">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                         </td>
@@ -593,7 +549,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="5" class="text-center" style="text-align: center; color: #64748b;">No variants available</td>
+                                    <td colspan="6" class="text-center">No variants available</td>
                                 </tr>
                             @endif
                         </tbody>
@@ -608,7 +564,7 @@
 function showTab(tabName) {
     // Hide all tab panes
     document.querySelectorAll('.tab-pane').forEach(pane => {
-        pane.classList.remove('active');
+        pane.style.display = 'none';
     });
     
     // Remove active class from all buttons
@@ -617,7 +573,7 @@ function showTab(tabName) {
     });
     
     // Show selected tab pane
-    document.getElementById(tabName + '-tab').classList.add('active');
+    document.getElementById(tabName + '-tab').style.display = 'block';
     
     // Add active class to clicked button
     event.target.classList.add('active');
@@ -648,12 +604,6 @@ function editSKU(skuId) {
     // Implement SKU editing functionality
     window.location.href = `/admin/products/{{ $cloth->id }}/skus/${skuId}/edit`;
 }
-
-// Initialize first tab as active
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('.tab-button').classList.add('active');
-    document.querySelector('.tab-pane').classList.add('active');
-});
 </script>
 
 @endsection

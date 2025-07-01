@@ -15,7 +15,7 @@
     <div class="max-w-7xl mx-auto space-y-6">
         <!-- Header -->
         <div class="flex items-center justify-between">
-            <div>
+            <div style="margin-top: 1rem;">
                 <h1 class="text-3xl font-bold text-gray-900">Thông tin cá nhân</h1>
                 <p class="text-gray-600 mt-1">Quản lý thông tin và lịch sử mua hàng</p>
             </div>

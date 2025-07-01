@@ -661,7 +661,7 @@ class ClothController extends Controller
 
         $categories = category::all();
 
-
+        $monthStats = [];
         $orderByMonth = Order::where('status','Đã giao')
             ->get()
             ->groupBy(function($order) {
