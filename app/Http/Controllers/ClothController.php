@@ -17,7 +17,7 @@ use PhpOption\None;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-
+use Carbon\Carbon;
 
 use App\Models\collections;
 use App\Models\SkuValue;
@@ -186,26 +186,6 @@ class ClothController extends Controller
         $categories = category::all();
         return view('admin.create',compact('categories'));
     }
-    private function generateCombinations(array $arrays)
-    {
-        if (empty($arrays)) return [];
-
-        $result = [[]];
-
-        foreach ($arrays as $propertyValues) {
-            $temp = [];
-
-            foreach ($result as $partialCombination) {
-                foreach ($propertyValues as $value) {
-                    $temp[] = array_merge($partialCombination, [$value]);
-                }
-            }
-
-            $result = $temp;
-        }
-
-        return $result;
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -287,7 +267,7 @@ class ClothController extends Controller
             foreach ($optionData['values'] as $valueName) {
                 $value = OptionValue::create([
                     'option_id' => $option->id,
-                    'value' => $valueName['name'],
+                    'value' => strtoupper($valueName['name']),
                 ]);
 
                 $sku = ProductSku::create([
@@ -296,6 +276,8 @@ class ClothController extends Controller
                     'price' => $valueName['price'],
                     'quantity' => 0,
                     //Default 0 ti vao update change
+
+                    //Neu them color phai sua ->S = short cai option name 
                 ]);
                 // dd($sku->id);
                 $skuValue = SkuValue::create([
@@ -609,125 +591,42 @@ class ClothController extends Controller
 }
 
 
-    public function statistic(){
+    public function statistic(Request $request)
+    {
 
-        $hourStats = [];
-        $ordersByDay = Order::where('status','Đã giao')
-            ->get()
-            ->groupBy(function($order) {
-                return $order->updated_at->format('D');
-            })
-            ->sortBy(function($orders, $date) {
-                return $date;
-            });
-        $orders = null;
-        foreach($ordersByDay as $hour => $orders) {
-
-            $stats = (object) [
-                'time' => $hour,
-                'order_count' => count($orders),
-                'total_subtotal' => 0
-            ];
-
-            foreach($orders as $order) {
-                $stats->total_subtotal += $order->sub_total;
-            }
-
-            $stats->average_order_value = $stats->total_subtotal / $stats->order_count;
-
-            $hourStats[] = $stats;
-
-        }
+        $categories = Category::all();
+        $orders = Order::where('status', 'Chờ duyệt đơn')->get();
         
-//        dd($hourStats);
-        $hourStatsObj = [];
-
-        foreach($hourStats as $stats) {
-            $hourStatsObj[] = $stats;
-        }
-
-        $yearStats = [];
-        $ordersByYear = Order::where('status','Đã giao')
-            ->get()
-            ->groupBy(function($order) {
-                return $order->updated_at->format('Y');
-            })
-            ->sortBy(function($orders, $date) {
-                return $date;
-            });
-        $orders = null;
-        foreach($ordersByYear as $year => $orders) {
-
-            $stats = (object) [
-                'time' => $year,
-                'order_count' => count($orders),
-                'total_subtotal' => 0
-            ];
-
-            foreach($orders as $order) {
-                $stats->total_subtotal += $order->sub_total;
-            }
-
-            $stats->average_order_value = $stats->total_subtotal / $stats->order_count;
-
-            $yearStats[] = $stats;
-
-        }
-        
-//        dd($hourStats);
-        $yearStatsObj = [];
-
-        foreach($yearStats as $stats) {
-            $yearStatsObj[] = $stats;
-        }
-
-        $categories = category::all();
-
-        $monthStats = [];
-        $orderByMonth = Order::where('status','Đã giao')
-            ->get()
-            ->groupBy(function($order) {
-                return $order->updated_at->format('M');
-            })
-            ->sortBy(function($orders, $date) {
-                return $date;
-            });
-        $orders = null;
-        foreach($orderByMonth as $month => $orders) {
-            $stats = (object) [
-                'time' => $month,
-                'order_count' => count($orders),
-                'total_subtotal' => 0
-            ];
-            // dd($stats);
-
-            foreach($orders as $order) {
-                $stats->total_subtotal += $order->sub_total;
-            }
-
-            $stats->average_order_value = $stats->total_subtotal / $stats->order_count;
-            
-            $monthStats[] = $stats;
-            
-            
-
-        }
-        // dd($monthStats);
-        $monthStatsObj = [];
-        foreach($monthStats as $stats) {
-            $monthStatsObj[] = $stats;
-            
-        }
-
-
-
-        $orders = Order::where('status','Chờ duyệt đơn')->get();
-        // dd($monthStatsObj);
-
         
 
-        return view('admin.statistic', compact('orders','categories','hourStatsObj', 'yearStatsObj','monthStatsObj'));
+
+
+
+
+        $start = $request->start_date ?? now()->startOfMonth()->toDateString();
+        $end = $request->end_date ?? now()->toDateString();
+
+        $end = date('Y-m-d', strtotime($end . ' +1 day'));
+
+        $revenueStats = Order::selectRaw('DATE(updated_at) as time, SUM(sub_total) as total_subtotal')
+            ->whereBetween('updated_at', [$start, $end])
+            ->groupBy('time')
+            ->orderBy('time')
+            ->get();
+        // dd($revenueStats);
+
+        $earliest = Order::orderBy('updated_at','asc')->first()->updated_at;
+        $earliest = date('Y-m-d', strtotime($earliest));
+
+
+
+
+
+        return view('admin.statistic', compact(
+            'orders', 'categories','revenueStats','earliest'
+        ));
     }
+
 }
 
 
