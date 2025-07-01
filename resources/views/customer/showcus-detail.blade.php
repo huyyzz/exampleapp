@@ -1,391 +1,463 @@
 @extends('customer.layout')
 @section('content')
 <style>
-
     button:disabled {
         background-color: #ccc;
         color: #666;
         cursor: not-allowed;
         opacity: 0.7;
     }
+
     /* Product Detail Styles */
-.product-gallery {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 32px;
-}
+    .product-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
 
-.main-image-container {
-    flex: 1;
-    position: relative;
-    max-width: 600px;
-}
+    .product-layout {
+        display: flex;
+        gap: 40px;
+        align-items: flex-start;
+    }
 
-.main-image {
-    width: 100%;
-    height: 600px;
-    object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-}
-
-.image-nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255,255,255,0.9);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-
-.image-nav-btn:hover {
-    background: white;
-    transform: translateY(-50%) scale(1.1);
-}
-
-.image-nav-btn.prev {
-    left: 16px;
-}
-
-.image-nav-btn.next {
-    right: 16px;
-}
-
-.thumbnail-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    max-width: 120px;
-}
-
-.thumbnail-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    max-height: 600px;
-    overflow-y: auto;
-}
-
-.thumbnail-nav::-webkit-scrollbar {
-    width: 4px;
-}
-
-.thumbnail-nav::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 2px;
-}
-
-.thumbnail-nav::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 2px;
-}
-
-.thumbnail {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.thumbnail:hover {
-    transform: scale(1.05);
-    border-color: #007bff;
-}
-
-.thumbnail.active {
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
-}
-
-.thumbnail-nav-btn {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    width: 100px;
-    height: 32px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 12px;
-    color: #666;
-}
-
-.thumbnail-nav-btn:hover {
-    background: #e9ecef;
-    border-color: #adb5bd;
-}
-
-.thumbnail-nav-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.product-info {
-    max-width: 500px;
-}
-
-.product-title {
-    font-size: 32px;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 16px;
-    line-height: 1.2;
-}
-
-.product-price {
-    font-size: 28px;
-    font-weight: 600;
-    color: #e74c3c;
-    margin-bottom: 8px;
-}
-
-.product-original-price {
-    font-size: 20px;
-    color: #999;
-    text-decoration: line-through;
-    margin-left: 12px;
-}
-
-.product-sku {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 24px;
-}
-
-.product-options {
-    margin-bottom: 32px;
-}
-
-.option-group {
-    margin-bottom: 20px;
-}
-
-.option-label {
-    font-size: 16px;
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 8px;
-    display: block;
-}
-
-.size-options {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.size-option {
-    padding: 8px 16px;
-    border: 2px solid #dee2e6;
-    border-radius: 6px;
-    background: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    min-width: 44px;
-    text-align: center;
-}
-
-.size-option:hover {
-    border-color: #007bff;
-    background: #f8f9fa;
-}
-
-.size-option.selected {
-    border-color: #007bff;
-    background: #007bff;
-    color: white;
-}
-
-.size-option.unavailable {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background: #f8f9fa;
-}
-
-.quantity-selector {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 8px;
-}
-
-.quantity-input {
-    width: 80px;
-    padding: 8px 12px;
-    border: 2px solid #dee2e6;
-    border-radius: 6px;
-    text-align: center;
-    font-weight: 500;
-}
-
-.quantity-btn {
-    width: 36px;
-    height: 36px;
-    border: 2px solid #dee2e6;
-    background: white;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.quantity-btn:hover {
-    border-color: #007bff;
-    background: #f8f9fa;
-}
-
-.stock-info {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 24px;
-}
-
-.add-to-cart-btn {
-    background: #333;
-    color: white;
-    border: none;
-    padding: 16px 32px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    margin-bottom: 16px;
-}
-
-.add-to-cart-btn:hover {
-    background: #555;
-    transform: translateY(-2px);
-}
-
-.product-actions {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 32px;
-}
-
-.action-btn {
-    flex: 1;
-    padding: 12px 24px;
-    border: 2px solid #dee2e6;
-    background: white;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-weight: 500;
-}
-
-.action-btn:hover {
-    border-color: #007bff;
-    background: #f8f9fa;
-}
-
-.product-description {
-    border-top: 1px solid #dee2e6;
-    padding-top: 24px;
-}
-
-.description-title {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 16px;
-    color: #333;
-}
-
-.description-content {
-    color: #666;
-    line-height: 1.6;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
+    /* Image Gallery Styles */
     .product-gallery {
-        flex-direction: column;
+        flex: 1;
+        max-width: 600px;
     }
-    
-    .thumbnail-container {
-        max-width: 100%;
+
+    .main-image-container {
+        position: relative;
+        margin-bottom: 20px;
     }
-    
-    .thumbnail-nav {
-        flex-direction: row;
-        max-height: none;
-        overflow-x: auto;
-        overflow-y: hidden;
-        padding-bottom: 8px;
-    }
-    
-    .thumbnail {
-        min-width: 80px;
-        width: 80px;
-        height: 80px;
-    }
-    
+
     .main-image {
-        height: 400px;
+        width: 100%;
+        height: 600px;
+        object-fit: cover;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
-    
+
+    .image-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.9);
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        font-size: 18px;
+        z-index: 2;
+    }
+
+    .image-nav-btn:hover {
+        background: white;
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .image-nav-btn.prev {
+        left: 16px;
+    }
+
+    .image-nav-btn.next {
+        right: 16px;
+    }
+
+    /* New Thumbnail Gallery Styles */
+    .thumbnail-container {
+        position: relative;
+        margin-top: 16px;
+    }
+
+    .thumbnail-gallery {
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    .thumbnail-track {
+        display: flex;
+        transition: transform 0.3s ease;
+        gap: 12px;
+    }
+
+    .thumbnail {
+        flex: 0 0 calc(25% - 9px); /* 4 thumbnails per view with gap */
+        height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 3px solid transparent;
+    }
+
+    .thumbnail:hover {
+        transform: scale(1.05);
+        border-color: #333;
+    }
+
+    .thumbnail.active {
+        border-color: #333;
+        box-shadow: 0 0 0 2px rgba(51,51,51,0.25);
+    }
+
+    /* Thumbnail Navigation Buttons */
+    .thumbnail-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.95);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        font-size: 16px;
+        z-index: 3;
+        color: #333;
+    }
+
+    .thumbnail-nav-btn:hover {
+        background: white;
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .thumbnail-nav-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+        transform: translateY(-50%);
+    }
+
+    .thumbnail-nav-btn.prev {
+        left: -15px;
+    }
+
+    .thumbnail-nav-btn.next {
+        right: -15px;
+    }
+
+    /* Product Info Styles */
+    .product-info {
+        flex: 1;
+        max-width: 500px;
+        padding-left: 20px;
+    }
+
     .product-title {
-        font-size: 24px;
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 16px;
+        line-height: 1.3;
     }
-    
+
+    .product-sku {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 8px;
+    }
+
     .product-price {
-        font-size: 22px;
+        font-size: 32px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 32px;
     }
-}
 
+    /* Product Options */
+    .product-options {
+        margin-bottom: 32px;
+    }
+
+    .option-group {
+        margin-bottom: 24px;
+    }
+
+    .option-label {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 12px;
+        display: block;
+    }
+
+    .size-options {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .size-option {
+        padding: 12px 20px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        min-width: 50px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .size-option:hover {
+        border-color: #333;
+        background: #f8f9fa;
+    }
+
+    .size-option.active {
+        border-color: #333;
+        background: #333;
+        color: white;
+    }
+
+    .size-option.unavailable {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #f8f9fa;
+    }
+
+    /* Quantity Selector */
+    .quantity-group {
+        margin-bottom: 24px;
+    }
+
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 8px;
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .quantity-btn {
+        width: 44px;
+        height: 44px;
+        border: none;
+        background: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        font-size: 18px;
+    }
+
+    .quantity-btn:hover {
+        background: #f8f9fa;
+    }
+
+    .quantity-input {
+        width: 80px;
+        height: 44px;
+        border: none;
+        text-align: center;
+        font-weight: 500;
+        font-size: 16px;
+    }
+
+    .quantity-input:focus {
+        outline: none;
+    }
+
+    .stock-info {
+        font-size: 14px;
+        color: #666;
+    }
+
+    /* Add to Cart Button */
+    .add-to-cart-btn {
+        background: #333;
+        color: white;
+        border: none;
+        padding: 16px 32px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-bottom: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .add-to-cart-btn:hover {
+        background: #555;
+        transform: translateY(-2px);
+    }
+
+    /* Product Description */
+    .product-description {
+        border-top: 1px solid #eee;
+        padding-top: 24px;
+    }
+
+    .description-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: #333;
+    }
+
+    .description-content {
+        max-height: 150px;
+        overflow-y: auto;
+        color: #666;
+        line-height: 1.6;
+        font-size: 14px;
+        padding-right: 10px;
+    }
+
+    .description-content::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .description-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+
+    .description-content::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+
+    .description-content::-webkit-scrollbar-thumb:hover {
+        background: #a1a1a1;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 968px) {
+        .product-layout {
+            flex-direction: column;
+            gap: 32px;
+        }
+        
+        .product-info {
+            padding-left: 0;
+            max-width: 100%;
+        }
+        
+        .main-image {
+            height: 500px;
+        }
+        
+        .thumbnail {
+            flex: 0 0 calc(33.333% - 8px); /* 3 thumbnails per view on tablet */
+        }
+    }
+
+    @media (max-width: 576px) {
+        .product-container {
+            padding: 16px;
+        }
+        
+        .product-title {
+            font-size: 24px;
+        }
+        
+        .product-price {
+            font-size: 28px;
+        }
+        
+        .main-image {
+            height: 400px;
+        }
+        
+        .size-options {
+            gap: 8px;
+        }
+        
+        .size-option {
+            padding: 10px 16px;
+            font-size: 13px;
+        }
+        
+        .thumbnail {
+            flex: 0 0 calc(50% - 6px); /* 2 thumbnails per view on mobile */
+            height: 100px;
+        }
+        
+        .thumbnail-nav-btn {
+            width: 35px;
+            height: 35px;
+            font-size: 14px;
+        }
+    }
 </style>
-<section class="py-5">
-    <div class="container">
-        <div class="row align-items-start gx-4 gy-4">
-            
-            <!-- Left: Image -->
-            <div class="col-12 col-md-6">
-                @foreach ($cloth->images as $image )
-                    <img src="{{ asset('storage/images/' . $image->image_url) }}" class="img-fluid" alt="Product Image">
-                @endforeach
-                <img src="{{ asset('storage/images/' . $cloth->images[0]->image_url) }}" class="img-fluid" alt="Product Image" style="max-width: 100%; height: 500px;">
+
+<div class="product-container">
+    <div class="product-layout">
+        <!-- Product Gallery -->
+        <div class="product-gallery">
+            <div class="main-image-container">
+                <img id="mainImage" src="{{ asset('storage/images/' . $cloth->images[0]->image_url) }}" class="main-image" alt="{{ $cloth->product_name }}">
+                
+                @if(count($cloth->images) > 1)
+                    <button class="image-nav-btn prev" id="prevBtn">‹</button>
+                    <button class="image-nav-btn next" id="nextBtn">›</button>
+                @endif
             </div>
-
-            <!-- Right: Product Details -->
-            <div class="col-12 col-md-6">
-                <h1 class="display-5 fw-bold">{{ $cloth->product_name }}</h1>
-                <h2 id="price_changing" class="text-danger mt-4">{{ number_format($cloth->skus[0]->price, 0, ',', '.') }} VNĐ</h2>
-
-                <div class="lead mt-3">
-                    Mô tả sản phẩm
-                    <br>
-                    {!! nl2br(e($cloth->product_description)) !!}
+            
+            @if(count($cloth->images) > 1)
+                <div class="thumbnail-container">
+                    <div class="thumbnail-gallery">
+                        <div class="thumbnail-track" id="thumbnailTrack">
+                            @foreach($cloth->images as $index => $image)
+                                <img src="{{ asset('storage/images/' . $image->image_url) }}" 
+                                     class="thumbnail {{ $index === 0 ? 'active' : '' }}" 
+                                     data-index="{{ $index }}"
+                                     alt="Product Image {{ $index + 1 }}">
+                            @endforeach
+                        </div>
+                    </div>
+                    
+                    @if(count($cloth->images) > 4)
+                        <button class="thumbnail-nav-btn prev" id="thumbnailPrevBtn">‹</button>
+                        <button class="thumbnail-nav-btn next" id="thumbnailNextBtn">›</button>
+                    @endif
                 </div>
-                <form class="mt-4" method="get" action="{{ route('addToCart', $cloth->id) }}">
-                    <label>Kích cỡ:</label>
-                    <div class="mb-3" id="sizeButtons">
+            @endif
+        </div>
+
+        <!-- Product Info -->
+        <div class="product-info">
+           
+            <h1 class="product-title">{{ $cloth->product_name }}</h1>
+            <div id="price_changing" class="product-price">{{ number_format($cloth->skus[0]->price, 0, ',', '.') }} VNĐ</div>
+
+            <form class="product-options" method="get" action="{{ route('addToCart', $cloth->id) }}">
+                <div class="option-group">
+                    <label class="option-label">Kích cỡ:</label>
+                    <div class="size-options" id="sizeButtons">
                         @foreach($cloth->skus as $sku)
                             <button 
                                 type="button" 
-                                class="btn btn-outline-dark me-2 mb-2 size-btn" 
+                                class="size-option size-btn {{ $loop->first ? 'active' : '' }}" 
                                 data-sku-id="{{ $sku->id }}" 
                                 data-quantity="{{ $sku->quantity }}"
                                 data-size="{{ $sku->skuValues[0]->optionValue->value }}"
@@ -394,27 +466,38 @@
                             </button>
                         @endforeach
                     </div>
-<!-- Value default la lay size dau tien -->
-                    <input type="hidden" name="sku_id" id="selectedSkuId" value="{{ $cloth->skus[0]->id }}">
+                </div>
 
-                    <label>Số lượng:</label>
-                    <div class="d-flex align-items-center mb-3">
-                        <input id="quantityInput" type="number" name="inputQuantity" min="1" max="{{ $cloth->skus[0]->quantity ?? 999 }}" value="1" class="form-control w-auto me-3">
-                        <span id="quantityAvailable" class="text-muted">{{ $cloth->skus[0]->quantity }} sản phẩm có sẵn</span>
-                        
+                <input type="hidden" name="sku_id" id="selectedSkuId" value="{{ $cloth->skus[0]->id }}">
+
+                <div class="quantity-group">
+                    <label class="option-label">Số lượng:</label>
+                    <div class="quantity-selector">
+                        <div class="quantity-controls">
+                            <button type="button" class="quantity-btn" id="decreaseBtn">−</button>
+                            <input id="quantityInput" type="number" name="inputQuantity" min="1" max="{{ $cloth->skus[0]->quantity ?? 999 }}" value="1" class="quantity-input">
+                            <button type="button" class="quantity-btn" id="increaseBtn">+</button>
+                        </div>
                     </div>
+                    <div id="quantityAvailable" class="stock-info">{{ $cloth->skus[0]->quantity }} sản phẩm có sẵn</div>
+                </div>
 
-                    <!-- <h2 id="out-of-stock" class="text-danger mt-4" style="display: none">Hết hàng</h2> -->
+                <button id="cartAdd" type="submit" class="add-to-cart-btn">
+                    <i class="bi bi-cart-fill"></i>
+                    Thêm vào giỏ
+                </button>
+            </form>
 
-                    <button id="cartAdd" type="submit" class="btn btn-dark">
-                        <i class="bi bi-cart-fill me-1"></i> Thêm vào giỏ
-                    </button>
-                </form>
+            <div class="product-description">
+                <h3 class="description-title">Mô tả sản phẩm</h3>
+                <div class="description-content">
+                    {!! nl2br(e($cloth->product_description)) !!}
+                </div>
             </div>
-
         </div>
     </div>
-</section>
+</div>
+
 <!-- Footer -->
 <footer class="text-center text-lg-start bg-body-tertiary text-muted">
     <!-- Section: Social media -->
@@ -451,7 +534,7 @@
             <div class="row mt-3">
                 <!-- Grid column -->
                 <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-<!-- Content -->
+                    <!-- Content -->
                     <h6 class="text-uppercase fw-bold mb-4">
                         <i class="fas fa-gem me-3"></i>TIN TIN 
                     </h6>
@@ -517,41 +600,138 @@
     <!-- Copyright -->
 </footer>
 <!-- Footer -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Core theme JS-->
 <script src="js/scripts.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var stock = document.getElementById('out-of-stock');
+        // Image gallery functionality
+        const mainImage = document.getElementById('mainImage');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentImageIndex = 0;
         
+        // Thumbnail gallery navigation
+        const thumbnailTrack = document.getElementById('thumbnailTrack');
+        const thumbnailPrevBtn = document.getElementById('thumbnailPrevBtn');
+        const thumbnailNextBtn = document.getElementById('thumbnailNextBtn');
+        let currentThumbnailIndex = 0;
+        const thumbnailsPerView = 4;
+        const maxThumbnailIndex = Math.max(0, thumbnails.length - thumbnailsPerView);
+        
+        // Thumbnail click handlers
+        thumbnails.forEach((thumbnail, index) => {
+            thumbnail.addEventListener('click', function() {
+                currentImageIndex = index;
+                updateMainImage();
+                updateActiveThumbnail();
+            });
+        });
+        
+        // Main image navigation button handlers
+        if (prevBtn && nextBtn) {
+            prevBtn.addEventListener('click', function() {
+                currentImageIndex = currentImageIndex > 0 ? currentImageIndex - 1 : thumbnails.length - 1;
+                updateMainImage();
+                updateActiveThumbnail();
+                ensureThumbnailVisible();
+            });
+            
+            nextBtn.addEventListener('click', function() {
+                currentImageIndex = currentImageIndex < thumbnails.length - 1 ? currentImageIndex + 1 : 0;
+                updateMainImage();
+                updateActiveThumbnail();
+                ensureThumbnailVisible();
+            });
+        }
+        
+        // Thumbnail navigation handlers
+        if (thumbnailPrevBtn && thumbnailNextBtn) {
+            thumbnailPrevBtn.addEventListener('click', function() {
+                if (currentThumbnailIndex > 0) {
+                    currentThumbnailIndex--;
+                    updateThumbnailPosition();
+                    updateThumbnailNavButtons();
+                }
+            });
+            
+            thumbnailNextBtn.addEventListener('click', function() {
+                if (currentThumbnailIndex < maxThumbnailIndex) {
+                    currentThumbnailIndex++;
+                    updateThumbnailPosition();
+                    updateThumbnailNavButtons();
+                }
+            });
+            
+            // Initialize thumbnail navigation buttons
+            updateThumbnailNavButtons();
+        }
+        
+        function updateMainImage() {
+            if (thumbnails[currentImageIndex]) {
+                mainImage.src = thumbnails[currentImageIndex].src;
+            }
+        }
+        
+        function updateActiveThumbnail() {
+            thumbnails.forEach(thumb => thumb.classList.remove('active'));
+            if (thumbnails[currentImageIndex]) {
+                thumbnails[currentImageIndex].classList.add('active');
+            }
+        }
+        
+        function updateThumbnailPosition() {
+            const translateX = -(currentThumbnailIndex * (100 / thumbnailsPerView));
+            thumbnailTrack.style.transform = `translateX(${translateX}%)`;
+        }
+        
+        function updateThumbnailNavButtons() {
+            if (thumbnailPrevBtn && thumbnailNextBtn) {
+                thumbnailPrevBtn.disabled = currentThumbnailIndex === 0;
+                thumbnailNextBtn.disabled = currentThumbnailIndex >= maxThumbnailIndex;
+            }
+        }
+        
+        function ensureThumbnailVisible() {
+            // Make sure the active thumbnail is visible
+            if (currentImageIndex < currentThumbnailIndex) {
+                currentThumbnailIndex = currentImageIndex;
+                updateThumbnailPosition();
+                updateThumbnailNavButtons();
+            } else if (currentImageIndex >= currentThumbnailIndex + thumbnailsPerView) {
+                currentThumbnailIndex = currentImageIndex - thumbnailsPerView + 1;
+                updateThumbnailPosition();
+                updateThumbnailNavButtons();
+            }
+        }
 
+        // Size selection and quantity functionality
         const buttons = document.querySelectorAll('.size-btn');
         const quantityInput = document.getElementById('quantityInput');
         const quantityAvailable = document.getElementById('quantityAvailable');
         const selectedSkuId = document.getElementById('selectedSkuId');
-        const price = document.getElementById('price_changing')
+        const price = document.getElementById('price_changing');
+        const decreaseBtn = document.getElementById('decreaseBtn');
+        const increaseBtn = document.getElementById('increaseBtn');
 
-        var quantityConLai = quantityInput.max
+        // Initialize disabled state for out-of-stock items
         buttons.forEach(button => {
-            if (button.getAttribute('data-quantity') == 0){
-                button.disabled = true
-                button.selected = false
+            if (button.getAttribute('data-quantity') == 0) {
+                button.disabled = true;
+                button.classList.add('unavailable');
             }
-            if (button.getAttribute('data-quantity') != 0){
-                button.disabled = false
-                button.selected = true
-            }
+        });
 
-        })
-        if (quantityConLai == 0){
-            // stock.style.display = "block"
-            document.getElementById("cartAdd").disabled = true
+        // Check stock
+        if (quantityInput.max == 0) {
+            document.getElementById("cartAdd").disabled = true;
         }
 
+        // Size button click handlers
         buttons.forEach(button => {
             button.addEventListener('click', function () {
-                
-
                 // Update hidden input
                 selectedSkuId.value = this.getAttribute('data-sku-id');
 
@@ -560,26 +740,53 @@
                 quantityInput.max = quantity;
                 quantityInput.value = 1;
                 quantityAvailable.textContent = `${quantity} sản phẩm có sẵn`;
-                console.log(quantity)
-                if (quantity != 0){
-                    // stock.style.display = "none"
-                    document.getElementById("cartAdd").disabled = false
-                }
-                if (quantity == 0){
-                    // stock.style.display = "block"
-                    document.getElementById("cartAdd").disabled = true
+                
+                // Update cart button state
+                if (quantity != 0) {
+                    document.getElementById("cartAdd").disabled = false;
+                } else {
+                    document.getElementById("cartAdd").disabled = true;
                 }
                 
+                // Update price
                 const pricing = this.getAttribute('data-price');
-
-                price.innerHTML = Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
-                    pricing,
-                );
+                price.innerHTML = Intl.NumberFormat("vi-VN", { 
+                    style: "currency", 
+                    currency: "VND" 
+                }).format(pricing);
 
                 // Highlight selected button
                 buttons.forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
             });
+        });
+
+        // Quantity control handlers
+        decreaseBtn.addEventListener('click', function() {
+            const currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        });
+
+        increaseBtn.addEventListener('click', function() {
+            const currentValue = parseInt(quantityInput.value);
+            const maxValue = parseInt(quantityInput.max);
+            if (currentValue < maxValue) {
+                quantityInput.value = currentValue + 1;
+            }
+        });
+
+        // Quantity input validation
+        quantityInput.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            const max = parseInt(this.max);
+            
+            if (value < 1) {
+                this.value = 1;
+            } else if (value > max) {
+                this.value = max;
+            }
         });
     });
 </script>

@@ -603,6 +603,29 @@ class ClothController extends Controller
 
 
 
+// <<<<<<< CSSSualaitatca
+//         $monthStats = [];
+//         $orderByMonth = Order::where('status','Đã giao')
+//             ->get()
+//             ->groupBy(function($order) {
+//                 return $order->updated_at->format('M');
+//             })
+//             ->sortBy(function($orders, $date) {
+//                 return $date;
+//             });
+//         $orders = null;
+//         foreach($orderByMonth as $month => $orders) {
+//             $stats = (object) [
+//                 'time' => $month,
+//                 'order_count' => count($orders),
+//                 'total_subtotal' => 0
+//             ];
+//             // dd($stats);
+
+//             foreach($orders as $order) {
+//                 $stats->total_subtotal += $order->sub_total;
+//             }
+//
         $start = $request->start_date ?? now()->startOfMonth()->toDateString();
         $end = $request->end_date ?? now()->toDateString();
 
