@@ -272,9 +272,10 @@
                     </label>
                     <input type="file" 
                            class="form-control file-input" 
-                           name="product_image_url"
+                           name="product_image_url[]"
                            id="product_image_url"
-                           accept="image/*"/>
+                           accept="image/*"
+                           multiple/>
                 </div>
 
                 <div id="TheRealOptionContainer">

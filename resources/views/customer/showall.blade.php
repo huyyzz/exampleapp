@@ -588,7 +588,7 @@
                 <div class="product-card mt-5">
                     <div class="product-image-container">
                         <a href="{{ route('showcus', $item->id) }}">
-                            <img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="{{ $item->product_name }}" class="product-image">
+                            <img src="{{ asset('storage/images/' . $item->images[0]->image_url) }}" alt="{{ $item->product_name }}" class="product-image">
                         </a>
                         
                         <!-- @php

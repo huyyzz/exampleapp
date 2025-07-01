@@ -51,7 +51,9 @@ class ClothController extends Controller
         $productCount = Count($products);
         $allCount = Count(Cloth::all());
         // $sizes = $cloths->variants();
-
+        foreach ($products as $product){
+            $product->product_price = $product->skus->min("price");
+        }
 
         
 
@@ -130,7 +132,9 @@ class ClothController extends Controller
         $cloths = Cloth::all();
         $categories = category::all();
 
-
+        foreach ($cloths as $product){
+            $product->product_price = $product->skus->min("price");
+        }
 
 
         $featuredCollections = collections::active()
@@ -152,13 +156,21 @@ class ClothController extends Controller
             ->select('sku_id', DB::raw('SUM(quantity) as total_sold'))
             ->groupBy('sku_id')
             ->orderByDesc('total_sold')
-            ->limit(8)
+            ->limit(5)
             ->get();
 
         $productIds = $bestSellers->pluck('sku_id');
-        $productBestSeller = Cloth::whereIn('id', $productIds)->get();
-
         
+
+        $skuBestSeller = ProductSku::whereIn('id', $productIds)->get();
+        $productBestSeller = Cloth::whereIn('id', $skuBestSeller->pluck("cloth_id"))->get();
+
+
+        // dd($productBestSeller);
+        
+        foreach ($productBestSeller as $product){
+            $product->product_price = $product->skus->min("price");
+        }
 
         return view('customer.home', compact('cloths','specific','categories','featuredCollections','productBestSeller'));
     }
@@ -212,7 +224,8 @@ class ClothController extends Controller
             // 'product_price' => 'nullable|numeric',
             'product_description' => 'nullable|string',
             'category_id' => 'nullable|exists:categories,id',
-            'product_image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:16132',
+            'product_image_url' => 'required|array',
+            'product_image_url.*' => 'image|mimetypes:image/jpeg,image/png,image/webp|max:16132',
             'options' => 'required|array',
             'options.*.name' => 'required|string|max:255',
             'options.*.values' => 'required|array|min:1',
@@ -228,23 +241,25 @@ class ClothController extends Controller
         ]);
 
         if ($request->hasFile('product_image_url')) {
-            $image = $request->file('product_image_url');
+            foreach ($request->file('product_image_url') as $image){
+                // $image = $request->file('product_image_url');
 
-            $validExtensions = ['jpeg', 'png', 'jpg', 'gif'];
-            $validMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+                $validExtensions = ['jpeg', 'png', 'jpg', 'gif','webp'];
+                $validMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif','image/webp'];
 
-            if (!in_array($image->getClientOriginalExtension(), $validExtensions) || !in_array($image->getMimeType(), $validMimeTypes)) {
-                return redirect()->back()->withErrors(['product_image_url' => 'The product image must be a file of type: jpeg, png, jpg, gif.']);
+                if (!in_array($image->getClientOriginalExtension(), $validExtensions) || !in_array($image->getMimeType(), $validMimeTypes)) {
+                    return redirect()->back()->withErrors(['product_image_url' => 'The product image must be a file of type: jpeg, png, jpg, gif.']);
+                }
+
+                // Store the file
+                $imageName = time() . '-' . $product->id . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/images', $imageName);
+                $storeData['product_image_url'] = $imageName;
+                $image = ProductImage::create([
+                    'image_url' => $storeData['product_image_url'],
+                    'cloth_id' => $product->id,
+                ]);
             }
-
-            // Store the file
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images', $imageName);
-            $storeData['product_image_url'] = $imageName;
-            $image = ProductImage::create([
-                'image_url' => $storeData['product_image_url'],
-                'cloth_id' => $product->id,
-            ]);
         }
         
 

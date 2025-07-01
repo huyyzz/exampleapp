@@ -431,7 +431,7 @@ background: linear-gradient(45deg, #ff6b6b, #ee5a52);
                 <div class="product-card">
                     <div class="product-image-container">
                         <a href="{{ route('showcus', $item->id) }}">
-                            <img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="{{ $item->product_name }}" class="product-image">
+                            <img src="{{ asset('storage/images/' . $item->images[0]->image_url) }}" alt="{{ $item->product_name }}" class="product-image">
                         </a>
                         <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; font-size: 0.75rem; padding: 5px 8px; border-radius: 15px;">NEW</span>
                     </div>
@@ -490,7 +490,7 @@ background: linear-gradient(45deg, #ff6b6b, #ee5a52);
                 <div class="product-card">
                     <div class="product-image-container">
                         <a href="{{ route('showcus', $item->id) }}">
-                            <img src="{{ asset('storage/images/' . $item->product_image_url) }}" alt="{{ $item->product_name }}" class="product-image">
+                            <img src="{{ asset('storage/images/' . $item->images[0]->image_url) }}" alt="{{ $item->product_name }}" class="product-image">
                         </a>
                         <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; font-size: 0.75rem; padding: 5px 8px; border-radius: 15px;">NEW</span>
                     </div>
