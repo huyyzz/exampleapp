@@ -58,6 +58,8 @@ Route::middleware('isAdmin')->group(function(){
     });
 
     Route::post('/detailUpdate', [\App\Http\Controllers\SkuController::class, 'update'])->name('SkuUpdate');
+    Route::post('/sizeCreate', [\App\Http\Controllers\SkuController::class, 'create'])->name('SkuCreate');
+    Route::post('/statistic', [\App\Http\Controllers\StatisticController::class, 'filter'])->name('StatFilter');
 });
 
 

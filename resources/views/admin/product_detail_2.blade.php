@@ -542,13 +542,65 @@
         <div class="tabs-nav">
             <button class="tab-button active" onclick="showTab('information')">Product Information</button>
             <button class="tab-button" onclick="showTab('variants')">Product Variants</button>
+            <a href="#" class="btn btn-primary btn-outline-primary float-end" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#createSize">
+                    Thêm size
+            </a>
+            <div class="modal fade" 
+                id="createSize" 
+                tabindex="-1" 
+                aria-labelledby="createSizeLabel" 
+                aria-hidden="true"
+                data-bs-backdrop="false"
+                data-bs-keyboard="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createSizeLabel">
+                            <i class="fas fa-boxes"></i> Thêm size
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    
+                    <form method="POST" action="{{ route('SkuCreate') }}">
+                        @csrf
+                        <div class="modal-body" style="display: none">
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Thêm số lượng</label>
+                                <input type="number" name="cloth_id" id="cloth_id" class="form-control" value="{{ $cloth->id }}" required>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="size" class="form-label">Size</label>
+                                <input type="text" name="size" id="size" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Giá</label>
+                                <input type="number" name="price" id="price" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        </div>
+                        
+                    </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="tab-content">
             <!-- Product Information Tab -->
             <div id="information-tab" class="tab-pane active">
                 <div class="product-options">
-                    <h4 style="margin-bottom: 24px; color: #1a202c; font-size: 1.25rem;">Product Options</h4>
+                    <!-- <h4 style="margin-bottom: 24px; color: #1a202c; font-size: 1.25rem;">Product Options</h4> -->
                     @if($cloth->options && count($cloth->options) > 0)
                         @foreach($cloth->options as $option)
                             <div class="mb-3">
@@ -611,7 +663,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <button class="btn btn-sm btn-outline-primary" onclick="editSKU({{ $sku->id }})">
+                                            <button class="btn btn-sm btn-outline-primary" onclick="editSKU()">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                         </td>
@@ -631,13 +683,12 @@
 </div>
 
 <script>
+
 function showTab(tabName) {
-    // Hide all tab panes
     document.querySelectorAll('.tab-pane').forEach(pane => {
         pane.classList.remove('active');
     });
     
-    // Remove active class from all buttons
     document.querySelectorAll('.tab-button').forEach(button => {
         button.classList.remove('active');
     });
@@ -648,7 +699,6 @@ function showTab(tabName) {
     // Add active class to clicked button
     event.target.classList.add('active');
 }
-
 function shareProduct() {
     const url = "{{ route('showcus', $cloth->id) }}";
     if (navigator.share) {
@@ -658,24 +708,16 @@ function shareProduct() {
             url: url
         });
     } else {
-        // Fallback - copy to clipboard
         navigator.clipboard.writeText(url).then(() => {
             alert('Product link copied to clipboard!');
         });
     }
 }
 
-function addToCollection() {
-    // Implement add to collection functionality
-    alert('Add to collection functionality would be implemented here');
-}
 
 function editSKU(skuId) {
-    // Implement SKU editing functionality
-    window.location.href = `/admin/products/{{ $cloth->id }}/skus/${skuId}/edit`;
+    alert('Tính lăng tương lai -> disable SKU')
 }
-
-// Initialize first tab as active
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.tab-button').classList.add('active');
     document.querySelector('.tab-pane').classList.add('active');

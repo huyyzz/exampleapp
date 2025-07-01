@@ -17,8 +17,9 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             \App\Models\Order::where('status', 'Pending')
-                ->where('is_online_paid', false)
-                ->where('created_at', '<', now()->subMinutes(15))
+                ->where('is_online_paid', true)
+                ->where('isPaid', true)
+                ->where('created_at', '<', now()->subMinutes(1))
                 ->update(['status' => 'Cancelled']);
         })->everyMinute();
     }
