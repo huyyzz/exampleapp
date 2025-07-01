@@ -662,7 +662,7 @@ class ClothController extends Controller
         $categories = category::all();
 
 
-        $monthStats = Order::where('status','Đã giao')
+        $orderByMonth = Order::where('status','Đã giao')
             ->get()
             ->groupBy(function($order) {
                 return $order->updated_at->format('M');
@@ -671,31 +671,36 @@ class ClothController extends Controller
                 return $date;
             });
         $orders = null;
-        foreach($monthStats as $month => $orders) {
+        foreach($orderByMonth as $month => $orders) {
             $stats = (object) [
                 'time' => $month,
                 'order_count' => count($orders),
                 'total_subtotal' => 0
             ];
+            // dd($stats);
 
             foreach($orders as $order) {
                 $stats->total_subtotal += $order->sub_total;
             }
 
             $stats->average_order_value = $stats->total_subtotal / $stats->order_count;
-
+            
             $monthStats[] = $stats;
+            
+            
 
         }
+        // dd($monthStats);
         $monthStatsObj = [];
         foreach($monthStats as $stats) {
             $monthStatsObj[] = $stats;
+            
         }
 
 
 
         $orders = Order::where('status','Chờ duyệt đơn')->get();
-        // dd($orders);
+        // dd($monthStatsObj);
 
         
 
