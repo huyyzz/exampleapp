@@ -65,7 +65,7 @@ class ClothController extends Controller
     }
 
     public function filter(Request $request)
-{
+    {
     $storeData = $request->validate([
         'minPriceInput' => 'required|numeric|min:0',
         'maxPriceInput' => 'required|numeric|min:0|gte:minPriceInput',
