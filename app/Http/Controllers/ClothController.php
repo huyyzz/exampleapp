@@ -39,7 +39,7 @@ class ClothController extends Controller
 
         foreach ($cloths as $product){
             // dd($product->skus[0]->cloth->images[0]->image_url);
-            $product->product_image_url = $product->skus[0]->cloth->images[0]->image_url;
+            $product->product_image_url = $product->images[0]->image_url;
         }
         
 
@@ -615,8 +615,16 @@ class ClothController extends Controller
             ->get();
         // dd($revenueStats);
 
-        $earliest = Order::orderBy('updated_at','asc')->first()->updated_at;
-        $earliest = date('Y-m-d', strtotime($earliest));
+        $earliest = Order::orderBy('updated_at','asc')->first();
+        if ($earliest != null){
+            $earliest = $earliest->updated_at;
+            $earliest = date('Y-m-d', strtotime($earliest));
+        }else{
+            $earliest = date('Y-m-d');
+        }
+            
+        
+        
 
 
 
