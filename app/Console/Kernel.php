@@ -17,10 +17,10 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             \App\Models\Order::where('status', 'Pending')
-                ->where('is_online_paid', true)
-                ->where('isPaid', true)
+                ->where('isOnlinePaid', true)
+                ->where('isPaid', false)
                 ->where('created_at', '<', now()->subMinutes(1))
-                ->update(['status' => 'Cancelled']);
+                ->update(['status' => 'Đã hủy']);
         })->everyMinute();
     }
 

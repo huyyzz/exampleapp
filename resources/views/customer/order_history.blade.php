@@ -251,7 +251,7 @@
         /* Simple loading state */
         .btn-loading {
             opacity: 0.6;
-            pointer-events: none;
+            /* pointer-events: none; */
         }
 
         /* No action text */
