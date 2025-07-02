@@ -604,12 +604,17 @@
                                 <br>
                                 <small class="text-muted text-decoration-line-through ms-2">{{ number_format($item->product_price*2, 0) }}đ</small>
                             </div>
-                            <form method="get" action="{{ route('addToCart', $item->id) }}">
+                            <!-- <form method="get" action="{{ route('addToCart', $item->id) }}">
                                 <input type="hidden" value="1" name="inputQuantity" id="inputQuantity" min="1" max="999">
                                 <button class="add-to-cart-btn" type="submit">
                                     <i class="bi bi-cart-plus"></i>
                                 </button>
-                            </form>
+                            </form> -->
+                            <a href="{{ route('showcus', $item->id) }}">
+                                <button class="add-to-cart-btn" type="submit">
+                                    <i class="bi bi-cart-plus"></i>
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -388,16 +388,16 @@
             <div class="menu-item">
                 <a href="#" class="menu-item">Nữ</a>
                 <div class="dropdown-menu-custom">
-                    <a href="#" class="dropdown-item-custom">Áo sơ mi nữ</a>
-                    <a href="#" class="dropdown-item-custom">Áo thun nữ</a>
-                    <a href="#" class="dropdown-item-custom">Áo khoác nữ</a>
-                    <a href="#" class="dropdown-item-custom">Quần jean nữ</a>
-                    <a href="#" class="dropdown-item-custom">Quần tây nữ</a>
-                    <a href="#" class="dropdown-item-custom">Váy ngắn</a>
-                    <a href="#" class="dropdown-item-custom">Váy dài</a>
-                    <a href="#" class="dropdown-item-custom">Đầm công sở</a>
-                    <a href="#" class="dropdown-item-custom">Túi xách</a>
-                    <a href="#" class="dropdown-item-custom">Giày cao gót</a>
+                    <a href="{{ route('search') }}?term=Áo sơ mi nữ" class="dropdown-item-custom">Áo sơ mi nữ</a>
+                    <a href="{{ route('search') }}?term=Áo thun nữ" class="dropdown-item-custom">Áo thun nữ</a>
+                    <a href="{{ route('search') }}?term=Áo khoác nữ" class="dropdown-item-custom">Áo khoác nữ</a>
+                    <a href="{{ route('search') }}?term=Quần jean nữ" class="dropdown-item-custom">Quần jean nữ</a>
+                    <a href="{{ route('search') }}?term=Quần tây nữ" class="dropdown-item-custom">Quần tây nữ</a>
+                    <a href="{{ route('search') }}?term=Váy ngắn" class="dropdown-item-custom">Váy ngắn</a>
+                    <a href="{{ route('search') }}?term=Váy dài" class="dropdown-item-custom">Váy dài</a>
+                    <a href="{{ route('search') }}?term=Đầm công sở" class="dropdown-item-custom">Đầm công sở</a>
+                    <a href="{{ route('search') }}?term=Túi xách" class="dropdown-item-custom">Túi xách</a>
+                    <a href="{{ route('search') }}?term=Giày cao gót" class="dropdown-item-custom">Giày cao gót</a>
                 </div>
             </div> 
 
@@ -405,15 +405,15 @@
             <div class="menu-item"> 
                 <a href="#" class="menu-item">Nam</a>
                 <div class="dropdown-menu-custom">
-                    <a href="#" class="dropdown-item-custom">Áo sơ mi nam</a>
-                    <a href="#" class="dropdown-item-custom">Áo thun nam</a>
-                    <a href="#" class="dropdown-item-custom">Áo khoác nam</a>
-                    <a href="#" class="dropdown-item-custom">Quần jean nam</a>
-                    <a href="#" class="dropdown-item-custom">Quần tây nam</a>
-                    <a href="#" class="dropdown-item-custom">Quần short</a>
-                    <a href="#" class="dropdown-item-custom">Vest nam</a>
-                    <a href="#" class="dropdown-item-custom">Giày thể thao</a>
-                    <a href="#" class="dropdown-item-custom">Phụ kiện nam</a>
+                    <a href="{{ route('search') }}?term=Áo sơ mi nam" class="dropdown-item-custom">Áo sơ mi nam</a>
+                    <a href="{{ route('search') }}?term=Áo thun nam" class="dropdown-item-custom">Áo thun nam</a>
+                    <a href="{{ route('search') }}?term=Áo khoác nam" class="dropdown-item-custom">Áo khoác nam</a>
+                    <a href="{{ route('search') }}?term=Quần jean nam" class="dropdown-item-custom">Quần jean nam</a>
+                    <a href="{{ route('search') }}?term=Quần tây nam" class="dropdown-item-custom">Quần tây nam</a>
+                    <a href="{{ route('search') }}?term=Quần short" class="dropdown-item-custom">Quần short</a>
+                    <a href="{{ route('search') }}?term=Vest nam" class="dropdown-item-custom">Vest nam</a>
+                    <a href="{{ route('search') }}?term=Giày thể thao" class="dropdown-item-custom">Giày thể thao</a>
+                    <a href="{{ route('search') }}?term=Phụ kiện nam" class="dropdown-item-custom">Phụ kiện nam</a>
                 </div>
             </div>
 

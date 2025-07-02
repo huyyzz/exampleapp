@@ -344,6 +344,7 @@
                         @endforelse
                         </tbody>
                     </table>
+                     {{ $orders->links() }}
                 </div>
             </div>
         </div>
@@ -354,7 +355,7 @@
         document.querySelectorAll('button[type="submit"]').forEach(button => {
             button.addEventListener('click', function() {
                 this.classList.add('btn-loading');
-                this.disabled = true;
+                // this.disabled = true;
             });
         });
 
