@@ -514,7 +514,7 @@
                                             {{ $value->value }}
                                         </span>
                                         @if(isset($value->skuvalue[0]) && isset($value->skuvalue[0]->clothSku))
-                                            <span class="badge badge-light">
+                                            <span class="badge badge-secondary">
                                                 SKU: {{ $value->skuvalue[0]->clothSku->sku }}
                                             </span>
                                             <span class="badge badge-secondary mr-1">
@@ -524,6 +524,7 @@
                                                 {{ $value->skuvalue[0]->clothSku->quantity > 0 ? 'In Stock' : 'Out of Stock' }}
                                             </span>
                                             <br>
+                                        @endif
                                         @endforeach
                                         
                                     </div>
