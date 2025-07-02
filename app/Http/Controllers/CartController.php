@@ -217,6 +217,13 @@ public function addToCart(Request $request, $id)
             'data.*.quantity' => 'required|max:255',
             'payment_type' => 'required|string'
         ]);
+        // dd($validatedData['payment_type']);
+        if ($validatedData['payment_type'] == 'VNPAY') {
+            $isOnlinePaid = 1;
+
+        } elseif ($validatedData['payment_type'] == 'COD') {
+            $isOnlinePaid = 0;
+        }
         // dd($validatedData);
 
         $subtotal = 0;
@@ -249,7 +256,7 @@ public function addToCart(Request $request, $id)
             'sub_total' => $subtotal,
             'shipping_address' => $userid->address,
             'shipping_phone' => $userid->phone,
-            ''
+            'isOnlinePaid' => $isOnlinePaid,
         ]);
 
         foreach ($validatedData['data'] as $item) {

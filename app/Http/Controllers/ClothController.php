@@ -330,9 +330,14 @@ class ClothController extends Controller
         $categories = category::all();
         //
         $cloth = Cloth::findOrFail($id);
-        
-//        dd($cloth);
-        return view('customer.showcus-detail',compact('cloth','categories'));
+
+
+        $relatedProducts = Cloth::where('category_id', $cloth->category_id)
+            ->where('id', '!=', $cloth->id)
+            ->take(5)
+            ->get();
+
+        return view('customer.showcus-detail',compact('cloth','categories','relatedProducts'));
     }
 
 

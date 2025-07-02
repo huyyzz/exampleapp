@@ -407,7 +407,32 @@
             height: 35px;
             font-size: 14px;
         }
-    }
+.slide {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 10px 5px;
+    scrollbar-width: none;
+}
+
+.slide::-webkit-scrollbar {
+    display: none;
+}
+
+.slide .item {
+    min-width: 130px;
+    background: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+    border: 1px solid #eee;
+}
+
+.slide .item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
 </style>
 
 <div class="product-container">
@@ -498,13 +523,26 @@
     </div>
 </div>
 
-<!-- Footer -->
+<!-- <div class="slide">
+    @foreach($relatedProducts as $product)
+        <div class="item">
+            <a href="{{ route('showcus', $product->id) }}" class="text-decoration-none">
+                <img src="{{ asset('storage/images/' . $product->images[0]->image_url) }}" alt="{{ $product->name }}" class="img-fluid" width="150px">
+                <h6 class="mt-2 text-dark">{{ $product->name }}</h6>
+                <p class="text-primary fw-bold">{{ number_format($product->skus[0]->price, 0, ',', '.') }}₫</p>
+            </a>
+        </div>
+    @endforeach
+</div> -->
+
+<!-- Footer --> 
+ <!-- Cai nay @extend ra  -->
 <footer class="text-center text-lg-start bg-body-tertiary text-muted">
     <!-- Section: Social media -->
     <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
         <!-- Left -->
         <div class="me-5 d-none d-lg-block">
-            <span>Get connected with us on social networks:</span>
+            <span>Kết nối với chúng tôi qua các nền tảng xã hội:</span>
         </div>
         <!-- Left -->
 
