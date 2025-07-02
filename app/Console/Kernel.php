@@ -16,11 +16,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            \App\Models\Order::where('status', 'Pending')
-                ->where('isOnlinePaid', true)
-                ->where('isPaid', false)
-                ->where('created_at', '<', now()->subMinutes(1))
-                ->update(['status' => 'Đã hủy']);
+            \App\Models\Order::where('status', 'Chờ duyệt đơn')
+            ->where('isOnlinePaid', true)
+            ->where('isPaid', false)
+            ->where('created_at', '<', now()->subMinutes(15))
+            ->update(['status' => 'Đã hủy']);
         })->everyMinute();
     }
 
