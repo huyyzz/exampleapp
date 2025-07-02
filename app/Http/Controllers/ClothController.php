@@ -540,7 +540,7 @@ class ClothController extends Controller
         }
         $categories = category::all();
         // $userid = User::where('id', $name)->first()->id;
-        $orders = Order::where('customer_id', $id)->orderBy('updated_at','desc')->get();
+        $orders = Order::where('customer_id', $id)->orderBy('updated_at','desc')->paginate(10);
         return view('customer.order_history', compact('orders','categories'));
     }
     

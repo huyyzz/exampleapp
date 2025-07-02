@@ -171,7 +171,7 @@
                                             <p class="font-medium">Mã đơn: #{{ $order->id }}</p>
                                             <p class="text-sm text-gray-600">{{ $order['items'] }}</p>
                                             <p class="text-xs text-gray-500">Ngày: {{ $order->created_at->format('d/m/Y H:i') }}</p>
-                                            <p class="text-xs text-gray-500">Mã vận đơn: {{ $order->shipping_code }}</p>
+                                            <p class="text-xs text-gray-500">Mã vận đơn: {{ $order->shipment_code }}</p>
                                         </div>
                                     </div>
                                     <div class="text-right">

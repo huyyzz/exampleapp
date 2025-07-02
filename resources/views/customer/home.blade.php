@@ -439,11 +439,17 @@ background: linear-gradient(45deg, #ff6b6b, #ee5a52);
                         <h5 class="product-name">{{ \Illuminate\Support\Str::limit($item->product_name, 50) }}</h5>
                         <div class="product-footer">
                             <span class="product-price">{{ number_format($item->product_price, 0) }}đ</span>
-                            <form method="get" action="{{ route('addToCart', $item->id) }}">
+                            <!-- <form method="get" action="{{ route('showcus', $item->id) }}">
+                                <a href="{{ route('addToCart', $item->id) }}"><button class="add-to-cart-btn" type="submit">
+                                    <i class="bi bi-cart-plus"></i>
+                                </button>
+                                </a>
+                            </form> -->
+                            <a href="{{ route('showcus', $item->id) }}">
                                 <button class="add-to-cart-btn" type="submit">
                                     <i class="bi bi-cart-plus"></i>
                                 </button>
-</form>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -461,12 +467,17 @@ background: linear-gradient(45deg, #ff6b6b, #ee5a52);
                         <h5 class="product-name">{{ \Illuminate\Support\Str::limit($item->product_name, 50) }}</h5>
                         <div class="product-footer">
                             <span class="product-price">{{ number_format($item->product_price, 0) }}đ</span>
-                            <form method="get" action="{{ route('addToCart', $item->id) }}">
+                            <!-- <form method="get" action="{{ route('addToCart', $item->id) }}">
                                 <input type="hidden" value="1" name="inputQuantity" id="inputQuantity" min="1" max="999">
                                 <button class="add-to-cart-btn" type="submit">
                                     <i class="bi bi-cart-plus"></i>
                                 </button>
-                            </form>
+                            </form> -->
+                            <a href="{{ route('showcus', $item->id) }}">
+                                <button class="add-to-cart-btn" type="submit">
+                                    <i class="bi bi-cart-plus"></i>
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -498,12 +509,17 @@ background: linear-gradient(45deg, #ff6b6b, #ee5a52);
                         <h5 class="product-name" style="text-align: left;">{{ \Illuminate\Support\Str::limit($item->product_name, 50) }}</h5>
 <div class="product-footer">
                             <span class="product-price">{{ number_format($item->product_price, 0) }}đ</span>
-                            <form method="get" action="{{ route('addToCart', $item->id) }}">
+                            <!-- <form method="get" action="{{ route('addToCart', $item->id) }}">
                                 <input type="hidden" value="1" name="inputQuantity" id="inputQuantity" min="1" max="999">
                                 <button class="add-to-cart-btn" type="submit">
                                     <i class="bi bi-cart-plus"></i>
                                 </button>
-                            </form>
+                            </form> -->
+                            <a href="{{ route('showcus', $item->id) }}">
+                                <button class="add-to-cart-btn" type="submit">
+                                    <i class="bi bi-cart-plus"></i>
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -522,7 +538,7 @@ background: linear-gradient(45deg, #ff6b6b, #ee5a52);
     <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
         <!-- Left -->
         <div class="me-5 d-none d-lg-block">
-            <span>Get connected with us on social networks:</span>
+            <span>Kết nối với chúng tôi qua các nền tàng xã hội:</span>
         </div>
         <!-- Left -->
 
@@ -573,7 +589,7 @@ background: linear-gradient(45deg, #ff6b6b, #ee5a52);
                 <!-- Grid column -->
                 <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
                     <!-- Links -->
-                    <h6 class="text-uppercase fw-bold mb-4">
+                    <!-- <h6 class="text-uppercase fw-bold mb-4">
                         Hỗ trợ khách hàng
                     </h6>
                     <p>
@@ -583,11 +599,8 @@ background: linear-gradient(45deg, #ff6b6b, #ee5a52);
                         <a href="#!" class="text-reset" style="text-decoration: none">Advise</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset" style="text-decoration: none">Orders</a>
-                    </p>
-                    <p>
                         <a href="#!" class="text-reset" style="text-decoration: none">Help</a>
-                    </p>
+                    </p> -->
                 </div>
                 <!-- Grid column -->
 
@@ -612,7 +625,7 @@ background: linear-gradient(45deg, #ff6b6b, #ee5a52);
 
     <!-- Copyright -->
     <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-        Domestic goods:
+        Shop thời trang trực tuyến hàng đầu Việt Nam:
         <a class="text-reset fw-bold">TIN TIN SHOP</a>
     </div>
     <!-- Copyright -->
