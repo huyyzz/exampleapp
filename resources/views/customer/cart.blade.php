@@ -725,7 +725,6 @@
             });
         });
 
-        // Enhanced Toast notification function
         function showToast(message, type = 'success') {
             const toastContainer = document.getElementById('toastContainer');
             const toast = document.createElement('div');

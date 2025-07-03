@@ -433,7 +433,50 @@
     transform: scale(1.03);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
+
+.hidden2 {
+        opacity: 1;
+        transition: opacity 1.2s ease-in-out;
+        background: linear-gradient(45deg, #00b894, #00cec9);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        padding: 15px 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 20px rgba(0, 184, 148, 0.3);
+    }
+
+.hidden2.fade {
+    opacity: 0;
+}
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+    
 </style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<!-- <div class="toast-container" id="toastContainer">
+    
+        @if(session()->has('success'))
+        <div class="toast show ">
+            <div class="toast-message success">{{ session()->get('success') }}</div>
+            
+        </div>
+        @endif
+    </div>
+    
+</div> -->
+
+<div class="toast-container" id="toastContainer"></div>
 
 <div class="product-container">
     <div class="product-layout">
@@ -473,6 +516,7 @@
         <div class="product-info">
            
             <h1 class="product-title">{{ $cloth->product_name }}</h1>
+           
             <div id="price_changing" class="product-price">{{ number_format($cloth->skus[0]->price, 0, ',', '.') }} VNĐ</div>
 
             <form class="product-options" method="get" action="{{ route('addToCart', $cloth->id) }}">
@@ -643,6 +687,37 @@
 <!-- Core theme JS-->
 <script src="js/scripts.js"></script>
 <script>
+    function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <span class="toast-message">${message}</span>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Show toast with animation
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 200);
+            
+            // Hide toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => {
+                    if (toastContainer.contains(toast)) {
+                        toastContainer.removeChild(toast);
+                    }
+                }, 400);
+            }, 3000);
+        }
     document.addEventListener('DOMContentLoaded', function () {
         // Image gallery functionality
         const mainImage = document.getElementById('mainImage');
