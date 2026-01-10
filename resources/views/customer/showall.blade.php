@@ -467,7 +467,7 @@
                 @csrf
                 @method('POST')
                 <!-- Size Section -->
-                <div class="filter-section collapsed">
+                <!-- <div class="filter-section collapsed">
                     <div class="section-header" onclick="toggleSection(this)">
                         <h4 class="section-title">Size</h4>
                         <div class="toggle-btn">+</div>
@@ -482,7 +482,7 @@
                             <div class="option-item" onclick="alertC(this)">XXL</div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="filter-section">
                     <div class="section-header" onclick="toggleSection(this)">
                         <h4 class="section-title">Danh mục</h4>

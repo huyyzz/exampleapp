@@ -310,10 +310,29 @@
 </head>
 <body>
     <div class="container-wrapper">
-
-
         @extends('admin.layout')
         @section('content')
+        <div class="orders-container fade-in mb-4">
+            <form method="POST" action="{{ route('searchAdmin') }}" class="row g-3 align-items-end">
+                @csrf
+                <div class="col-md-4">
+                    <label for="term" class="form-label">Từ khóa tìm kiếm</label>
+                    <input type="text" name="term" id="term" class="form-control" placeholder="Nhập ID, danh mục" value="{{ request('term') }}" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="type" class="form-label">Tìm theo</label>
+                    <select name="type" id="type" class="form-select">
+                        <option value="id">Mã sản phẩm</option>
+                        <option value="category_name">Danh mục</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-1"></i> Tìm kiếm
+                    </button>
+                </div>
+            </form>
+        </div>
             <div class="push-top">
                 <div>
                 </div>

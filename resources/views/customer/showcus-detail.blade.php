@@ -483,8 +483,12 @@
         <!-- Product Gallery -->
         <div class="product-gallery">
             <div class="main-image-container">
-                <img id="mainImage" src="{{ asset('storage/images/' . $cloth->images[0]->image_url) }}" class="main-image" alt="{{ $cloth->product_name }}">
-                
+                @if($isThumb)
+                    <img id="mainImage" src="{{ asset('storage/images/' . $isThumb->image_url) }}" class="main-image" alt="{{ $cloth->product_name }}">
+                @else
+                    <img id="mainImage" src="{{ asset('storage/images/' . $cloth->images[0]->image_url) }}" class="main-image" alt="{{ $cloth->product_name }}">
+                @endif
+
                 @if(count($cloth->images) > 1)
                     <button class="image-nav-btn prev" id="prevBtn">‹</button>
                     <button class="image-nav-btn next" id="nextBtn">›</button>

@@ -418,7 +418,7 @@ background: linear-gradient(45deg, #ff6b6b, #ee5a52);
 
     <!-- New Arrivals Section -->
      <section class="section-header">
-        <h2 class="section-title">NEW ARRIVAL</h2>
+        <h2 class="section-title">SẢN PHẨM MỚI</h2>
         <div class="section-tabs">
             <!-- <a href="#" class="tab active">Lady</a>
             <a href="#" class="tab">Metagent</a> -->

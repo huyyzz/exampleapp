@@ -286,7 +286,6 @@
     <div class="container-fluid px-4">
         <h1 class="page-title display-4 mt-4">Quản lý đơn hàng</h1>
 
-        <!-- Status Selection Tabs -->
         <div class="status-tabs fade-in">
             <div class="d-flex flex-wrap justify-content-center">
                 <a href="{{route('order', 'Chờ duyệt đơn')}}" 
@@ -323,6 +322,30 @@
                 <div class="badge bg-primary fs-6 px-3 py-2">
                     Tổng: {{count($orders)}} đơn hàng
                 </div>
+            </div>
+            <!-- Search Form -->
+            <div class="orders-container fade-in mb-4">
+                <form method="POST" action="{{ route('orderSearch',$specific) }}" class="row g-3 align-items-end">
+                    @csrf
+                    <div class="col-md-4">
+                        <label for="term" class="form-label">Từ khóa tìm kiếm</label>
+                        <input type="text" name="term" id="term" class="form-control" placeholder="Nhập ID, mã vận đơn..." value="{{ request('term') }}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="type" class="form-label">Tìm theo</label>
+                        <select name="type" id="type" class="form-select">
+                            <option value="order_id">Mã đơn hàng</option>
+                            <option value="customer_id">ID người dùng</option>
+                            <option value="shipping_code">Mã vận đơn</option>
+                            <option value="shipping_phone">SĐT người nhận</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search me-1"></i> Tìm kiếm
+                        </button>
+                    </div>
+                </form>
             </div>
 
             @if(count($orders) > 0)
@@ -428,16 +451,23 @@
                                     @elseif($specific == 'Đang giao hàng')
                                         <form method="post" action="{{ route('orderUpdate', $order->id) }}">
                                             @csrf
-                                            <input type="hidden" name="status" value="Đã giao">
-                                            <button class="btn btn-success w-100">
-                                                <i class="fas fa-check-double me-1"></i> Hoàn thành
-                                            </button>
+                                            <div class="mb-3">
+                                                <input type="hidden" name="status" value="Đã giao">
+                                                <button class="btn btn-success w-100">
+                                                    <i class="fas fa-check-double me-1"></i> Hoàn thành
+                                                </button>
+                                            </div>
+                                            
                                         </form>
-                                        <form method="get" action="{{ route('order.details', $order->id) }}">
-                                            <button class="btn btn-info w-100">
-                                                <i class="fas fa-info-circle me-1"></i> Chi tiết
-                                            </button>
-                                        </form>
+                                        <br>
+                                        <div class="d-flex flex-column gap-2" style="max-width: 300px;">
+                                            <!-- Chi tiết -->
+                                            <form method="get" action="{{ route('order.details', $order->id) }}">
+                                                <button class="btn btn-info w-100">
+                                                    <i class="fas fa-info-circle me-1"></i> Chi tiết
+                                                </button>
+                                            </form>
+                                        </div>
                                     @else
                                     <form method="get" action="{{ route('order.details', $order->id) }}">
                                         <button class="btn btn-info w-100">
@@ -449,9 +479,15 @@
                                 </div>
                             </td>
                         </tr>
+
                         @endforeach
+                        
                     </tbody>
+                    
                 </table>
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $orders->links() }}
+                </div>
             </div>
             @else
             <div class="empty-state">

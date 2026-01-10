@@ -16,16 +16,16 @@
     <div class="min-h-screen py-8">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Header -->
-            <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-900">My Profile</h1>
-                <p class="text-gray-600 mt-2">Manage your account settings and preferences</p>
+            <div class="mb-8 mt-6">
+                <h1 class="text-3xl font-bold text-gray-900">Chỉnh sửa trang cá nhân</h1>
+                <p class="text-gray-600 mt-2">Quản lý cài đặt và tùy chọn tài khoản của bạn</p>
             </div>
 
             <!-- Tab Navigation -->
             <div class="border-b border-gray-200 mb-6">
                 <nav class="-mb-px flex space-x-8">
                     <button class="tab-btn active py-2 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600" data-tab="personal">
-                        <i class="fas fa-user mr-2"></i>Personal
+                        <i class="fas fa-user mr-2"></i>Cá nhân
                     </button>
                 </nav>
             </div>
@@ -34,8 +34,8 @@
             <div id="personal-tab" class="tab-content">
                 <div class="bg-white shadow rounded-lg">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900">Personal Information</h3>
-                        <p class="mt-1 text-sm text-gray-600">Update your personal details and profile information</p>
+                        <h3 class="text-lg font-medium text-gray-900">Thông tin cá nhân</h3>
+                        <p class="mt-1 text-sm text-gray-600">Cập nhật thông tin cá nhân và hồ sơ của bạn</p>
                     </div>
                     <div class="px-6 py-6">
                         <!-- Profile Photo -->

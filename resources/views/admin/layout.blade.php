@@ -277,7 +277,7 @@
             <!-- Sidebar -->
             <div class="sidebar" id="sidebar">
                 <div class="sidebar-header">
-                    <img src="https://insacmau.com/wp-content/uploads/2024/11/logo-shop-quan-ao-nu-9.jpg" alt="Logo">
+                    <!-- <img src="https://insacmau.com/wp-content/uploads/2024/11/logo-shop-quan-ao-nu-9.jpg" alt="Logo"> -->
                     <h3>Admin Dashboard</h3>
                 </div>
                 

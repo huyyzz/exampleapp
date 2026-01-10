@@ -39,7 +39,7 @@ class ClothController extends Controller
 
         foreach ($cloths as $product){
             // dd($product->skus[0]->cloth->images[0]->image_url);
-            $product->product_image_url = $product->skus[0]->cloth->images[0]->image_url;
+            $product->product_image_url = $product->images[0]->image_url;
         }
         
 
@@ -65,7 +65,7 @@ class ClothController extends Controller
     }
 
     public function filter(Request $request)
-{
+    {
     $storeData = $request->validate([
         'minPriceInput' => 'required|numeric|min:0',
         'maxPriceInput' => 'required|numeric|min:0|gte:minPriceInput',
@@ -132,7 +132,7 @@ class ClothController extends Controller
     {
         
         $specific = null;
-        $cloths = Cloth::all();
+        $cloths = Cloth::orderBy('created_at', 'desc')->get();
         $categories = category::all();
 
         foreach ($cloths as $product){
@@ -337,7 +337,9 @@ class ClothController extends Controller
             ->take(5)
             ->get();
 
-        return view('customer.showcus-detail',compact('cloth','categories','relatedProducts'));
+        $isThumb = ProductImage::where('cloth_id', $cloth->id)->where('isThumb', 1)->first();
+
+        return view('customer.showcus-detail',compact('cloth','categories','relatedProducts','isThumb'));
     }
 
 
@@ -472,7 +474,7 @@ class ClothController extends Controller
 
         $specific = $types;
 
-        $orders = Order::where('status', $types)->orderBy('updated_at','asc')->get();
+        $orders = Order::where('status', $types)->orderBy('updated_at','asc')->paginate(20);
         $order_item = Order_items::all();
 
         return view('admin.order', compact('orders','specific'));
@@ -499,8 +501,9 @@ class ClothController extends Controller
 //                $product->quantity
             if ($updateData['status'] == "Đã hủy") {
                 $quantity = [
-                    "quantity" => $product->quantity + $cloth->QuantityInWareHouse
+                    "quantity" => $product->quantity + $cloth->quantity
                 ];
+                // dd($quantity);
                 ProductSku::whereId($product->sku_id)->update($quantity);
             }
 
@@ -643,8 +646,16 @@ class ClothController extends Controller
             ->get();
         // dd($revenueStats);
 
-        $earliest = Order::orderBy('updated_at','asc')->first()->updated_at;
-        $earliest = date('Y-m-d', strtotime($earliest));
+        $earliest = Order::orderBy('updated_at','asc')->first();
+        if ($earliest != null){
+            $earliest = $earliest->updated_at;
+            $earliest = date('Y-m-d', strtotime($earliest));
+        }else{
+            $earliest = date('Y-m-d');
+        }
+            
+        
+        
 
 
 
@@ -653,6 +664,47 @@ class ClothController extends Controller
         return view('admin.statistic', compact(
             'orders', 'categories','revenueStats','earliest'
         ));
+    }
+
+
+    public function searchAdmin(Request $request)
+    {
+    $validated = $request->validate([
+        'term' => 'required|string|max:255',
+        'type' => 'required|in:id,category_name',
+    ]);
+
+    $search = strtolower($validated['term']);
+    $type = $validated['type'];
+
+    $query = Cloth::query();
+
+    switch ($type) {
+        case 'id':
+            $query->where('id', $search);
+            break;
+
+        case 'category_name':
+            $query->join('categories', 'cloths.category_id', '=', 'categories.id')
+                ->where('categories.name', 'LIKE', "%$search%")
+                ->select('cloths.*');
+            break;
+    }
+
+    $query->with('images'); // Optional: if you need image data
+
+    $cloths = $query->paginate(16);
+
+    $categories = Category::all();
+    $orders = Order::where('status', 'Chờ duyệt đơn')->get();
+
+    foreach ($cloths as $product) {
+        $product->product_image_url = $product->images[0]->image_url ?? null;
+        $product->product_price = $product->skus->min("price");
+    }
+
+
+        return view('admin.index', compact('cloths', 'type', 'search','categories','orders'));
     }
 
 }
