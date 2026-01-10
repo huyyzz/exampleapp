@@ -61,6 +61,7 @@ Route::middleware('isAdmin')->group(function(){
     Route::post('/sizeCreate', [\App\Http\Controllers\SkuController::class, 'create'])->name('SkuCreate');
     Route::post('/statistic', [\App\Http\Controllers\StatisticController::class, 'filter'])->name('StatFilter');
     Route::post('/orders/search/{type}', [\App\Http\Controllers\OrderController::class, 'search'])->name('orderSearch');
+    Route::post('/orders/search', [\App\Http\Controllers\ClothController::class, 'searchAdmin'])->name('searchAdmin');
 });
 
 

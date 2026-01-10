@@ -671,7 +671,7 @@ function shareProduct() {
 
 
 function editSKU(skuId) {
-    alert('Tính lăng tương lai -> disable SKU')
+    alert('Tính năng tương lai -> disable SKU')
 }
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.tab-button').classList.add('active');

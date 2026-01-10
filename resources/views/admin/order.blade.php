@@ -329,7 +329,7 @@
                     @csrf
                     <div class="col-md-4">
                         <label for="term" class="form-label">Từ khóa tìm kiếm</label>
-                        <input type="text" name="term" id="term" class="form-control" placeholder="Nhập ID, mã vận đơn..." value="{{ request('term') }}">
+                        <input type="text" name="term" id="term" class="form-control" placeholder="Nhập ID, mã vận đơn..." value="{{ request('term') }}" required>
                     </div>
                     <div class="col-md-3">
                         <label for="type" class="form-label">Tìm theo</label>
@@ -451,16 +451,23 @@
                                     @elseif($specific == 'Đang giao hàng')
                                         <form method="post" action="{{ route('orderUpdate', $order->id) }}">
                                             @csrf
-                                            <input type="hidden" name="status" value="Đã giao">
-                                            <button class="btn btn-success w-100">
-                                                <i class="fas fa-check-double me-1"></i> Hoàn thành
-                                            </button>
+                                            <div class="mb-3">
+                                                <input type="hidden" name="status" value="Đã giao">
+                                                <button class="btn btn-success w-100">
+                                                    <i class="fas fa-check-double me-1"></i> Hoàn thành
+                                                </button>
+                                            </div>
+                                            
                                         </form>
-                                        <form method="get" action="{{ route('order.details', $order->id) }}">
-                                            <button class="btn btn-info w-100">
-                                                <i class="fas fa-info-circle me-1"></i> Chi tiết
-                                            </button>
-                                        </form>
+                                        <br>
+                                        <div class="d-flex flex-column gap-2" style="max-width: 300px;">
+                                            <!-- Chi tiết -->
+                                            <form method="get" action="{{ route('order.details', $order->id) }}">
+                                                <button class="btn btn-info w-100">
+                                                    <i class="fas fa-info-circle me-1"></i> Chi tiết
+                                                </button>
+                                            </form>
+                                        </div>
                                     @else
                                     <form method="get" action="{{ route('order.details', $order->id) }}">
                                         <button class="btn btn-info w-100">
@@ -472,9 +479,15 @@
                                 </div>
                             </td>
                         </tr>
+
                         @endforeach
+                        
                     </tbody>
+                    
                 </table>
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $orders->links() }}
+                </div>
             </div>
             @else
             <div class="empty-state">
